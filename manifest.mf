@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+X-COMMENT: Main-Class will be added automatically by build
+Main-Class: jcomicdownloader.ComicDownGUI
+SplashScreen-Image: jcomicdownloader/tools/resource/logo.png
+Class-Path: Jtattoo.jar lib/Jtattoo.jar nimrodlf-1.2.jar lib/nimrodlf-1.2.jar napkinlaf-alpha001.jar lib/napkinlaf-alpha001.jar trident.jar lib/trident.jar substance-6.1.jar lib/substance-6.1.jar jaudiotagger-2.0.4-20111207.115108-15.jar lib/jaudiotagger-2.0.4-20111207.115108-15.jar 
