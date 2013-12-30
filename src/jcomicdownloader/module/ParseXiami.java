@@ -395,7 +395,7 @@ public class ParseXiami extends ParseSogou
             endIndex = allPageString.indexOf( "\"", beginIndex );
         }
         else if ( urlString.indexOf( "/artist/" ) < 0 && allPageString.indexOf( "href=\"/artist/" ) > 0 ) // 解析方法二
-        {  
+        {
             beginIndex = allPageString.indexOf( "href=\"/artist/" ) + 1;
             beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
             endIndex = allPageString.indexOf( "<", beginIndex );
