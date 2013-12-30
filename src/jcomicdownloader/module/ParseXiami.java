@@ -394,20 +394,20 @@ public class ParseXiami extends ParseSogou
             beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
             endIndex = allPageString.indexOf( "\"", beginIndex );
         }
-        else if ( urlString.matches( "(?s).*song/detail/(?s).*" ) ) {
+        else if ( urlString.indexOf( "/artist/" ) < 0 && allPageString.indexOf( "href=\"/artist/" ) > 0 ) // 解析方法二
+        {  
             beginIndex = allPageString.indexOf( "href=\"/artist/" ) + 1;
-            beginIndex = allPageString.indexOf( "href=\"/artist/", beginIndex ) + 1;
             beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
             endIndex = allPageString.indexOf( "<", beginIndex );
         }
-        else // 解析方法二
+        else // 解析方法三 ex. http://www.xiami.com/artist/109210
         {
             beginIndex = allPageString.indexOf( "<title>" );
             beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
 
             endIndex = allPageString.indexOf( "</title>", beginIndex );
-            endIndex = allPageString.lastIndexOf( "的", endIndex );
         }
+        
         String title = allPageString.substring( beginIndex, endIndex ).trim();
 
         return Common.getStringRemovedIllegalChar( Common.getTraditionalChinese( title ) );
