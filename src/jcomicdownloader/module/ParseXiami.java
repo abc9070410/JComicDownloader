@@ -2,9 +2,10 @@
  ----------------------------------------------------------------------------------------------------
  Program Name : JComicDownloader
  Authors  : surveyorK
- Last Modified : 2013/12/31
+ Last Modified : 2014/1/13
  ----------------------------------------------------------------------------------------------------
  ChangeLog:
+ 5.19 : 1. add the artist name into the tag for the hot song page
  5.19 : 1. fix xiami
  5.12 : 1. 新增對xiami的支援。
  ----------------------------------------------------------------------------------------------------
@@ -291,10 +292,20 @@ public class ParseXiami extends ParseSogou
         tempString = allPageString.substring( beginIndex, endIndex ).trim();
         tags[TagEnum.ALBUM] = Common.getTraditionalChinese( tempString );
 
-        beginIndex = allPageString.indexOf( "class=\"item\"" );
-        beginIndex = allPageString.indexOf( " href=", beginIndex );
-        beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
-        endIndex = allPageString.indexOf( "<", beginIndex );
+        beginIndex = allPageString.indexOf( "artist_photo" );
+        if ( beginIndex > 0 ) // ex. http://www.xiami.com/artist/80221
+        {
+            beginIndex = allPageString.indexOf( "title=", beginIndex );
+            beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
+            endIndex = allPageString.indexOf( "\"", beginIndex );
+        }
+        else
+        {
+            beginIndex = allPageString.indexOf( "class=\"item\"" );
+            beginIndex = allPageString.indexOf( " href=", beginIndex );
+            beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
+            endIndex = allPageString.indexOf( "<", beginIndex );
+        }
         tempString = allPageString.substring( beginIndex, endIndex ).trim();
         tags[TagEnum.ARTIST] = Common.getTraditionalChinese( tempString );
 
