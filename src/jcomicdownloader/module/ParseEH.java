@@ -2,9 +2,10 @@
 ----------------------------------------------------------------------------------------------------
 Program Name : JComicDownloader
 Authors  : surveyorK
-Last Modified : 2012/12/8
+Last Modified : 2014/2/19
 ----------------------------------------------------------------------------------------------------
 ChangeLog:
+ 5.19: change the default pic count in one page to 40 
  5.10: 修改eh解析機制，使其無須全部頁面解析完畢才開始下載。
  5.10: 修復eh解析頁數錯誤的問題。
 4.10: 修復在Substance介面下若跳出輸入視窗必崩潰的問題。
@@ -44,7 +45,7 @@ public class ParseEH extends ParseOnlineComicSite {
         siteName = "EH";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_e_Hentai_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_e_Hentai_encode_parse_", "html" );
-        onePagePicCount = 20; // 20 pics on every page
+        onePagePicCount = 40; // 40 pics on every page
 
         needCookie = false;
         cookieString = "";
