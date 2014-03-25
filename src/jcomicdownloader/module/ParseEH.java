@@ -5,7 +5,8 @@ Authors  : surveyorK
 Last Modified : 2014/2/19
 ----------------------------------------------------------------------------------------------------
 ChangeLog:
- 5.19: change the default pic count in one page to 40 
+ 5.19: 1. change the default pic count in one page to 40 
+ *     2. fix the continue problem 
  5.10: 修改eh解析機制，使其無須全部頁面解析完畢才開始下載。
  5.10: 修復eh解析頁數錯誤的問題。
 4.10: 修復在Substance介面下若跳出輸入視窗必崩潰的問題。
@@ -135,10 +136,10 @@ public class ParseEH extends ParseOnlineComicSite {
                 pageNumber++ ) {
             
             
-            if ( Common.existPicFile( getDownloadDirectory(), pageUrlCount + 1, pageUrlCount + 21 ) ) {
-                Common.debugPrintln( "第" + ( pageUrlCount + 1 ) + "到第" + ( pageUrlCount + 20 ) + "已下載，跳過此頁" );
+            if ( Common.existPicFile( getDownloadDirectory(), pageUrlCount + 1, pageUrlCount + onePagePicCount + 1 ) ) {
+                Common.debugPrintln( "第" + ( pageUrlCount + 1 ) + "到第" + ( pageUrlCount + onePagePicCount ) + "已下載，跳過此頁" );
                 beginPage = pageUrlCount;
-                pageUrlCount += 20;
+                pageUrlCount += onePagePicCount;
                 continue;
             }
 

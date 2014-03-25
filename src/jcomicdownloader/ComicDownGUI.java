@@ -3,8 +3,8 @@
  ----------------------------------------------------------------------------------------------------
  Program Name : JComicDownloader
  Authors  : surveyorK
- Version  : v5.19
- Last Modified : 2013/11/23
+ Version  : v5.19.20140326
+ Last Modified : 2014/3/26
  ----------------------------------------------------------------------------------------------------
  * 
  * ChangeLog:
@@ -446,6 +446,8 @@ package jcomicdownloader;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -556,7 +558,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     private Run mainRun;
     private int nowDownloadMissionRow; // 目前正在進行下載的任務列的順序
     Dimension frameDimension;
-    public static String versionString = "JComicDownloader  v5.19";
+    public static String versionString = "JComicDownloader v5.19." + new SimpleDateFormat("yyMMddHHmmss").format(Calendar.getInstance().getTime());
 
     public ComicDownGUI()
     {
@@ -644,7 +646,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         // 檢查skin是否由外部jar支援，若是外部skin且沒有此jar，則下載
         CommonGUI.checkSkin();
 
-        buildPreprocess(); // 開發階段的預先處理(目的是讓輸出的jar檔與版本一致)
+        //buildPreprocess(); // 開發階段的預先處理(目的是讓輸出的jar檔與版本一致)
     }
 
     private void setUpUIComponent()
