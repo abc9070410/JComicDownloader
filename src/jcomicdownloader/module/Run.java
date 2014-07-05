@@ -439,6 +439,11 @@ public class Run extends Thread
                 ParseOnlineComicSite parse = new ParseEynyNovel();
                 runSingleParseModule( parse );
             }
+            else if ( pw.getSiteID() == Site.WIKI )
+            {
+                ParseOnlineComicSite parse = new ParseWiki();
+                runSingleParseModule( parse );
+            }
             else if ( pw.getSiteID() == Site.ZUIWANJU )
             {
                 ParseOnlineComicSite parse = new ParseZuiwanju();

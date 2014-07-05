@@ -472,6 +472,7 @@ abstract public class ParseOnlineComicSite {
         text = text.replaceAll( "</H1>", "\r\n" );
         text = text.replaceAll( "<tr>", "\r\n\r\n" );
         text = text.replaceAll( "<TR>", "\r\n\r\n" );
+        text = text.replaceAll( "<li>", "\r\n\r\n" );
 
         return text;
     }

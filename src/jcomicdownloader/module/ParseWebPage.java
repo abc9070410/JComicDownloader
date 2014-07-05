@@ -306,6 +306,10 @@ public class ParseWebPage
         {
             siteID = Site.EYNY_NOVEL;
         }
+        else if ( webSite.matches( "(?s).*wikipedia.org/(?s).*" ) )
+        {
+            siteID = Site.WIKI;
+        }
         else if ( webSite.matches( "(?s).*zuiwanju.com(?s).*" ) )
         {
             siteID = Site.ZUIWANJU;

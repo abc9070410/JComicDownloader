@@ -114,6 +114,7 @@ public class Parse178 extends ParseOnlineComicSite
         totalPage = allCodeString.split( "\",\"" ).length;
         Common.debugPrintln( "共 " + totalPage + " 頁" );
         comicURL = new String[ totalPage ];
+        refers = new String[ totalPage ];
 
 
         // 取得位址編碼代號的替換字元
@@ -129,7 +130,7 @@ public class Parse178 extends ParseOnlineComicSite
         }
         //System.exit( 0 );
 
-        String basePicURL = "http://imgfast.dmzj.com/";//"http://imgfast.manhua.178.com/";
+        String basePicURL = "http://images.dmzj.com/";//"http://images.manhua.178.com/";
         String[] codeTokens = allCodeString.split( "\",\"" );
 
 
@@ -167,6 +168,7 @@ public class Parse178 extends ParseOnlineComicSite
         for ( int i = 0; i < codeTokens.length && Run.isAlive; i++ )
         {
             comicURL[i] = parentPicURL + picNames[i]; // 存入每一頁的網頁網址
+            refers[i] = webSite;
             //Common.debugPrintln( ( i + 1 ) + " " + comicURL[i]  ); // debug
 
         }

@@ -249,6 +249,7 @@ public class RunModule {
     public static boolean isNovelSite( int siteID ) {
         if ( siteID == Site.CK_NOVEL
             || siteID == Site.EYNY_NOVEL
+            || siteID == Site.WIKI
             || siteID == Site.MYBEST
             || siteID == Site.WENKU
             || siteID == Site.TIANYA_BOOK

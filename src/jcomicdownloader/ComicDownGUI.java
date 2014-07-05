@@ -447,6 +447,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
 import javax.swing.*;
@@ -3956,11 +3957,12 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
             public void run()
             {
+                testWiki();
 
                 Run.isAlive = true;
 
                 String picURL = "http://6manga.com/comics/11/08/30/16/42344001.jpg";
-                String pageURL = "http://6manga.com/comics/11/08/30/16/42344001.jpg";
+                String pageURL = "http://en.wikipedia.org/w/index.php?title=Category:21st-century_American_actresses&amp;from=B";
                 String testURL = "http://www.fumanhua.com/images/pic_loading.gif";
 
                 String referURL = "http://6manga.com/page/comics/7/0/418_ibitsu.html";
@@ -3969,14 +3971,14 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                 //pageURL = Common.getFixedChineseURL( pageURL );
 
                 //Common.downloadFile( picURL, "", "test.jpg", false, "", referURL );
-                //Common.downloadFile( pageURL, "", "test1.html", false, "", "" );
+                //Common.downloadFile( pageURL, "", "test2.html", false, "", "" );
 
                 //Common.debugPrintln( cookie );
 
                 //Common.simpleDownloadFile( picURL, "", "test.jpg", cookie, referURL );
                 //Common.downloadGZIPInputStreamFile( testURL, SetUp.getTempDirectory(), "test.ext", false, "" );
 
-                Common.simpleDownloadFile( picURL, "", "test2.jpg", cookie, referURL );
+                //Common.simpleDownloadFile( picURL, "", "test2.jpg", cookie, referURL );
                 //Common.downloadFile( picURL, "", "test.jpg", false, "", referURL );
                 
                 //Common.downloadPost( testURL, "", "test.jpg", true, cookie, "", "" );
@@ -4001,7 +4003,86 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
             }
         } );
-        //downThread.start();
+        downThread.start();
+    }
+    
+    private void testWiki()
+    {
+        File a = new File("C:\\Users\\Chien-Yu\\Documents\\JAVA\\JComicDownloader\\Github\\down\\Lists of National Basketball Association players - Wikipedia, the free encyclopedia");
+      
+      String[] filenames;
+      String fullpath = a.getAbsolutePath() + "\\";
+      java.util.List<String> nameList = new ArrayList<String>();
+      java.util.List<String> coverList = new ArrayList<String>();
+      java.util.List<String> dirList = new ArrayList<String>();
+      
+      String allString = "";
+      
+      if(a.isDirectory()){
+        filenames=a.list();
+        for (int i = 0 ; i < filenames.length ; i++){         
+          File tempFile = new File(fullpath + "\\" + filenames[i]);
+          if(tempFile.isDirectory()){
+            System.out.println("目錄:" + filenames[i]);
+          }
+          else
+          {
+            System.out.println("檔案:" + filenames[i]);
+            
+            String tempAllText = Common.getFileString(fullpath, filenames[i]) + "\n\n\n";
+            
+            int beginIndex = tempAllText.indexOf( "gasNameList_" );
+            int endIndex = tempAllText.indexOf( " = ", beginIndex);
+            String tempTag = tempAllText.substring( beginIndex, endIndex );
+            nameList.add(tempTag);
+            
+            beginIndex = tempAllText.indexOf( "gasCoverList_" );
+            endIndex = tempAllText.indexOf( " = ", beginIndex);
+            tempTag = tempAllText.substring( beginIndex, endIndex );
+            coverList.add(tempTag);
+            
+            beginIndex = tempAllText.indexOf( "gsDirectory_" );
+            endIndex = tempAllText.indexOf( " = ", beginIndex);
+            tempTag = tempAllText.substring( beginIndex, endIndex );
+            dirList.add(tempTag);
+            
+            allString += tempAllText;
+          }
+        }
+        allString += "\n// ------------------------------------------------\n\n";
+        
+        allString += "NAME_LIST = new Array( ";
+        for (int i = 0; i < nameList.size(); i ++ )
+        {
+            allString += "\n    " + nameList.get(i);
+            if ((i+1) < nameList.size())
+                allString += ",";
+        }
+        allString += "\n);\n\n";
+        
+        allString += "COVER_LIST = new Array( ";
+        for (int i = 0; i < coverList.size(); i ++ )
+        {
+            allString += "\n    " + coverList.get(i);
+            if ((i+1) < coverList.size())
+                allString += ",";
+        }
+        allString += "\n);\n\n";
+        
+        allString += "DIRECTORY_LIST = new Array( ";
+        for (int i = 0; i < dirList.size(); i ++ )
+        {
+            allString += "\n    " + dirList.get(i);
+            if ((i+1) < dirList.size())
+                allString += ",";
+        }
+        allString += "\n);\n\n";
+        
+        
+        String fileName = "list.js";
+        Common.outputFile(allString, fullpath, fileName);
+        Common.debugPrintln( "STROE: " + fullpath + fileName );
+      }
     }
 
     /*
