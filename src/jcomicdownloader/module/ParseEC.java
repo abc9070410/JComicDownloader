@@ -39,10 +39,6 @@ public class ParseEC extends ParseOnlineComicSite {
     private String volumeNoString; // 每一集都有數字編號
     private String itemid; // 每本漫畫的編號
 
-    /**
-     *
-     * @author user
-     */
     public ParseEC() {
         siteID = Site.EIGHT_COMIC;
         siteName = "8comic";
@@ -98,7 +94,6 @@ public class ParseEC extends ParseOnlineComicSite {
             ch = webSite.substring( beginIndex, endIndex );
         }
         Common.debugPrintln( "ch: " + ch );
-        
 
         String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
         
@@ -110,101 +105,25 @@ public class ParseEC extends ParseOnlineComicSite {
         Common.debugPrintln( "chs: " + chs );
         
         // 取得itemid
-        beginIndex = allPageString.indexOf( "var itemid" );
+        beginIndex = allPageString.indexOf( "var ti" );
         beginIndex = allPageString.indexOf( "=", beginIndex ) + 1;
         endIndex = allPageString.indexOf( ";", beginIndex );
         String itemid = allPageString.substring( beginIndex, endIndex );
-        Common.debugPrintln( "itemid: " + itemid );
+        Common.debugPrintln( "itemid(ti): " + itemid );
         
         // 取得圖片編碼
-        beginIndex = allPageString.indexOf( "var allcodes", beginIndex );
-        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
-        endIndex = allPageString.indexOf( "\"", beginIndex );
+        beginIndex = allPageString.indexOf( "var cs", beginIndex );
+        beginIndex = allPageString.indexOf( "\'", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( "\'", beginIndex );
         String allcodes = allPageString.substring( beginIndex, endIndex );
-        
-        
-        showpic( itemid, allcodes, chs, ch );
-        
-        //System.exit( 0 );
-        
-    }
-    
-    // 轉譯原始碼中的showpic function , 解析並保存圖片位址
-    void showpic( String itemid, String allcodes, String chs, String chString ) 
-    {
-        int ch = Integer.parseInt( chString.split( "-" )[0] );
-        
-        String[] codes = allcodes.split( "\\|" );
-        String code = "";
-        int cid = 0;
-        for ( int i = 0; i < codes.length; i++) {
-            if (codes[i].indexOf(ch + " ") == 0) {
-                cid = i;
-                code = codes[i];
-                break;
-            };
-        }
-        if ( ch == 0 ) 
-        {
-            for ( int i = 0; i < codes.length; i++) 
-            {
-                if ( Integer.parseInt( codes[i].split( " " )[0] ) > ch ) 
-                {
-                    cid = i;
-                    code = codes[i];
-                    ch = Integer.parseInt( codes[i].split( " " )[0] );
-                    break;
-                }
-            }
-        }
-        if ( "".equals( code ) ) 
-        {
-            cid = codes.length - 1;
-            code = codes[cid];
-            ch = Integer.parseInt( chs );
-        }
-        
-        String num = code.split( " " )[0];
-        String sid = code.split( " " )[1];
-        String did = code.split( " " )[2];
-        String page = code.split( " " )[3];
-        code = code.split( " " )[4];
-        
-        Common.debugPrint( "開始解析這一集有幾頁 :" );
-        totalPage = Integer.valueOf( page );
-        comicURL = new String[totalPage];
-        Common.debugPrint( "共" + totalPage + "頁" );
-        
-        Common.debugPrintln( "解析出的位址: " );
-        
-        for ( int p = 1; p <= totalPage; p ++ )
-        {        
-            String img = "";
-            if (p < 10)
-            {
-                img = "00" + p;
-            }
-            else if (p < 100) 
-            {
-                img = "0" + p;
-            }
-            else 
-            {
-                img = "" + p;
-            }
-            int m = ( (int)((p - 1) / 10) % 10) + (((p - 1) % 10) * 3);
-            img += "_" + code.substring(m, m + 3);
 
-
-            comicURL[p - 1] =  "http://img" + sid + ".8comic.com/" + did + 
-                    "/" + itemid + "/" + num + "/" + img + ".jpg";
-            
-            Common.debugPrintln( p + ": " +  comicURL[p - 1] );
-            
+        NView_Java nv = new NView_Java(Integer.parseInt(chs), Integer.parseInt(itemid), allcodes, ch);
+        this.comicURL = new String[nv.getPagesCount()];
+        nv.setPage(1);
+        for (int d = 0; d < nv.getPagesCount(); nv.setPage(++d)) {
+            this.comicURL[d] = nv.parse();
         }
-        
     }
-        
 
     @Override
     public String getAllPageString( String urlString ) {
@@ -536,5 +455,142 @@ class ParseSixComic extends ParseEC {
         System.out.println( "|                                 " );
         System.out.println( "| Run the 6comic module: " );
         System.out.println( "|_____________________________________\n" );
+    }
+}
+
+/**
+ * The Java Class of translated JavaScript file "http://new.comicvip.com//js/nview.js"
+ * @author hkgsherlock
+ */
+class NView_Java {
+    /**
+     * Storing the result URL to the image of that page of manga.
+     */
+    private String urlResult;
+
+    /**
+     * Number of chapters available in this manga.
+     */
+    private final int chs;
+
+    /**
+     * The numeric identifier (ID) of the manga.
+     */
+    private final int ti;
+
+    /**
+     * Compiled String stored in JavaScript variable exactly named as "cs" in Page View page.
+     */
+    private final String cs;
+    /**
+     * String of chapter, also found on URL param "ch". Format: "1", "1-3", "153-12"
+     */
+    private String ch;
+
+    public NView_Java(int chapters, int mangaId, String compiledString, String chapter) {
+        this.chs = chapters;
+        this.ti = mangaId;
+        this.cs = compiledString;
+        this.ch = chapter;
+
+        if (ch.indexOf('-') > 0) {
+            p = Integer.parseInt(ch.split("-")[1]);
+            ch = ch.split("-")[0];
+        }
+        
+        this.sp();
+    }
+
+    public NView_Java(int chapters, int mangaId, String compiledString, int chapter, int page) {
+        this.chs = chapters;
+        this.ti = mangaId;
+        this.cs = compiledString;
+        this.ch = chapter + "";
+        this.p = page;
+        
+        this.sp();
+    }
+
+    /**
+     * Parse all sort of stuffs as a URL to the manga page image.
+     * @return The image of that page of a manga.
+     */
+    public String parse() {
+        si(c);
+        return this.urlResult;
+    }
+
+    /**
+     * Get pages available for this volume of manga.
+     * <p><em>Note:</em> set the </p>
+     * @return Count of pages of the volume.
+     */
+    public int getPagesCount() {
+        String strCnt = ss(c, 7, 3);
+        return Integer.parseInt(strCnt);
+    }
+
+    /**
+     * Set the chapter for the following work.
+     * @param chapter The number of chapter to work.
+     */
+    public void setChapter(int chapter) {
+        this.ch = chapter + "";
+    }
+
+    /**
+     * Set the page to work.
+     * @param page The number of page to work.
+     */
+    public void setPage(int page) {
+        this.p = page;
+    }
+
+    private String c = "";
+    private final int f = 50;
+    private int p = 1;
+
+    /**
+     * The first function called by the 8comic view page, which provides ability to decode the "cs"
+     * (compiled string) in the page js to a image link hyper-referenced by img#TheImg DOM.
+     */
+    private void sp() {
+
+        int cc = cs.length();
+        for (int i = 0; i < cc / f; i++) {
+            if (ss(cs, i * f, 4).equals(ch)) {
+                c = ss(cs, i * f, f, f);
+                break;
+            }
+        }
+        if (c.equals("")) {
+            c = ss(cs, cc - f, f);
+            ch = chs + "";
+        }
+    }
+
+    private String ss(String a, int b, int c) {
+        return ss(a, b, c, null);
+    }
+
+    private String ss(String a, int b, int c, Object d) {
+        String e = a.substring(b, b + c);
+        return (d == null) ? e.replaceAll("[a-z]*", "") : e;
+    }
+
+    /**
+     * Padding zero for a integer, letting the string of number becomes one which length of 3.
+     */
+    private String nn(int n) {
+        return String.format("%03d", n);
+    }
+
+    private int mm(int p) {
+        //noinspection RedundantCast
+        return ((int)((p - 1) / 10) % 10) + (((p - 1) % 10) * 3);
+    }
+
+    private void si(String c) {
+        this.urlResult = "http://img" + ss(c, 4, 2) + ".8comic.com/" + ss(c, 6, 1) + "/" + ti + "/" + ss(c, 0, 4) + "/" + nn(p) + "_" + ss(c, mm(p) + 10, 3, f) + ".jpg";
     }
 }
