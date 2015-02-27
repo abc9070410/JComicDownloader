@@ -6,7 +6,29 @@
 
 * https://sites.google.com/site/jcomicdownloader/
 
+## Platform
+
+* all the platforms with Java Runtime Environment(JRE)
+
+## Release
+
+* https://github.com/abc9070410/JComicDownloader/raw/master/dist/JComicDownloader.jar
+
 ## Installation
 
 * How to build this project:
 * https://sites.google.com/site/jcomicdownloader/step-by-step/how-to-build-project
+
+## External Library
+
+* Zhcode
+* http://www.mandarintools.com/zhcode.html
+* JTatoo
+* http://www.jtattoo.net/
+* NimROD
+* http://nilogonzalez.es/nimrodlf/index-en.html
+* Napkin
+* http://napkinlaf.sourceforge.net/
+* Substance
+* https://java.net/projects/substance/
+
