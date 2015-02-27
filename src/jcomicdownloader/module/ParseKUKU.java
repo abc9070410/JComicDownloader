@@ -41,7 +41,7 @@ public class ParseKUKU extends ParseOnlineComicSite {
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kuku_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kuku_encode_parse_", "html" );
 
-        baseURL = "http://cc.kukudm.com/";
+        baseURL = "http://n.kukudm.com/";
     }
 
 
