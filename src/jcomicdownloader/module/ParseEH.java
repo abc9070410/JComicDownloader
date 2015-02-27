@@ -93,6 +93,33 @@ public class ParseEH extends ParseOnlineComicSite {
 
         int beginIndex = 0;
         int endIndex = 0;
+
+        String lastAllPageString = "";
+        for ( int i = 0 ; i < lines.length ; i++ ) {
+            if (lines[i].indexOf("onclick=\"return false\">") > 0)
+            {
+                beginIndex = lines[i].lastIndexOf("onclick=\"return false\">") - 1;
+                //Common.debugPrintln( "--->  " + lines[i].substring(beginIndex, beginIndex+10) );
+                beginIndex = lines[i].lastIndexOf("onclick=\"return false\">", beginIndex);
+                //Common.debugPrintln( "--->  " + lines[i].substring(beginIndex, beginIndex+10) );
+                beginIndex = lines[i].indexOf(">", beginIndex) + 1;
+                //Common.debugPrintln( "--->  " + lines[i].substring(beginIndex, beginIndex+10) );
+                endIndex = lines[i].indexOf("<", beginIndex);
+                //Common.debugPrintln( "--->  " + lines[i].substring(beginIndex, beginIndex+10) );
+                pageCount = Integer.valueOf( lines[i].substring( beginIndex, endIndex ) );
+                lastAllPageString = lines[i];
+            }
+        }
+        
+        if (pageCount > 1)
+        {
+            lastAllPageString = getAllPageString( webSite + "?p=" + (pageCount - 1) );      
+        }
+        int lastPageCount = lastAllPageString.split("<img alt=" ).length - 1;
+        
+        totalPage = (pageCount-1) * onePagePicCount + lastPageCount;
+        
+        /*
         for ( int i = 0 ; i < lines.length ; i++ ) {
             // ex. Showing 41 - 60 of 192 images
             if ( lines[i].matches( "(?s).*Showing(?s).*of(?s).*images(?s).*" ) ) {
@@ -110,8 +137,11 @@ public class ParseEH extends ParseOnlineComicSite {
         } else {
             pageCount = totalPage / onePagePicCount + 1;
         }
-        
+        */
         Common.debugPrintln( "共分幾個頁面 : " + pageCount );
+        Common.debugPrintln( "總共頁數 : " + totalPage );
+        
+        //System.exit(0);
 
         comicPageURL = new String[totalPage];
         comicURL = new String[totalPage]; // totalPage = amount of comic pic
@@ -165,7 +195,7 @@ public class ParseEH extends ParseOnlineComicSite {
             
             for ( int count = 0 ; count < onePagePicCount && Run.isAlive ; count++ ) {
                 //Common.debugPrintln( "\n" + lines.length + " LINE " + i + " " + beginIndex );//"\n " + lines[i] );
-                beginIndex = lines[i].indexOf( baseSiteURL, beginIndex );
+                beginIndex = lines[i].indexOf( baseSiteURL + "/s/", beginIndex );
                 endIndex = lines[i].indexOf( "\"><img alt=\"", beginIndex );
 
                 //System.out.println( count + " = " + beginIndex + "   "  + endIndex );
