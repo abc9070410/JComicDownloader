@@ -406,6 +406,27 @@ abstract public class ParseOnlineComicSite {
 
         return formatVolume;
     }
+    
+    private String removeNewline(String text)
+    {
+        return text.replaceAll("\\r|\\n", " ");
+    }
+    
+    public String getOutputText(String text)
+    {
+        /*
+        while (text.indexOf("&nbsp;") >= 0)
+        {
+            text = text.replace("&nbsp;", "");
+        }
+        */
+        
+        text = text.replaceAll("<b>.+</b>", "");
+        
+        text = Common.replaceTag(text);
+        
+        return Common.getTraditionalChinese(removeNewline(replaceNCR(text)).replaceAll("'", "")).trim();
+    }
 
     //  將numeric character references全部還原
     public String replaceNCR( String text ) {
@@ -413,14 +434,31 @@ abstract public class ParseOnlineComicSite {
         int endIndex = 0;
 
         // 先將非數字的character references進行替換
-        text = text.replaceAll( "&nbsp;", " " );
-        text = text.replaceAll( "&quot;", "\"" );
-        text = text.replaceAll( "&amp;", "&" );
-        text = text.replaceAll( "&hellip;", "..." );
-        text = text.replaceAll( "&gt;", ">" );
-        text = text.replaceAll( "&lt;", "<" );
-        text = text.replaceAll( "&rdquo;", "”" );
-        text = text.replaceAll( "&ldquo;", "“" );
+        text = text.replaceAll( "\\&nbsp;", " " );
+        text = text.replaceAll( "\\&quot;", "\"" );
+        text = text.replaceAll( "\\&amp;", "&" );
+        text = text.replaceAll( "\\&hellip;", "..." );
+        text = text.replaceAll( "\\&gt;", ">" );
+        text = text.replaceAll( "\\&lt;", "<" );
+        text = text.replaceAll( "\\&rdquo;", "”" );
+        text = text.replaceAll( "\\&ldquo;", "“" );
+        text = text.replaceAll( "\\&#39;", "'" );
+        text = text.replaceAll( "\\&mdash;", "—" );
+        text = text.replaceAll( "\\&ndash;", "–" );
+        text = text.replaceAll( "\\&iexcl;", "¡" );
+        text = text.replaceAll( "\\&ldquo;", "“" );
+        text = text.replaceAll( "\\&rdquo;", "”" );
+        text = text.replaceAll( "\\&laquo;", "«" );
+        text = text.replaceAll( "\\&raquo;", "»" );
+        text = text.replaceAll( "\\&middot;", "·" );
+        text = text.replaceAll( "\\&divide;", "÷" );
+        text = text.replaceAll( "\\&nabla;", "∇" );
+        text = text.replaceAll( "\\&hearts;", "♥" );
+        text = text.replaceAll( "\\&clubs;", "♣" );
+        text = text.replaceAll( "\\&diams;", "♦" );
+        text = text.replaceAll( "\\&loz;", "◊" );
+        text = text.replaceAll( "\\&infin;", "∞" );
+        //text = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4(text);
 
         String ncrString = ""; // 存放numeric character references字串 ex. &#65289;
         String numberString = ""; // 存放numeric character references的數字部份 ex. 65289
@@ -428,7 +466,7 @@ abstract public class ParseOnlineComicSite {
 
         int times = 0;
         while ( true && times < 300 ) {
-            Common.debugPrint( " " + times ++ );
+            //Common.debugPrint( " " + times ++ );
             beginIndex = text.indexOf( "&#", beginIndex );
             endIndex = text.indexOf( ";", beginIndex ) + 1;
 

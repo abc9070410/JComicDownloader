@@ -18,8 +18,10 @@ import jcomicdownloader.tools.*;
 import jcomicdownloader.enums.*;
 import java.util.*;
 import jcomicdownloader.ComicDownGUI;
+import jcomicdownloader.Flag;
 import jcomicdownloader.SetUp;
 import jcomicdownloader.encode.Encoding;
+import static jcomicdownloader.module.ParseWiki.pageParsedCount;
 
 public class ParseEynyNovel extends ParseCKNovel {
 
@@ -259,22 +261,19 @@ public class ParseEynyNovel extends ParseCKNovel {
 
         return Common.getFileString( SetUp.getTempDirectory(), indexName );
     }
+    
+    @Override
+    public boolean isSingleVolumePage(String urlString) {
+        return (urlString.indexOf( "/M.1") > 0);
+    }
 
     @Override
     public String getTitleOnMainPage( String urlString, String allPageString ) {
         int beginIndex, endIndex;
 
-        if ( urlString.matches( "(?s).*/tid-(?s).*" ) || urlString.matches( "(?s).*/thread-(?s).*" ) ) { // 網址為文章頁面
-            beginIndex = allPageString.indexOf( "name=\"keywords\"" );
-            beginIndex = allPageString.indexOf( "content=", beginIndex );
-            beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
-            endIndex = allPageString.indexOf( "\"", beginIndex );
-        }
-        else { // 網址為名單頁面 ex. http://www03.eyny.com/archiver/fid-1777-1.html
-            beginIndex = allPageString.indexOf( "<title>" );
-            beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
-            endIndex = allPageString.indexOf( "</title>", beginIndex );
-        }
+        beginIndex = allPageString.indexOf( "<title>" );
+        beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( " - ", beginIndex );
 
         String title = allPageString.substring( beginIndex, endIndex ).trim();
         title = getRegularFileName( title );

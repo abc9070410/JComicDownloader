@@ -25,24 +25,25 @@ package jcomicdownloader.tools;
 
 import java.awt.Color;
 import java.awt.Font;
-import jcomicdownloader.table.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jcomicdownloader.encode.*;
-import jcomicdownloader.module.*;
-import jcomicdownloader.*;
 
 import java.io.*;
 import java.lang.reflect.Method;
-import java.util.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.text.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.*;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -52,8 +53,12 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import jcomicdownloader.*;
+import jcomicdownloader.encode.*;
 import jcomicdownloader.enums.*;
 import jcomicdownloader.frame.InformationFrame;
+import jcomicdownloader.module.*;
+import jcomicdownloader.table.*;
 
 /**
 
@@ -334,7 +339,7 @@ public class Common
         try
         {
             URL url = new URL( urlString );
-            HttpURLConnection connection = ( HttpURLConnection ) url.openConnection();
+            HttpsURLConnection connection = ( HttpsURLConnection ) url.openConnection();
             connection.setRequestProperty( "User-Agent", "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-TW; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8" );
             connection.setDoInput( true );
             connection.setDoOutput( true );
@@ -394,7 +399,7 @@ public class Common
         try
         {
             URL url = new URL( urlString );
-            HttpURLConnection connection = ( HttpURLConnection ) url.openConnection();
+            HttpsURLConnection connection = ( HttpsURLConnection ) url.openConnection();
             connection.setRequestProperty( "User-Agent", "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-TW; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8" );
 
             if ( referURL != null )
@@ -500,6 +505,32 @@ public class Common
         }
 
     }
+    
+    public static void trustHTTPS()
+    {        
+        // Create a new trust manager that trust all certificates
+        TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                public void checkClientTrusted(
+                    java.security.cert.X509Certificate[] certs, String authType) {
+                }
+                public void checkServerTrusted(
+                    java.security.cert.X509Certificate[] certs, String authType) {
+                }
+            }
+        };
+
+        // Activate the new trust manager
+        try {
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (Exception e) {
+        }
+    }
 
     public static void downloadFile( String webSite, String outputDirectory, String outputFileName,
                                      boolean needCookie, String cookieString, String referURL, boolean fastMode, int retryTimes,
@@ -521,6 +552,8 @@ public class Common
             {
 
                 ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
+                
+                trustHTTPS();
 
                 // google圖片下載時因為有些連線很久沒回應，所以要設置計時器，預防連線時間過長
                 Timer timer = new Timer();
@@ -588,7 +621,8 @@ public class Common
                     return;
                 }
 
-                tryConnect( connection );
+                if (webSite.indexOf("https:") < 0)
+                    tryConnect( connection );
 
 
                 int fileSize = connection.getContentLength() / 1000;
@@ -600,20 +634,26 @@ public class Common
 
                     Common.sleep( 1000, "重新下載倒數:" ); // 每次暫停一秒再重新連線
 
-                    tryConnect( connection );
+                    if (webSite.indexOf("https:") < 0)
+                        tryConnect( connection );
                 }
                 // 內部伺服器發生錯誤，讀取getErrorStream() 
-                if ( connection.getResponseCode() == 500 )
+                if (webSite.indexOf("https:") < 0)
                 {
+                    if ( connection.getResponseCode() == 500 )
+                    {
+                    }
+                    else if ( connection.getResponseCode() != 200 )
+                    {
+                        //Common.debugPrintln( "第二次失敗，不再重試!" );
+                        String errorMessage = "錯誤回傳碼(responseCode): " + connection.getResponseCode();
+                        Common.errorReport( errorMessage + " : " + webSite );
+                        ComicDownGUI.stateBar.setText( errorMessage + " ----> 無法下載" + webSite );
+                        return;
+                    }
                 }
-                else if ( connection.getResponseCode() != 200 )
-                {
-                    //Common.debugPrintln( "第二次失敗，不再重試!" );
-                    String errorMessage = "錯誤回傳碼(responseCode): " + connection.getResponseCode();
-                    Common.errorReport( errorMessage + " : " + webSite );
-                    ComicDownGUI.stateBar.setText( errorMessage + " ----> 無法下載" + webSite );
-                    return;
-                }
+                
+                
 
                 Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
 
@@ -621,7 +661,7 @@ public class Common
                 OutputStream os = new FileOutputStream( outputDirectory + outputFileName );
                 InputStream is = null;
 
-                if ( connection.getResponseCode() == 500 )
+                if ( webSite.indexOf("https:") < 0 && connection.getResponseCode() == 500 )
                 {
                     is = connection.getErrorStream(); // xindm
                 }
@@ -1317,7 +1357,8 @@ public class Common
                     || oldString.charAt( i ) == '<'
                     || oldString.charAt( i ) == '>'
                     || oldString.charAt( i ) == '|'
-                    || oldString.charAt( i ) == '#')
+                    || oldString.charAt( i ) == '#'
+                    || oldString.charAt( i ) == '-')
                     //|| oldString.charAt( i ) == '-')
             {
 
