@@ -41,3 +41,7 @@
 * Substance
 * https://java.net/projects/substance/
 
+## License
+
+* GPLv3
+* http://www.gnu.org/copyleft/gpl.html
