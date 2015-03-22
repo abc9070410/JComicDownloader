@@ -2,6 +2,8 @@
 
 * A tool which has the ability to download the online comics and novels from some china websites.
 
+![res](res/screenshot2.png)
+
 
 ## Website
 
