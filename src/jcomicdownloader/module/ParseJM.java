@@ -96,6 +96,10 @@ public class ParseJM extends ParseOnlineComicSite
         endIndex = allPageString.indexOf( "\"", beginIndex );
 
         String tempString = allPageString.substring( beginIndex, endIndex );
+        
+        tempString = unsuan(tempString, "www.jmymh.com");
+        Common.debugPrintln( "tempString: " + tempString );
+        //System.exit(0);
 
         String[] urlStrings = tempString.split( "\\|" );
         totalPage = urlStrings.length;
@@ -110,35 +114,36 @@ public class ParseJM extends ParseOnlineComicSite
         String midPicURL = allPageString.substring( beginIndex, endIndex );
 
         // 設定伺服器位址
-        String serverURL = "http://mh.jmymh.jmmh.net:2012/";
-        String serverURL1 = "http://ltsvr.jmydm.jmmh.net:2012/";
-        String serverURL2 = "http://mhsvr.jmmh.net:2012/";
-        String serverURL3 = "http://wt.jmydm.net:2012/";
+        String serverURL[] = {
+            "http://comic.jmydm.com:8080/",
+            "http://comic.1mh.in:2813/",
+            "http://mh.jmymh.jmmh.net:2012/",
+            "http://ltsvr.jmydm.jmmh.net:2012/",
+            "http://wt.jmydm.net:2012/"
+        };
+        
         String nowServerURL = ""; // 這次要使用的伺服器
+        
+        Common.debugPrintln("測試:" +  serverURL + midPicURL + urlStrings[0]);
 
-        if ( Common.urlIsOK( serverURL + midPicURL + urlStrings[0] ) )
+        //System.exit(0);
+        
+        for (int i = 0; i < serverURL.length; i ++)
         {
-            nowServerURL = serverURL;
+            if ( Common.urlIsOK( serverURL[i] + midPicURL + urlStrings[0] ) )
+            {
+                nowServerURL = serverURL[i];
+                break;
+            }
         }
-        else if ( Common.urlIsOK( serverURL1 + midPicURL + urlStrings[0] ) )
-        {
-            nowServerURL = serverURL1;
-        }
-        else if ( Common.urlIsOK( serverURL2 + midPicURL + urlStrings[0] ) )
-        {
-            nowServerURL = serverURL2;
-        }
-        else if ( Common.urlIsOK( serverURL3 + midPicURL + urlStrings[0] ) )
-        {
-            nowServerURL = serverURL3;
-        }
-
-
+        
         int p = 0; // 目前頁數
         for ( int i = 1; i <= totalPage && Run.isAlive; i++ )
         {
-            comicURL[p++] = nowServerURL + midPicURL + urlStrings[i - 1]; // 存入每一頁的網頁網址
+            String picURL = nowServerURL + midPicURL + urlStrings[i - 1]; 
+            //comicURL[p++] = nowServerURL + midPicURL + urlStrings[i - 1]; // 存入每一頁的網頁網址
             //Common.debugPrintln( p + " " + comicURL[p - 1] ); // debug
+            singlePageDownloadUsingSimple( getTitle(), getWholeTitle(), picURL, totalPage, i, "", webSite );
 
         }
         //System.exit( 0 ); // debug
@@ -244,4 +249,8 @@ public class ParseJM extends ParseOnlineComicSite
 
         return combinationList;
     }
+
+    
+    
+
 }

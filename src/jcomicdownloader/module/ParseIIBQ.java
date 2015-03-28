@@ -88,6 +88,9 @@ public class ParseIIBQ extends ParseOnlineComicSite {
         int endIndex = allPageString.indexOf( "\"", beginIndex );
         String tempString = allPageString.substring( beginIndex, endIndex ).trim();
         
+        tempString = unsuan(tempString, "www.iibq.com");
+        Common.debugPrintln( "tempString: " + tempString );
+        //System.exit(0);
         String[] urlTokens = tempString.split( "\\|" );
 
         totalPage = urlTokens.length; 
@@ -107,8 +110,11 @@ public class ParseIIBQ extends ParseOnlineComicSite {
         String basePicURL = allPageString.substring( beginIndex, endIndex );
 
         for ( int p = 1 ; p <= totalPage && Run.isAlive; p++ ) {
-            comicURL[p - 1] = basePicURL + middleURL + urlTokens[p-1];
+            //comicURL[p - 1] = basePicURL + middleURL + urlTokens[p-1];
             //System.out.println( comicURL[p - 1] ); // debug
+            String picURL = basePicURL + middleURL + urlTokens[p-1];
+            singlePageDownloadUsingSimple( getTitle(), getWholeTitle(), picURL, totalPage, p, "", webSite );
+            
         }
         //System.exit(0); // debug
     }
@@ -148,7 +154,7 @@ public class ParseIIBQ extends ParseOnlineComicSite {
 
     @Override
     public String getTitleOnMainPage( String urlString, String allPageString ) {
-        int beginIndex = allPageString.indexOf( "class=\"cTitle\"" );
+        int beginIndex = allPageString.indexOf( "<h1 " );
         beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
         int endIndex = allPageString.indexOf( "</h1>", beginIndex );
         String title = allPageString.substring( beginIndex, endIndex ).trim().split( "\\s" )[0];
@@ -165,7 +171,7 @@ public class ParseIIBQ extends ParseOnlineComicSite {
         List<String> volumeList = new ArrayList<String>();
 
         int beginIndex = allPageString.indexOf( "class=\"cVol\"" );
-        int endIndex = allPageString.indexOf( "class=\"cCRHtm\"", beginIndex );
+        int endIndex = allPageString.indexOf( "uyan_frame", beginIndex );
         String tempString = allPageString.substring( beginIndex, endIndex );
         
         endIndex = beginIndex = 0;

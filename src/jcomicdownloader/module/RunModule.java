@@ -323,7 +323,10 @@ public class RunModule {
             || siteID == Site.TWO_ECY
             || siteID == Site.ONESEVEN_KK
             || siteID == Site.FUMANHUA
-            || siteID == Site.CK ) {
+            || siteID == Site.CK 
+            || siteID == Site.PTT 
+            || siteID == Site.JM
+            || siteID == Site.IIBQ ) {
             return true;
         }
         else if ( isNovelSite( siteID ) || isBlogSite( siteID ) || isMusicSite( siteID ) ) {
