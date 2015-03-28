@@ -66,7 +66,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
         officialName = "official.html";
         //downloadPageName = "downloadPage.html";
         //downloadPageURL = "https://sites.google.com/site/jcomicdownloader/release";
-        officialURL = "https://sites.google.com/site/jcomicdownloader/";
+        officialURL = "https://github.com/abc9070410/JComicDownloader/tree/master/dist";//"https://sites.google.com/site/jcomicdownloader/";
 
         setUpUIComponent();
         setUpeListener();
@@ -249,10 +249,12 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
         String allPageString = Common.getFileString( SetUp.getTempDirectory(), officialName );
 
         // 先找出最新的是第幾號版本
-        int endIndex = allPageString.indexOf( "版發佈" );
-        int beginIndex = allPageString.substring( 0, endIndex ).lastIndexOf( ">" ) + 1;
+        int beginIndex = allPageString.indexOf( "title=\"JComicDownloader.jar\"" );
+        beginIndex = allPageString.indexOf("datetime=", beginIndex);
+        beginIndex = allPageString.indexOf("\"", beginIndex) + 1;
+        int endIndex = allPageString.indexOf("T", beginIndex);
         String versionString = allPageString.substring( beginIndex, endIndex );
-
+        
         return Common.getStringUsingDefaultLanguage( versionString, versionString );
     }
 
@@ -328,16 +330,16 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
                 String nowSkinName = SetUp.getSkinClassName();
 
                 downloadOfficialHtml(); // 下載官方網頁
-                versionLabel.setText( getUpdateVersionString() ); // 從官方網頁提取更新版本資訊
+                versionLabel.setText( "" ); // 從官方網頁提取更新版本資訊
                 synchronized ( InformationFrame.thisFrame )
                 { // lock main frame
                     InformationFrame.thisFrame.notifyAll();
                     InformationFrame.downloadLock = false;
                 }
 
-                dateLabel.setText( getUpdateDateString() ); // 從官方網頁提取更新日期資訊
+                dateLabel.setText( getUpdateVersionString() ); // 從官方網頁提取更新日期資訊
 
-                supportedSiteLabel.setText( getUpdateSupportedSiteString() ); // 從官方網頁提取支援網站資訊
+                supportedSiteLabel.setText( "?" ); // 從官方網頁提取支援網站資訊
                 repaint();
 
                 if ( !CommonGUI.isDarkSytleSkin( nowSkinName ) )
@@ -427,9 +429,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
     // 下載最新版本的JComicDownloader
     private void downloadLastestVersion()
     {
-        InformationFrame.downloadButton.setText( "嘗試取得版本資訊..." );
-
-
+        InformationFrame.downloadButton.setText( "開始下載最新版本..." );
 
         new Thread( new Runnable()
         {
@@ -478,34 +478,10 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
                         
                         deleteOfficialHtml(); // 刪除官方網頁檔案
 
-                        String fileName = "JComicDownloader_" + versionLabel.getText() + ".jar";
+                        String fileName = "JComicDownloader.jar";
 
-                        /*
-                         if ( ComicDownGUI.versionString.matches( ".*" + versionLabel.getText() + ".*" ) )
-                         {
-                         CommonGUI.showMessageDialog( InformationFrame.thisFrame, "目前程式已是最新版本！",
-                         "提醒訊息", JOptionPane.INFORMATION_MESSAGE );
-                         }
-                         else
-                         */
-                        if ( ComicDownGUI.versionString.matches( ".*" + versionLabel.getText() + ".*" ) )
-                        {
-                            Common.debugPrintln( "開始更新最新版本" );
-                            InformationFrame.downloadButton.setText( "更新最新版本" );
-                        }
-                        else
-                        {
-                            Common.debugPrintln( "開始下載最新版本" );
-                            InformationFrame.downloadButton.setText( "開始下載最新版本" );
-                        }
-
-
-
-                        String frontURL = "https://sites.google.com/site/jcomicdownloader/release/";
-                        String backURL = "?attredirects=0&amp;d=1";
-                        String lastestVersionURL = frontURL + fileName + backURL;
+                        String lastestVersionURL = "https://github.com/abc9070410/JComicDownloader/blob/master/dist/JComicDownloader.jar?raw=true";
                         Common.downloadFile( lastestVersionURL, Common.getNowAbsolutePath(), fileName, false, null );
-
 
                         InformationFrame.downloadButton.setText( "最新版本下載完成" );
 
