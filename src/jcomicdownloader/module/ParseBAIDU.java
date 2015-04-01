@@ -113,6 +113,8 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             }
 
             int picCountOnNowPage = allPageString.split( "\"BDE_Image\"" ).length - 1;
+            
+            Common.debugPrintln( "此頁應該有" + picCountOnNowPage + "張圖");
 
             // 當此頁面貼圖數少於5張，且之前沒有選擇解析為止，且不是最後一頁，才跳出詢問視窗
             if ( picCountOnNowPage < 5 && choice != 2 && i != pageAmount - 1 ) {
@@ -132,6 +134,7 @@ public class ParseBAIDU extends ParseOnlineComicSite {
                     continue;
                 }
             }
+            /*
             String[] tokens = allPageString.split( "\"" );
             for ( int j = 0 ; j < tokens.length ; j++ ) {
                 if ( tokens[j].matches( "BDE_Image" ) ) {
@@ -147,8 +150,27 @@ public class ParseBAIDU extends ParseOnlineComicSite {
                     }
                 }
             }
-
+            
             String[] comicURL = tempComicURL.split( "####" );
+            */
+            String[] temps = allPageString.split("\"BDE_Image\"");
+            String[] comicURL = new String[temps.length-1];
+            String basePicURL = "http://imgsrc.baidu.com/forum/pic/item";
+            
+            for (i = 1; i < temps.length; i ++)
+            {
+                beginIndex = temps[i].indexOf("http://imgsrc.baidu.com/");
+                endIndex = temps[i].indexOf("\"", beginIndex);
+                beginIndex = temps[i].lastIndexOf("/", endIndex);
+                comicURL[i-1] = basePicURL + temps[i].substring(beginIndex, endIndex);
+                Common.debugPrintln("解析到的第" + i + "張圖:" + comicURL[i-1]);
+            }
+            
+            //System.exit(0);
+            /*
+
+            */
+
             
             
             // get the orginial image
@@ -199,9 +221,9 @@ public class ParseBAIDU extends ParseOnlineComicSite {
         String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_", "html" );
 
         Common.downloadFile( urlString, SetUp.getTempDirectory(), indexName, false, "" );
-        Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName, Zhcode.GBK );
+        //Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName, Zhcode.GBK );
 
-        return Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
+        return Common.getFileString( SetUp.getTempDirectory(), indexName );
     }
 
     private boolean existsTempFile() {
