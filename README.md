@@ -46,7 +46,7 @@
 
 ## Icon Information
 
-- Author : Double-J Design (http://www.doublejdesign.co.uk/)
+- Double-J Design (http://www.doublejdesign.co.uk/)
 
 
 ## License
