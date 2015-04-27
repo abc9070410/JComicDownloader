@@ -43,6 +43,12 @@
 * Substance
 * https://java.net/projects/substance/
 
+
+## Icon Information
+
+- Author : Double-J Design (http://www.doublejdesign.co.uk/)
+
+
 ## License
 
 * GPLv3
