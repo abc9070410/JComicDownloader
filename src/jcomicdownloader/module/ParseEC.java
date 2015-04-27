@@ -120,8 +120,8 @@ public class ParseEC extends ParseOnlineComicSite {
         NView_Java nv = new NView_Java(Integer.parseInt(chs), Integer.parseInt(itemid), allcodes, ch);
         this.comicURL = new String[nv.getPagesCount()];
         nv.setPage(1);
-        for (int d = 0; d < nv.getPagesCount(); nv.setPage(++d)) {
-            this.comicURL[d] = nv.parse();
+        for (int d = 1; d <= nv.getPagesCount(); nv.setPage(++d)) {
+            this.comicURL[d - 1] = nv.parse();
         }
     }
 
