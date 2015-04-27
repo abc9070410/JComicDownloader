@@ -44,7 +44,7 @@ public class ParseWiki extends ParseCKNovel {
      */
     public ParseWiki() {
         siteID = Site.WIKI;
-        siteName = "EynyNovel";
+        siteName = "Wiki";
         indexName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_wiki_parse_", "html");
         indexEncodeName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_wiki_encode_parse_", "html");
 
@@ -805,6 +805,12 @@ public class ParseWiki extends ParseCKNovel {
             for (int i = 0; i < tokens.length; i++) {
                 int tempIndex2 = tempString.indexOf(tokens[i].toLowerCase());
                 if (tempIndex2 >= 0) {
+                    
+                    if (i == 6 && !tempString.matches(".+from=\\w"))
+                    {
+                        Common.debugPrintln( "不是基本的字母分類，跳過:" + tempString );
+                        continue;
+                    }
                     return index;
                 }
             }

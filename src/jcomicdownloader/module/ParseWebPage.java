@@ -390,6 +390,14 @@ public class ParseWebPage
         {
             siteID = Site.XIAMI;
         }
+        else if ( webSite.matches( "(?s).*ptt.cc/(?s).*" ) )
+        {
+            siteID = Site.PTT;
+        }
+        else if ( webSite.matches( "(?s).*ishuhui.com(?s).*" ) )
+        {
+            siteID = Site.ISHUHUI;
+        }
         else
         {
             siteID = Site.UNKNOWN;

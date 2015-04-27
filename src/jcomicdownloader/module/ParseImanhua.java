@@ -91,8 +91,10 @@ public class ParseImanhua extends ParseOnlineComicSite {
 
 
 
-        String[] picNames; // 存放此集所有圖片檔名
+        String[] picNames = null; // 存放此集所有圖片檔名
+        String[] picNames2 = null;
 
+        try {
         if ( allPageString.indexOf( "|" ) > 0 ) {
             // 第一種格式，副檔名與檔名分開
             // ex. http://www.imanhua.com/comic/1034/list_33255.html
@@ -133,8 +135,32 @@ public class ParseImanhua extends ParseOnlineComicSite {
             }
             
         }
-
+        }
+        catch (Exception e)
+        {
+             Common.debugPrintln( "原始方式解析圖片檔名失敗" );
+        }
+        
+        if ( picNames == null || picNames.length == 1)
+        {
+            Common.debugPrintln( "解析失誤，產生流水號" );
+            
+            int total = allPageString.split("</option><option").length;
+            
+            picNames = new String[total];
+            
+            NumberFormat formatter = new DecimalFormat( Common.getZero() );
+            NumberFormat formatter2 = new DecimalFormat( "0000" );
+            
+            for (int i = 1; i <= picNames.length; i ++)
+            {
+                picNames[i-1] = "imanhua_" + formatter.format( i ) + ".png";
+                picNames2[i-1] = "" + formatter2.format( i ) + ".png";
+            }
+        }
+        
         totalPage = picNames.length;
+        
         Common.debugPrintln( "共 " + totalPage + " 頁" );
         comicURL = new String[totalPage];
 
@@ -165,7 +191,7 @@ public class ParseImanhua extends ParseOnlineComicSite {
         String baseURL1 = "http://t4.imanhua.com/";
         String baseURL2 = "http://t5.imanhua.com/";
         String baseURL3 = "http://t6.imanhua.com/";
-
+        String baseURL4 = "http://t.mangafiles.com/";
 
         int p = 0; // 目前頁數
         for ( int i = 0 ; i < totalPage && Run.isAlive ; i++ ) {
@@ -174,13 +200,13 @@ public class ParseImanhua extends ParseOnlineComicSite {
                 comicURL[i] = baseURL1 + picNames[i];
             }
             else {
-                comicURL[i] = baseURL1 + midURL
+                comicURL[i] = baseURL4 + midURL
                         + firstNumber + "/" + secondNumber + "/" + picNames[i];
             }
 
             // 使用最簡下載協定，加入refer始可下載
             singlePageDownloadUsingSimple( getTitle(), getWholeTitle(),
-                    comicURL[i], totalPage, i + 1, comicURL[i] );
+                    comicURL[i], totalPage, i + 1, webSite );
 
             //Common.debugPrintln( (++p) + " " + comicURL[p - 1] ); // debug
         }

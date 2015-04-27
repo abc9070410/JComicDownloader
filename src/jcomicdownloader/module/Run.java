@@ -539,6 +539,16 @@ public class Run extends Thread
                 ParseOnlineComicSite parse = new ParseXiami();
                 runSingleParseModule( parse );
             }
+            else if ( pw.getSiteID() == Site.PTT )
+            {
+                ParseOnlineComicSite parse = new ParsePtt();
+                runSingleParseModule( parse );
+            }
+            else if ( pw.getSiteID() == Site.ISHUHUI )
+            {
+                ParseOnlineComicSite parse = new ParseIshuhui();
+                runSingleParseModule( parse );
+            }
             else // Site.UNKNOWN
             {
                 Common.urlIsUnknown = true;

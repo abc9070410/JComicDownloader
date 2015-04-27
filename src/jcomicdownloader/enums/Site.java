@@ -99,4 +99,7 @@ public class Site {
     public final static int TING1 = 81;
     public final static int XIAMI = 82;
     public final static int WIKI = 83;
+    public final static int PTT = 84;
+    public final static int ISHUHUI = 85; // ishuhui
+    
 }
