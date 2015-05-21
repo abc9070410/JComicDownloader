@@ -86,11 +86,11 @@ public class ParseWebPage
         else if ( webSite.matches( "(?s).*99comic.com(?s).*" ) )
         {
             siteID = Site.NINENINE_COMIC;
-        }
+        }*/
         else if ( webSite.matches( "(?s).*99mh.com(?s).*" ) )
         {
             siteID = Site.NINENINE_MH;
-        }
+        }/*
         else if ( webSite.matches( "(?s).*mh.99770.cc(?s).*" ) )
         {
             siteID = Site.NINENINE_MH_99770;

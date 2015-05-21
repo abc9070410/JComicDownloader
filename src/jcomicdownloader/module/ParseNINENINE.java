@@ -939,6 +939,26 @@ class Parse99Mh extends ParseNINENINE
         endIndex = allPageString.indexOf( "\"", beginIndex );
 
         tempString = allPageString.substring( beginIndex, endIndex );
+        beginIndex = 0;
+        endIndex = tempString.length()- (tempString.charAt(tempString.length()-1) - 95);
+        tempString = tempString.substring(beginIndex, endIndex);
+        beginIndex = endIndex - 11;
+        String keyString = tempString.substring(beginIndex, endIndex);
+          
+        endIndex = beginIndex;
+        beginIndex = 0;
+        tempString = tempString.substring(beginIndex, endIndex);
+        
+        for(int i = 0; i < 10; ++i)
+            tempString = tempString.replace(keyString.charAt(i), (char) ('0' + i));
+        urlTokens = tempString.split( "x" );
+        char[] urlchar = new char[urlTokens.length];
+        for(int i = 0; i < urlTokens.length; ++i)
+        {
+            urlchar[i] = (char) Integer.parseInt(urlTokens[i]);
+        }
+        tempString = String.valueOf(urlchar);
+
         urlTokens = tempString.split( "\\|" );
 
         // 取得頁數
