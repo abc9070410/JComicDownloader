@@ -136,12 +136,10 @@ public class ParseWebPage
         {
             siteID = Site.JUMPCNCN;
         }
-        /*
         else if ( webSite.matches( "(?s).*dmeden\\.(?s).*" ) )
         {
             siteID = Site.DMEDEN;
         }
-        */
         else if ( webSite.matches( "(?s).*\\.jumpcn.com/(?s).*" ) )
         {
             siteID = Site.JUMPCN;
