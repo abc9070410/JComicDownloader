@@ -25,7 +25,6 @@ package jcomicdownloader.tools;
 
 import java.awt.Color;
 import java.awt.Font;
-
 import java.io.*;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
@@ -40,6 +39,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.*;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -53,6 +53,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+
 import jcomicdownloader.*;
 import jcomicdownloader.encode.*;
 import jcomicdownloader.enums.*;
@@ -3252,6 +3253,33 @@ public class Common
         }
         return tmp.toString();
     }
+
+    public static String[] unsuan99(String srcString, String keyString)
+    {
+        for(int i = 0; i < 10; ++i)
+            srcString = srcString.replace(keyString.charAt(i), (char) ('0' + i));
+        String [] urlTokens = srcString.split( keyString.substring(10,11));
+        char[] urlchar = new char[urlTokens.length];
+        for(int i = 0; i < urlTokens.length; ++i)
+            urlchar[i] = (char) Integer.parseInt(urlTokens[i]);
+        srcString = String.valueOf(urlchar);
+        return srcString.split( "\\|" );
+    }
+    
+    public static String []unsuan99(String srcString)
+    {
+        int beginIndex = 0;
+        int endIndex = srcString.length()- (srcString.charAt(srcString.length()-1) - 95);
+        srcString = srcString.substring(beginIndex, endIndex);
+        beginIndex = endIndex - 11;
+        String keyString = srcString.substring(beginIndex, endIndex);
+          
+        endIndex = beginIndex;
+        beginIndex = 0;
+        srcString = srcString.substring(beginIndex, endIndex);
+        return unsuan99(srcString, keyString);
+    }
+
 
 }
 

@@ -125,7 +125,7 @@ public class ParseDmeden extends ParseOnlineComicSite {
 
                 for ( int i = 0 ; i < urlTokens.length && Run.isAlive; i++ ) {
                     if ( urlTokens[i].matches( "\\s*name=\\s*" ) ) {
-                        comicURL[p - 1] = Common.getFixedChineseURL( imgUrl+Decode(urlTokens[i + 1] )[0]);
+                        comicURL[p - 1] = Common.getFixedChineseURL( imgUrl + Common.unsuan99(urlTokens[i + 1])[0]);
                         // 每解析一個網址就下載一張圖
                         singlePageDownload( getTitle(), getWholeTitle(), comicURL[p - 1], totalPage, p, 0 );
 
@@ -264,30 +264,5 @@ public class ParseDmeden extends ParseOnlineComicSite {
     @Override
     public String getMainUrlFromSingleVolumeUrl( String volumeURL ) {
         throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    public String[] Decode(String srcString, String keyString)
-    {
-        for(int i = 0; i < 10; ++i)
-            srcString = srcString.replace(keyString.charAt(i), (char) ('0' + i));
-        String [] urlTokens = srcString.split( keyString.substring(10,11));
-        char[] urlchar = new char[urlTokens.length];
-        for(int i = 0; i < urlTokens.length; ++i)
-            urlchar[i] = (char) Integer.parseInt(urlTokens[i]);
-        srcString = String.valueOf(urlchar);
-        return srcString.split( "\\|" );
-    }
-    public String []Decode(String srcString)
-    {
-        int beginIndex = 0;
-        int endIndex = srcString.length()- (srcString.charAt(srcString.length()-1) - 95);
-        srcString = srcString.substring(beginIndex, endIndex);
-        beginIndex = endIndex - 11;
-        String keyString = srcString.substring(beginIndex, endIndex);
-          
-        endIndex = beginIndex;
-        beginIndex = 0;
-        srcString = srcString.substring(beginIndex, endIndex);
-        return Decode(srcString, keyString);
     }
 }
