@@ -19,7 +19,9 @@ package jcomicdownloader.module;
 
 import jcomicdownloader.tools.*;
 import jcomicdownloader.enums.*;
+
 import java.util.*;
+
 import jcomicdownloader.SetUp;
 
 public class ParseDmeden extends ParseOnlineComicSite {
@@ -82,9 +84,16 @@ public class ParseDmeden extends ParseOnlineComicSite {
         String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
         Common.debugPrint( "開始解析這一集有幾頁 : " );
 
-        int beginIndex = allPageString.indexOf( "\"hdPageCount\"" );
+        int beginIndex = allPageString.indexOf( "\"hdDomain\"" );
         int endIndex = allPageString.indexOf( "/>", beginIndex );
         String tempString = allPageString.substring( beginIndex, endIndex );
+        String[] Tokens = tempString.split( "\"" );
+        tempString = Tokens[Tokens.length - 2];
+        String imgUrl = tempString.split( "\\|" )[0];
+
+        beginIndex = allPageString.indexOf( "\"hdPageCount\"" );
+        endIndex = allPageString.indexOf( "/>", beginIndex );
+        tempString = allPageString.substring( beginIndex, endIndex );
         String[] pageTokens = tempString.split( "\"" );
         totalPage = Integer.parseInt( pageTokens[pageTokens.length - 2] );
         Common.debugPrintln( "共 " + totalPage + " 頁" );
@@ -115,8 +124,8 @@ public class ParseDmeden extends ParseOnlineComicSite {
                 String[] urlTokens = tempUrlString.split( "\"" );
 
                 for ( int i = 0 ; i < urlTokens.length && Run.isAlive; i++ ) {
-                    if ( urlTokens[i].matches( "\\s*src=\\s*" ) ) {
-                        comicURL[p - 1] = Common.getFixedChineseURL( urlTokens[i + 1] );
+                    if ( urlTokens[i].matches( "\\s*name=\\s*" ) ) {
+                        comicURL[p - 1] = Common.getFixedChineseURL( imgUrl + Common.unsuan99(urlTokens[i + 1])[0]);
                         // 每解析一個網址就下載一張圖
                         singlePageDownload( getTitle(), getWholeTitle(), comicURL[p - 1], totalPage, p, 0 );
 
@@ -195,7 +204,7 @@ public class ParseDmeden extends ParseOnlineComicSite {
         
         if ( urlString.matches( ".*dmeden.net/.*" ) ) {
             beginIndex = allPageString.indexOf( "class=\"cVolList\"" );
-            endIndex = allPageString.indexOf( "class=\"cCRHtm\"", beginIndex );
+            endIndex = allPageString.indexOf( "<input name=\"hdComicID\"", beginIndex );
         }
         else {
             beginIndex = allPageString.indexOf( "class=\"list_s\"" );

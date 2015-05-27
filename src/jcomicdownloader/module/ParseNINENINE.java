@@ -79,8 +79,10 @@ public class ParseNINENINE extends ParseOnlineComicSite
         int endIndex = allString.indexOf( ">", beginIndex );
 
         int endIndexOfBaseURL = Common.getIndexOfOrderKeyword( webSite, "/", 3 );
-        baseURL = webSite.substring( 0, endIndexOfBaseURL );
-        jsURL = baseURL + allString.substring( beginIndex, endIndex );
+        if(baseURL == null)
+            baseURL = webSite.substring( 0, endIndexOfBaseURL );
+        if(jsURL == null)
+            jsURL = baseURL + allString.substring( beginIndex, endIndex );
 
         Common.debugPrintln( "基本位址: " + baseURL );
         Common.debugPrintln( "JS檔位址: " + jsURL );
@@ -133,27 +135,34 @@ public class ParseNINENINE extends ParseOnlineComicSite
 
         String baseDownloadURL = allJsString.substring( beginIndex, endIndex );
         Common.debugPrintln( "下載伺服器位址: " + baseDownloadURL );
+        beginIndex = allJsString.indexOf( "unsuan(", endIndex );
+        beginIndex = allJsString.indexOf( "\"", beginIndex ) + 1;
+        endIndex = allJsString.indexOf( "\"", beginIndex + 1 );
+        String keyString = allJsString.substring(beginIndex, endIndex);
 
         // 再取得後面的圖片目錄網址
-        String[] lines = Common.getFileStrings( SetUp.getTempDirectory(), indexEncodeName );
-        index = 0;
-        while ( !lines[index].matches( "(?s).*\\|(?s).*" ) )
-        {
-            index++;
-        }
+        String allPageString = getAllPageString( webSite );
 
-        beginIndex = lines[index].indexOf( "\"" ) + 1;
-        endIndex = lines[index].lastIndexOf( "\"" );
+        beginIndex = 0;
+        endIndex = 0;
 
+        beginIndex = allPageString.indexOf( "var PicListUrl =" );
+        if(beginIndex == -1)
+            beginIndex = allPageString.indexOf( "var PicListsUrl =" );
+        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( "\"", beginIndex );
 
-        String tempString = lines[index].substring( beginIndex, endIndex );
+        String tempString = allPageString.substring( beginIndex, endIndex );
+        //decode
+        String [] urlTokens = Common.unsuan99(tempString, keyString);
 
-        String[] specificDownloadURL = tempString.split( "\\|" );
-
+        // 取得頁數
+        comicURL = new String[ urlTokens.length ];
+        refers = new String[ urlTokens.length ];
 
         for ( int i = 0; i < comicURL.length && Run.isAlive; i++ )
         {
-            comicURL[i] = baseDownloadURL + specificDownloadURL[i];
+            comicURL[i] = baseDownloadURL + urlTokens[i];
             Common.debugPrintln( i + " : " + comicURL[i] );
             refers[i] = webSite;
         }
@@ -197,7 +206,7 @@ public class ParseNINENINE extends ParseOnlineComicSite
     {
         return serverNo;
     }
-
+    
     @Override // 從單集頁面取得title(作品名稱)
     public String getTitleOnSingleVolumePage( String urlString )
     {
@@ -351,60 +360,55 @@ class Parse99MangaTC extends Parse99ComicTC
         siteName = "dm.99manga.com";
 
         baseURL = "http://dm.99manga.com";
+        jsURL = "http://dm.99manga.com/script/ds.js";
     }
 
     @Override
     public void parseComicURL()
     { // parse URL and save all URLs in comicURL
         // 先取得後面的下載伺服器網址
-
-        String allPageString = getAllPageString( webSite );
+        String allPageString = getAllPageString( jsURL );
 
         int beginIndex = 0;
         int endIndex = 0;
-
-        beginIndex = allPageString.indexOf( "var PicListUrl" );
+        
+        beginIndex = allPageString.indexOf( "var sDS" );
         beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
         endIndex = allPageString.indexOf( "\"", beginIndex );
 
         String tempString = allPageString.substring( beginIndex, endIndex );
         String[] urlTokens = tempString.split( "\\|" );
+        
+        String basePicURL = urlTokens[urlTokens.length-1];
+        Common.debugPrintln( "下載伺服器位址: " + basePicURL );
+
+        allPageString = getAllPageString( webSite );
+
+        beginIndex = 0;
+        endIndex = 0;
+
+        beginIndex = allPageString.indexOf( "var sFiles=" );
+        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( "\"", beginIndex );
+
+        tempString = allPageString.substring( beginIndex, endIndex );
+        //decode
+        urlTokens = Common.unsuan99(tempString);
 
         // 取得頁數
         comicURL = new String[ urlTokens.length ];
         refers = new String[ urlTokens.length ];
-
-        // 再取得下載伺服器編號
-        beginIndex = webSite.indexOf( "s=", beginIndex );
-        beginIndex = webSite.indexOf( "=", beginIndex ) + 1;
-        tempString = webSite.substring( beginIndex, webSite.length() );
-        serverNo = Integer.parseInt( tempString );
-
-        //  取得伺服器位址
-        String jsURL = "http://dm.99manga.com/d/i.js";
-        Common.downloadFile( jsURL, SetUp.getTempDirectory(), jsName, false, "" );
-        String allJsString = Common.getFileString( SetUp.getTempDirectory(), jsName );
-
-        beginIndex = endIndex = 0;
-        String[] tempTokens = allJsString.split( "]=\"" );
-        String[] baseURLs = new String[ tempTokens.length - 2 ];
-        for ( int i = 0; i < baseURLs.length; i++ )
-        {
-            beginIndex = allJsString.indexOf( "]=\"", beginIndex ) + 3;
-            endIndex = allJsString.indexOf( "\"", beginIndex );
-            baseURLs[i] = allJsString.substring( beginIndex, endIndex );
-            //Common.debugPrintln( baseURLs[i] );
-        }
-
-        baseURL = baseURLs[serverNo - 1];
-
-        Common.debugPrintln( "下載伺服器位址: " + baseURL );
+        
+        // 取得目錄
+        beginIndex = allPageString.indexOf( "var sPath" );
+        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( "\"", beginIndex );
+        String dicString = allPageString.substring( beginIndex, endIndex );
 
         for ( int i = 0; i < comicURL.length; i++ )
         {
-            comicURL[i] = baseURL + Common.getFixedChineseURL( urlTokens[i] );
-            //Common.debugPrintln( i + " : " + comicURL[i] ) ;
-
+            comicURL[i] = basePicURL + dicString + Common.getFixedChineseURL( urlTokens[i] );
+            Common.debugPrintln( i + " : " + comicURL[i] );
             refers[i] = webSite;
         }
         //System.exit(0);
@@ -569,69 +573,6 @@ class Parse99MangaWWW extends Parse99MangaTC
 
         return combinationList;
     }
-    /*
-     @Override // 從主頁面取得title(作品名稱)
-     public String getTitleOnMainPage( String urlString, String allPageString ) {
-     Common.debugPrintln( "開始由主頁面位址取得title：" );
-
-     int beginIndex = allPageString.indexOf( "<h1>" );
-     beginIndex = allPageString.indexOf( " title=", beginIndex );
-     beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
-     int endIndex = allPageString.indexOf( "<", beginIndex );
-     String tempString = allPageString.substring( beginIndex, endIndex );
-
-     String title = Common.getStringRemovedIllegalChar(
-     Common.getTraditionalChinese( tempString.trim() ) );
-
-     return title;
-     }
-
-     @Override // 從主頁面取得所有集數名稱和網址
-     public List<List<String>> getVolumeTitleAndUrlOnMainPage( String urlString, String allPageString ) {
-     // combine volumeList and urlList into combinationList, return it.
-     // ex. <li><a href=/manga/4142/84144.htm?s=4 target=_blank>bakuman151集</a>
-     // <a href="javascript:ShowA(4142,84144,4);" class=Showa>加速A</a>
-     // <a href="javascript:ShowB(4142,84144,4);" class=Showb>加速B</a></li>
-
-     List<List<String>> combinationList = new ArrayList<List<String>>();
-     List<String> urlList = new ArrayList<String>();
-     List<String> volumeList = new ArrayList<String>();
-
-     int endIndexOfBaseURL = Common.getIndexOfOrderKeyword( urlString, "/", 3 );
-     String baseURL = urlString.substring( 0, endIndexOfBaseURL );
-
-     int beginIndex = allPageString.indexOf( "class=\"vol\"" );
-     int endIndex = allPageString.indexOf( "class=\"replv\"", beginIndex );
-     String tempString = allPageString.substring( beginIndex, endIndex );
-
-     int totalVolume = getHowManyKeyWordInString( tempString, "ShowA" );
-     int index = 0;
-     for ( int count = 0 ; count < totalVolume ; count++ ) {
-     index = tempString.indexOf( "href=/", index );
-
-     int urlBeginIndex = tempString.indexOf( "/", index );
-     int urlEndIndex = Common.getSmallerIndexOfTwoKeyword( tempString, index, " ", ">" );
-
-     urlList.add( baseURL + tempString.substring( urlBeginIndex, urlEndIndex ) );
-
-     int volumeBeginIndex = tempString.indexOf( ">", index ) + 1;
-     int volumeEndIndex = tempString.indexOf( "<", volumeBeginIndex );
-
-     String title = tempString.substring( volumeBeginIndex, volumeEndIndex );
-
-     volumeList.add( getVolumeWithFormatNumber(
-     Common.getStringRemovedIllegalChar(
-     Common.getTraditionalChinese( title ) ) ) );
-
-     index = volumeEndIndex;
-     }
-
-     combinationList.add( volumeList );
-     combinationList.add( urlList );
-
-     return combinationList;
-     }
-     */
 }
 
 class Parse99Manga extends ParseNINENINE
@@ -859,7 +800,7 @@ class Parse99ComicTC extends ParseCocoTC
         for ( int i = 0; i < comicURL.length; i++ )
         {
             comicURL[i] = baseURL + Common.getFixedChineseURL( urlTokens[i] );
-            //Common.debugPrintln( i + " : " + comicURL[i] ) ;
+            Common.debugPrintln( i + " : " + comicURL[i] );
         }
         //System.exit(0);
     }
@@ -912,7 +853,6 @@ class Parse99Mh extends ParseNINENINE
     @Override
     public void parseComicURL()
     {  
-        jsURL = "http://99mh.com/script/ds.js";
         String allPageString = getAllPageString( jsURL );
 
         int beginIndex = 0;
@@ -939,7 +879,8 @@ class Parse99Mh extends ParseNINENINE
         endIndex = allPageString.indexOf( "\"", beginIndex );
 
         tempString = allPageString.substring( beginIndex, endIndex );
-        urlTokens = tempString.split( "\\|" );
+        //decode
+        urlTokens = Common.unsuan99(tempString);
 
         // 取得頁數
         comicURL = new String[ urlTokens.length ];
@@ -962,7 +903,25 @@ class Parse99Mh extends ParseNINENINE
         
         //System.exit( 0 );
     }
+    @Override 
+    public String getTitleOnMainPage( String urlString, String allPageString )
+    {
+        Common.debugPrintln( "開始由主頁面位址取得title：" );
 
+        String[] tokens = allPageString.split( "\\s*=\\s+|\'" );
+        String title = "";
+
+        int index = 0;
+        for ( ; index < tokens.length; index++ )
+        {
+            if ( tokens[index].matches( "(?s).*wumiiTitle\\s*" ) )
+            { // ex. var wumiiTitle = "食夢者";
+                title = tokens[index + 2];
+                break;
+            }
+        }
+        return Common.getStringRemovedIllegalChar( Common.getTraditionalChinese( title ) );
+    }
     @Override // 下載網址指向的網頁，全部存入String後回傳
     public String getAllPageString( String urlString )
     {
@@ -1023,6 +982,10 @@ class Parse99Mh extends ParseNINENINE
             beginIndex = tempString.indexOf( ">", endIndex ) + 1;
             endIndex = tempString.indexOf( "</a>", beginIndex );
             volumeString = tempString.substring( beginIndex, endIndex );
+            //trim dummy
+            endIndex = volumeString.indexOf( "<img src",0);
+            if(endIndex != -1)
+                volumeString = volumeString.substring(0,endIndex);
             volumeList.add( getVolumeWithFormatNumber(
                     Common.getStringRemovedIllegalChar(
                     Common.getTraditionalChinese( volumeString.trim() ) ) ) );

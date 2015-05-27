@@ -66,15 +66,15 @@ public class ParseWebPage
         {
             siteID = Site.EX;
         }
-        /*
+
         else if ( webSite.matches( "(?s).*dm.99manga.com(?s).*" ) )
         {
             siteID = Site.NINENINE_MANGA_TC;
         }
-        else if ( webSite.matches( "(?s).*www.99manga.com(?s).*" ) )
+        /*else if ( webSite.matches( "(?s).*www.99manga.com(?s).*" ) )
         {
             siteID = Site.NINENINE_MANGA_WWW;
-        }
+        }*/
         else if ( webSite.matches( "(?s).*99manga.com(?s).*" ) )
         {
             siteID = Site.NINENINE_MANGA;
@@ -83,10 +83,10 @@ public class ParseWebPage
         {
             siteID = Site.NINENINE_COMIC_TC;
         }
-        else if ( webSite.matches( "(?s).*99comic.com(?s).*" ) )
+        /*else if ( webSite.matches( "(?s).*99comic.com(?s).*" ) )
         {
             siteID = Site.NINENINE_COMIC;
-        }
+        }*/
         else if ( webSite.matches( "(?s).*99mh.com(?s).*" ) )
         {
             siteID = Site.NINENINE_MH;
@@ -95,10 +95,10 @@ public class ParseWebPage
         {
             siteID = Site.NINENINE_MH_99770;
         }
-        else if ( webSite.matches( "(?s).*99770.cc(?s).*" ) )
+        /*else if ( webSite.matches( "(?s).*99770.cc(?s).*" ) )
         {
             siteID = Site.NINENINE_99770;
-        }
+        }*/
         else if ( webSite.matches( "(?s).*www.cococomic.com(?s).*" ) )
         {
             siteID = Site.NINENINE_COCO_TC;
@@ -107,7 +107,7 @@ public class ParseWebPage
         {
             siteID = Site.NINENINE_COCO;
         }
-        else if ( webSite.matches( "(?s).*1mh.com(?s).*" ) )
+        /*else if ( webSite.matches( "(?s).*1mh.com(?s).*" ) )
         {
             siteID = Site.NINENINE_1MH;
         }
@@ -136,12 +136,10 @@ public class ParseWebPage
         {
             siteID = Site.JUMPCNCN;
         }
-        /*
         else if ( webSite.matches( "(?s).*dmeden\\.(?s).*" ) )
         {
             siteID = Site.DMEDEN;
         }
-        */
         else if ( webSite.matches( "(?s).*\\.jumpcn.com/(?s).*" ) )
         {
             siteID = Site.JUMPCN;
