@@ -2,7 +2,7 @@
 
 * A tool which has the ability to download the online comics and novels from some china websites.
 
-![res](res/screenshot2.png)
+![res](src/main/resources/screenshot2.png)
 
 
 ## Website
@@ -17,14 +17,16 @@
 
 ## Release
 
-* https://github.com/abc9070410/JComicDownloader/raw/master/dist/JComicDownloader.jar
+* https://github.com/abc9070410/JComicDownloader/releases
 
 
 ## Installation
 
-* How to build this project:
-* https://sites.google.com/site/jcomicdownloader/step-by-step/how-to-build-project
+How to build this project
+----
+*mvn package*
 
+copy JComicDownloader\*.jar and lib at *target* folder
 
 ## External Library
 
@@ -42,6 +44,9 @@
 
 * Substance
 * https://java.net/projects/substance/
+
+* JAudioTagger
+* https://bitbucket.org/ijabz/jaudiotagger/
 
 
 ## Icon Information
