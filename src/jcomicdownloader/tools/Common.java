@@ -2808,6 +2808,138 @@ public class Common
 
         return responseCode;
     }
+    public static int simpleDownloadFile( String webSite,
+            String outputDirectory, String outputFileName, List<List<String>> requestProperty)
+    {
+        int responseCode = 0;
+        try
+        {
+            URL url = new URL( webSite );
+            HttpURLConnection connection = ( HttpURLConnection ) url.openConnection();
+            
+            connection.setRequestMethod( "GET" );
+            connection.setDoOutput( true );
+            
+            connection.setRequestProperty( "If-None-Match", "\"c4d553cc945cd1:0\"" );
+            connection.setRequestProperty( "Host", "pic.fumanhua.com" );
+            
+            //connection.setRequestProperty( "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" );
+            //connection.setRequestProperty( "Accept-Charset", "Big5,utf-8;q=0.7,*;q=0.3" );
+            //connection.setRequestProperty( "Accept-Encoding", "gzip,deflate,sdch" );
+            //connection.setRequestProperty( "Accept-Language", "zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4" );
+            //connection.setRequestProperty( "Cache-Control", "max-age=0" );
+            //connection.setRequestProperty( "Connection", "keep-alive" );
+            //connection.setRequestProperty( "Host", "f1.xiami.net" );
+            connection.setRequestProperty( "User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11" );
+            
+            List<String> KeyList = requestProperty.get(0);
+            List<String> ValueList = requestProperty.get(1);
+            for(int i = 0; i < KeyList.size() && i < ValueList.size(); ++i)
+            {
+                String strKey = KeyList.get(i);
+                if ( strKey != null && !"".equals( strKey ) )
+                {
+                    connection.setRequestProperty( strKey, ValueList.get(i) );
+                }
+            }
+            
+            ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
+            
+            //tryConnect( connection );
+            
+            int fileSize = connection.getContentLength() / 1000;
+            
+            responseCode = connection.getResponseCode();
+            if ( responseCode != 200 )
+            {
+                //Common.debugPrintln( "第二次失敗，不再重試!" );
+                Common.errorReport( "錯誤回傳碼(responseCode): "
+                + responseCode + " : " + webSite );
+                
+                return responseCode;
+            }
+            
+            Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
+            
+            //OutputStream os = response.getOutputStream();
+            OutputStream os = new FileOutputStream( outputDirectory + outputFileName );
+            InputStream is = null;
+            
+            
+            is = connection.getInputStream(); // 其他漫畫網
+            
+            Common.debugPrint( "(" + fileSize + " k) " );
+            String fileSizeString = fileSize > 0 ? "" + fileSize : " ? ";
+            
+            
+            
+            byte[] r = new byte[ 1024 ];
+            int len = 0;
+            
+            int fileGotSize = 0;
+            while ( (len = is.read( r )) > 0 && (Run.isAlive) )
+            {
+                // 快速模式下，檔案小於1mb且連線超時 -> 切斷連線
+                if ( fileSize > 1024 || !Flag.timeoutFlag ) // 預防卡住的機制
+                {
+                    os.write( r, 0, len );
+                }
+                else
+                {
+                    break;
+                }
+                
+                fileGotSize += (len / 1000);
+                
+                if ( Common.withGUI() )
+                {
+                    int percent = 100;
+                    String downloadText = "";
+                    if ( fileSize > 0 )
+                    {
+                        percent = (fileGotSize * 100) / fileSize;
+                        downloadText = fileSizeString + "Kb ( " + percent + "% ) ";
+                    }
+                    else
+                    {
+                        downloadText = fileSizeString + " Kb ( " + fileGotSize + "Kb ) ";
+                    }
+                
+                    ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
+                        + CommonGUI.stateBarDetailMessage
+                        + " : " + downloadText );
+                }
+            }
+            
+            is.close();
+            os.flush();
+            os.close();
+            
+            if ( Common.withGUI() )
+            {
+                ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
+                    + CommonGUI.stateBarDetailMessage
+                    + " : " + fileSizeString + "Kb ( 100% ) " );
+            }
+            
+            connection.disconnect();
+            
+            Flag.timeoutFlag = false; // 歸回初始值
+            
+            Common.debugPrintln( webSite + " downloads successful!" ); // for debug
+            
+        }
+        catch ( MalformedURLException e )
+        {
+            Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+        }
+        catch ( IOException e )
+        {
+            // TODO Auto-generated catch block
+            Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+        }
+        return responseCode;
+    }
 
     // 從java.awt.Color[r=255,g=175,b=175]轉為Color
     public static Color getColor( String colorString )
