@@ -175,7 +175,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
         JButton searchNovelButton = getButton( " 小說搜尋引擎", "novel search", "information_novel_search.png",
                                                "http://www.google.com/cse/home?cx=002948535609514911011:_vv3hzthlt8&hl=zh-TW", KeyEvent.VK_N );
         JButton messageButton = getButton( " 疑難問題回報", "bug report", "information_report.png",
-                                           "http://jcomicdownloader.blogspot.tw/2013/11/bug-report-8.html", KeyEvent.VK_R );
+                                           "https://github.com/abc9070410/JComicDownloader/issues", KeyEvent.VK_R );
 
         JLabel authorLabel = getLabel( "作者：surveyorK （abc9070410@gmail.com）",
                                        "author: surveyorK (abc9070410@gmail.com)" );
