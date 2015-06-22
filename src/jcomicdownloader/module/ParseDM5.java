@@ -1019,9 +1019,11 @@ public class ParseDM5 extends ParseOnlineComicSite
             }
             Common.debugPrint( i + " 圖片檔名:" + picNames[i] );
             
-            
-
-            picURLs[i] = Common.getFixedChineseURL( basePicURL + picNames[i] + cidAndKey );
+            if(basePicURL.lastIndexOf("/") != (basePicURL.length() -1) &&
+                    picNames[i].indexOf("/") != 0)
+                picURLs[i] = Common.getFixedChineseURL( basePicURL + "/" + picNames[i] + cidAndKey );
+            else
+                picURLs[i] = Common.getFixedChineseURL( basePicURL + picNames[i] + cidAndKey );
 
             Common.debugPrintln( " 圖片網址:" + picURLs[i] );
         }
