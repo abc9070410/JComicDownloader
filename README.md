@@ -9,7 +9,7 @@ https://sites.google.com/site/jcomicdownloader/
 Any operating systems which has a [Java Runtime Environment](https://java.com/zh_TW/download/) installed.
 
 ## Release
-http://abc9070410.github.io/JComicDownloader/JComicDownloader.jar
+https://github.com/abc9070410/JComicDownloader/raw/master/release/JComicDownloader.jar
 
 ## Installation
 See [How to build this project](https://sites.google.com/site/jcomicdownloader/step-by-step/how-to-build-project).
