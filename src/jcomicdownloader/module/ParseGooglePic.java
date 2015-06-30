@@ -89,7 +89,7 @@ public class ParseGooglePic extends ParseOnlineComicSite {
 
         allPageString = getNewAllPageString( webSite );
 
-        if ( allPageString.split( "/imghp" ).length > 2 ) {
+        if ( allPageString.split( "imgurl=" ).length > 10 ) {
             googleEnum = GoogleEnum.PIC;
             Common.debugPrintln( "此為圖片搜尋頁面" );
         }
@@ -99,21 +99,7 @@ public class ParseGooglePic extends ParseOnlineComicSite {
         }
 
         if ( googleEnum == GoogleEnum.PIC ) {
-            onePageAmount = 20;
-
-            // 取得基本版位址的前面
-            baseURL = getBaseUrlString( webSite );
-
-            // google圖片搜尋只有到980，之後就搜不到了。
-            allPageString = getNewAllPageString( baseURL + "&start=980&sa=N" );
-
-            // 最後一頁的圖片張數
-            lastPagePicCount = allPageString.split( "imgurl=" ).length - 1;
-
-            beginIndex = allPageString.indexOf( "style=\"float:right\"" );
-            beginIndex = allPageString.indexOf( "<div>", beginIndex ) + 5;
-            endIndex = allPageString.indexOf( "</div>", beginIndex );
-
+            totalPage = 1000; // default
         }
         else {
             onePageAmount = 10;
@@ -139,51 +125,42 @@ public class ParseGooglePic extends ParseOnlineComicSite {
             beginIndex = allPageString.indexOf( "id=resultStats" );
             beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
             endIndex = allPageString.indexOf( "<", beginIndex );
+            
+            Common.debugPrint( "開始解析這一集有幾頁 : " );
 
-        }
-        
-        
+            String[] pageTokens = allPageString.substring( beginIndex, endIndex ).split( "\\s" );
 
-        Common.debugPrint( "開始解析這一集有幾頁 : " );
-        String[] pageTokens = allPageString.substring( beginIndex, endIndex ).split( "\\s" );
-        
-        int lastPageNumber = 1000;
-        
-        /*
-        for ( int i = 1; i < pageTokens.length; i++ ) {
-            System.out.println( i + " ->" + pageTokens[i] );
-            if ( pageTokens[i].matches( "\\d+" ) ) {
-                // 因為最後一頁不全，所以減一
-                // 取較小的，防止判斷錯誤
-                if ( ( Integer.parseInt( pageTokens[i] ) - 1 ) < lastPageNumber ) {
-                    lastPageNumber = Integer.parseInt( pageTokens[i] ) - 1;
-                }
+            int lastPageNumber = 1000;
+            endIndex = allPageString.indexOf( "</b></td><td" );
+            if ( endIndex > 0 ) {
+                beginIndex = allPageString.lastIndexOf( ">", endIndex ) + 1;
+                lastPageNumber = Integer.parseInt( allPageString.substring( beginIndex, endIndex ) );
             }
+            else {
+                lastPageNumber = 1;
+            }
+            System.out.println( lastPageNumber );
+            totalPage = ( lastPageNumber - 1 ) * onePageAmount + lastPagePicCount;
         }
-        */
         
-        endIndex = allPageString.indexOf( "</b></td><td" );
-        if ( endIndex > 0 ) {
-            beginIndex = allPageString.lastIndexOf( ">", endIndex ) + 1;
-            lastPageNumber = Integer.parseInt( allPageString.substring( beginIndex, endIndex ) );
-        }
-        else {
-            lastPageNumber = 1;
-        }
-        System.out.println( lastPageNumber );
-        totalPage = ( lastPageNumber - 1 ) * onePageAmount + lastPagePicCount;
-
         Common.debugPrintln( "共 " + totalPage + " 頁" );
         comicURL = new String[totalPage];
 
+       
 
+        //System.exit(0);
+
+        boolean useOriginalFileName = false; // 取流水號檔名還是原始檔名
+        int i = 0; // 每一個搜尋頁一百張圖片
         int p = 0; // 頁數編號
-        for ( int i = 1; i <= lastPageNumber && Run.isAlive; i++ ) {
-            // "&start=0&sa=N"
-            String baseNo = "&start=" + ( ( i - 1 ) * onePageAmount ) + "&sa=N";
-            Common.debugPrintln( "目前進度第" + i + "頁: " + baseURL + baseNo );
-            allPageString = getNewAllPageString( baseURL + baseNo );
+        while (Run.isAlive) {
 
+            if (allPageString.length() < 1000)
+            {
+                Common.debugPrintln("下一頁已經沒有圖片可下載，收工");
+                break;
+            }
+            
             if ( googleEnum == GoogleEnum.PIC ) {
                 String[] tokens = allPageString.split( "imgurl=" );
                 String picName = "";
@@ -191,18 +168,35 @@ public class ParseGooglePic extends ParseOnlineComicSite {
                     p++;
 
                     comicURL[p - 1] = tokens[j].split( "&amp;" )[0];
-                    beginIndex = comicURL[p - 1].lastIndexOf( "/" ) + 1;
-                    picName = comicURL[p - 1].substring( beginIndex, comicURL[p - 1].length() );
-
-                    if ( picName.length() > 40 ) // 檔名太長
+                    
+                    if (useOriginalFileName)
                     {
-                        continue;
+                        beginIndex = comicURL[p - 1].lastIndexOf( "/" ) + 1;
+                        picName = comicURL[p - 1].substring( beginIndex, comicURL[p - 1].length() );
+
+                        if ( picName.length() > 40 ) // 檔名太長
+                        {
+                            continue;
+                        }
+
+                        // google獨立下載函式，需要判斷是否有同檔名的已下載檔案
+                        downloadGoogle( picName, p );
                     }
-
-                    // google獨立下載函式，需要判斷是否有同檔名的已下載檔案
-                    downloadGoogle( picName, p );
-
-                    //System.out.println( comicURL[p-1] );
+                    else
+                    {
+                        if ( !Common.existPicFile( getDownloadDirectory(), p ) ||
+                             !Common.existPicFile( getDownloadDirectory(), p + 1 ) )
+                        {
+                            singlePageDownloadUsingSimple( getTitle(), getWholeTitle(), comicURL[p-1], totalPage, p, webSite );
+                        }
+                    }
+                    
+                    if (false) // for the specific purpose...
+                    {
+                        String listText = Common.getFileString( getDownloadDirectory(), "list.txt" );
+                        listText += p + " : " + comicURL[p-1] + "\r\n";
+                        Common.outputFile( listText, getDownloadDirectory(), "list.txt" );
+                    }
                 }
             }
             else {
@@ -242,9 +236,10 @@ public class ParseGooglePic extends ParseOnlineComicSite {
                 }
             }
 
-
-
-
+            i++;
+            String baseNo = "&ijn=" + i + "&start=" + (i *100);
+            Common.debugPrintln( "目前進度第" + i + "頁: " + webSite + baseNo );
+            allPageString = getNewAllPageString( webSite + baseNo );
         }
 
         //System.exit(0); // debug
@@ -311,10 +306,16 @@ public class ParseGooglePic extends ParseOnlineComicSite {
     private String getBaseUrlString( String standardUrlString ) {
         String allPageString = getNewAllPageString( standardUrlString + "&sout=1" );
 
-        int beginIndex = allPageString.indexOf( "href=\"http" ) + 6;
-        int endIndex = allPageString.indexOf( "&gbv=", beginIndex );
-        String baseUrlString = allPageString.substring( beginIndex, endIndex );
+        int endIndex = allPageString.indexOf( "&amp;start=" );
+        int beginIndex = allPageString.lastIndexOf( "/search", endIndex );
+        String baseUrlString = "https://www.google.com" + allPageString.substring( beginIndex, endIndex );
+        
+        baseUrlString = baseUrlString.replaceAll("amp;", "");
+        
+        Common.debugPrintln("GooglePic BaseUrl: " + baseUrlString);
 
+        //System.exit(0);
+        
         return baseUrlString;
     }
 
