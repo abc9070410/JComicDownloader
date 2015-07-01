@@ -729,8 +729,8 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
         try {
             if (skinClassName.matches(".*substance.api.skin.*")
-                    && !new File(Common.getNowAbsolutePath() + "trident.jar").exists()) {
-                throw new Exception("資料夾內找不到trident.jar，無法設置Substance介面");
+                    && !new File(Common.getNowAbsolutePath() + "lib/trident-6.3.jar").exists()) {
+                throw new Exception("資料夾內找不到lib/trident-6.3.jar，無法設置Substance介面");
             }
 
             CommonGUI.setLookAndFeelByClassName(skinClassName);

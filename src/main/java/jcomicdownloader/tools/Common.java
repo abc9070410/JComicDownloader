@@ -2941,6 +2941,7 @@ public class Common
         return responseCode;
     }
 
+
     // 從java.awt.Color[r=255,g=175,b=175]轉為Color
     public static Color getColor( String colorString )
     {
@@ -3094,7 +3095,7 @@ public class Common
     // 取得目前程式檔名
     public static String getThisFileName()
     {
-        return ComicDownGUI.versionString.replaceAll( "  ", "_" ) + ".jar";
+        return ComicDownGUI.versionString.replaceAll(" ", "-" ) + ".jar";
     }
 
     // 下載j單一個ar檔，下載完畢自動重啟
@@ -3144,13 +3145,13 @@ public class Common
          */
 
         //String jarFileName = "jaudiotagger-2.0.4-20111207.115108-15.jar";
-        String jarClassName = "jaudiotagger-2.0.4-20111207.115108-15.jar";
+        String jarClassName = "jaudiotagger-21e1b39.jar";
 
         // 若jar檔不存在 就下載
         if ( !Common.existJAR( jarClassName ) )
         {
-            String jarFileURL = "https://sites.google.com/site/jcomicdownloader/release/jaudiotagger-2.0.4-20111207.115108-15.jar?attredirects=0&d=1";
-
+          //  String jarFileURL = "https://sites.google.com/site/jcomicdownloader/release/jaudiotagger-2.0.4-20111207.115108-15.jar?attredirects=0&d=1";
+            String jarFileURL = "https://abc9070410.github.io/JComicDownloader/jaudiotagger-21e1b39.jar";
             Common.downloadJarFile( jarFileURL, jarClassName );
         }
 

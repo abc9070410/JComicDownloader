@@ -50,14 +50,14 @@ public class CommonGUI
     public static String showInputDialogValue = "IntialValue"; // OptionDialog視窗輸入的值
     public static boolean showMessageOK = false;
     public static String mainIcon = "main_icon.png";
-    private static String jtattooFileName = "Jtattoo.jar";
-    private static String nimrodFileName = "nimrodlf-1.2.jar";
-    private static String napkinFileName = "napkinlaf-alpha001.jar";
-    private static String substanceFileName = "substance-6.1.jar";
-    private static String tridentFileName = "trident.jar";
+    private static String jtattooFileName = "JTattoo-1.6.11.jar";
+    private static String nimrodFileName = "nimrod-laf-1.2.jar";
+    private static String napkinFileName = "napkinlaf-1.2.jar";
+    private static String substanceFileName = "substance-6.3.jar";
+    private static String tridentFileName = "trident-6.3.jar";
     private static String jtattooClassName = "com.jtattoo.plaf.*";
-    private static String nimrodClassName = "com.nilo.plaf.nimrod.*";
-    public static String napkinClassName = ".*napkin\\..*";
+    private static String nimrodClassName = "net.sf.nimrod.*";
+    public static String napkinClassName = ".*napkinlaf\\..*";
     private static String substanceClassName = ".*substance.api.skin.*";
 
     public CommonGUI()
@@ -293,12 +293,12 @@ public class CommonGUI
     {
         String[] nimRodClassNames =
         {
-            "com.nilo.plaf.nimrod.NimRODLookAndFeel_Night", // 夜晚風格
-            "com.nilo.plaf.nimrod.NimRODLookAndFeel_DarkGrey", // 暗灰風格
-            "com.nilo.plaf.nimrod.NimRODLookAndFeel_DarkTabaco", // 暗Tabaco風格
-            "com.nilo.plaf.nimrod.NimRODLookAndFeel_LightTabaco", // 亮Tabaco風格
-            "com.nilo.plaf.nimrod.NimRODLookAndFeel_Burdeos", // Burdeos風格
-            "com.nilo.plaf.nimrod.NimRODLookAndFeel_Snow", // 白雪風格
+            "net.sf.nimrod.NimRODLookAndFeel_Night", // 夜晚風格
+            "net.sf.nimrod.NimRODLookAndFeel_DarkGrey", // 暗灰風格
+            "net.sf.nimrod.NimRODLookAndFeel_DarkTabaco", // 暗Tabaco風格
+            "net.sf.nimrod.NimRODLookAndFeel_LightTabaco", // 亮Tabaco風格
+            "net.sf.nimrod.NimRODLookAndFeel_Burdeos", // Burdeos風格
+            "net.sf.nimrod.NimRODLookAndFeel_Snow", // 白雪風格
         };
 
         return nimRodClassNames;
@@ -309,7 +309,8 @@ public class CommonGUI
     {
         String[] nimRodClassNames =
         {
-            "napkin.NapkinLookAndFeel", // 預設潦草風格
+            "net.sourceforge.napkinlaf.NapkinLookAndFeel", // 預設潦草風格
+//            "Napkin.NapkinLookAndFeel", // 預設潦草風格
         };
 
         return nimRodClassNames;
@@ -838,7 +839,7 @@ public class CommonGUI
     }
 
     // 檢查skin是否由外部jar支援，若是外部skin且沒有此jar，則下載
-    public static boolean checkSkin()
+      public static boolean checkSkin()
     {
 
 
@@ -848,19 +849,19 @@ public class CommonGUI
                 && !Common.existJAR( jtattooFileName ) )
         {
             new CommonGUI().downloadNewTheme( "JTattoo", jtattooFileName,
-                                              "http://jcomicdownloader.googlecode.com/files/JTattoo.jar" ); // 下載JTattoo.jar
+                                              "https://abc9070410.github.io/JComicDownloader/JTattoo-1.6.11.jar" ); // 下載JTattoo.jar
         }
         else if ( SetUp.getSkinClassName().matches( nimrodClassName )
                 && !Common.existJAR( nimrodFileName ) )
         {
             new CommonGUI().downloadNewTheme( "NimRod", nimrodFileName,
-                                              "http://jcomicdownloader.googlecode.com/files/nimrodlf-1.2.jar" ); // 下載nimrodlf-1.2.jar
+                                              "https://abc9070410.github.io/JComicDownloader/nimrod-laf-1.2.jar" ); // 下載nimrodlf-1.2.jar
         }
         else if ( SetUp.getSkinClassName().matches( napkinClassName )
                 && !Common.existJAR( napkinFileName ) )
         {
             new CommonGUI().downloadNewTheme( "Napkin", napkinFileName,
-                                              "https://sites.google.com/site/jcomicdownloaderbackup/release/napkinlaf-alpha001.jar?attredirects=0&d=1" ); // 下載napkinlaf-alpha001.jar
+                                              "https://abc9070410.github.io/JComicDownloader/napkinlaf-1.2.jar" ); // 下載napkinlaf-1.2.jar
         }
         else if ( SetUp.getSkinClassName().matches( substanceClassName )
                 && (!Common.existJAR( substanceFileName ) || !Common.existJAR( tridentFileName )) )
@@ -875,8 +876,8 @@ public class CommonGUI
             };
             String[] urls = new String[]
             {
-                "https://sites.google.com/site/jcomicdownloaderbackup/release/substance-6.1.jar?attredirects=0&d=1",
-                "https://sites.google.com/site/jcomicdownloaderbackup/release/trident.jar?attredirects=0&d=1"
+                "https://abc9070410.github.io/JComicDownloader/substance-6.3.jar",
+                "https://abc9070410.github.io/JComicDownloader/trident-6.3.jar"
             };
             new CommonGUI().downloadNewTheme( themeNames, fileNames,
                                               urls ); // 
