@@ -169,9 +169,12 @@ public class ParseGooglePic extends ParseOnlineComicSite {
 
                     comicURL[p - 1] = tokens[j].split( "&amp;" )[0];
                     
+                    endIndex = comicURL[p - 1].lastIndexOf( "/" ) + 1;
+                    String referUrl = comicURL[p - 1].substring(0, endIndex);
+                    
                     if (useOriginalFileName)
                     {
-                        beginIndex = comicURL[p - 1].lastIndexOf( "/" ) + 1;
+                        beginIndex = endIndex;
                         picName = comicURL[p - 1].substring( beginIndex, comicURL[p - 1].length() );
 
                         if ( picName.length() > 40 ) // 檔名太長
@@ -187,7 +190,8 @@ public class ParseGooglePic extends ParseOnlineComicSite {
                         if ( !Common.existPicFile( getDownloadDirectory(), p ) ||
                              !Common.existPicFile( getDownloadDirectory(), p + 1 ) )
                         {
-                            singlePageDownloadUsingSimple( getTitle(), getWholeTitle(), comicURL[p-1], totalPage, p, webSite );
+                            //referUrl = "";
+                            singlePageDownloadUsingSimple( getTitle(), getWholeTitle(), comicURL[p-1], totalPage, p, referUrl );
                         }
                     }
                     
