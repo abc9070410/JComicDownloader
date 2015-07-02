@@ -12,9 +12,9 @@ Any operating systems with a [Java Runtime Environment](https://java.com/zh_TW/d
 https://github.com/abc9070410/JComicDownloader/releases
 
 ## Installation
-Using IDE See [Building this project](../../wiki/Building-this-project).
-Using Maven
-"mvn clean package"
+* Using IDE See [Building this project](../../wiki/Building-this-project).
+* Using Maven
+<br>'mvn clean install'<br>Files will be placed at output folder
 
 ## External Library
 * Zhcode <br/>
