@@ -12,7 +12,9 @@ Any operating systems with a [Java Runtime Environment](https://java.com/zh_TW/d
 https://github.com/abc9070410/JComicDownloader/releases
 
 ## Installation
-See [Building this project](../../wiki/Building-this-project).
+Using IDE See [Building this project](../../wiki/Building-this-project).
+Using Maven
+"mvn clean package"
 
 ## External Library
 * Zhcode <br/>
@@ -25,9 +27,11 @@ http://nilogonzalez.es/nimrodlf/index-en.html
 http://napkinlaf.sourceforge.net/
 * Substance <br/>
 https://java.net/projects/substance/
+* JAudioTagger
+* https://bitbucket.org/ijabz/jaudiotagger/
 
 ## Icon Information
 [Double-J Design](http://www.doublejdesign.co.uk/)
 
 ## License
-This software is released under a GNU General Public License version 3 license. See http://www.gnu.org/copyleft/gpl.html for more information. 
+This software is released under a GNU General Public License version 3 license. See http://www.gnu.org/copyleft/gpl.html for more information.
