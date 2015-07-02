@@ -1,10 +1,10 @@
 /*
 ----------------------------------------------------------------------------------------------------
-Program Name : JComicDownloader
-Authors  : surveyorK
-Last Modified : 2013/7/22
+This class is currently maintained by hkgsherlock. Please report any problems or giving improvements on GitHub https://github.com/abc9070410/JComicDownloader/issues .
 ----------------------------------------------------------------------------------------------------
 ChangeLog:
+5.19: Fixed getting first image for twice, that of last not fetched problem.
+5.19: Changed de-obfuscation algorithm due to change of the 8comic site.
 5.17: 修復8comic改變位址的問題。
 5.16: 修復8comic解析失敗的問題。
 5.06: 修復8comic因網站改版而解析錯誤的問題。
