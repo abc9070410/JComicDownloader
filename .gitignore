@@ -1,0 +1,8 @@
+# NetBeans
+/build.xml
+nbproject
+
+# IntelliJ IDEA
+.idea
+out
+/*.iml
