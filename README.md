@@ -12,9 +12,11 @@ Any operating systems with a [Java Runtime Environment](https://java.com/zh_TW/d
 https://github.com/abc9070410/JComicDownloader/releases
 
 ## Installation
-* Using IDE See [Building this project](../../wiki/Building-this-project).
-* Using Maven
-<br>'mvn clean install'<br>Files will be placed at output folder
+* Using IDE <br/>
+See [Building this project](../../wiki/Building-this-project).
+* Using Maven <br/>
+`mvn clean install`
+<br/>Files will be placed at output folder <br/>
 
 ## External Library
 * Zhcode <br/>
@@ -27,8 +29,8 @@ http://nilogonzalez.es/nimrodlf/index-en.html
 http://napkinlaf.sourceforge.net/
 * Substance <br/>
 https://java.net/projects/substance/
-* JAudioTagger
-* https://bitbucket.org/ijabz/jaudiotagger/
+* JAudioTagger <br/>
+https://bitbucket.org/ijabz/jaudiotagger/
 
 ## Icon Information
 [Double-J Design](http://www.doublejdesign.co.uk/)
