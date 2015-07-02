@@ -1,6 +1,6 @@
 ## JComicDownloader
 A tool which has the ability to download the online comics and novels from some China websites.
-![res](../gh-pages/res/screenshot2.png)
+![Screenshot for the ComicDownGUI](../gh-pages/images/screenshot2.png)
 
 ## Website
 https://sites.google.com/site/jcomicdownloader/
