@@ -1,8 +1,20 @@
 # NetBeans
 /build.xml
-nbproject
+/nbproject
+/dist
 
 # IntelliJ IDEA
-.idea
-out
+/.idea
+/out
 /*.iml
+
+# Maven out & debug
+/target
+/temp
+
+# debug files
+/set.ini
+/bookmarkList.dat
+/downloadList.dat
+/recordList.dat
+/ErrorRecord
