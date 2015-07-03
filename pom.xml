@@ -3,8 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.abc9070410</groupId>
     <artifactId>JComicDownloader</artifactId>
-    <version>v5.19.150702</version>
+    <version>v5.12</version>
     <packaging>jar</packaging>
+    <name>JComicDownloader</name>
+    <scm>
+    	<url>https://github.com/abc9070410/JComicDownloader/</url>
+    </scm>
+    <issueManagement>
+        <url>https://github.com/abc9070410/JComicDownloader/issues</url>
+    </issueManagement>
     <description>A tool which has the ability to download the online comics and novels from some china websites.</description>
     <url>https://sites.google.com/site/jcomicdownloader</url>   
     <licenses>
@@ -155,7 +162,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
                 <version>1.5</version>
@@ -178,7 +185,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-jar-plugin</artifactId>
@@ -187,12 +194,12 @@
                  <archive>                                   
                    <manifest>
                         <mainClass>jcomicdownloader.ComicDownGUI</mainClass>
-<!--                        <addClasspath>true</addClasspath>
-                        <classpathPrefix>lib/</classpathPrefix>-->
+                        <addClasspath>true</addClasspath>
+                        <classpathPrefix>lib/</classpathPrefix>
                    </manifest>
                     <manifestEntries><!-- Custom add classpath instead of maven gen-->
                         <!--<Class-Path>JTattoo-1.6.11.jar lib/JTattoo-1.6.11.jar nimrod-laf-1.2.jar lib/nimrod-laf-1.2.jar napkinlaf-1.2.jar lib/napkinlaf-1.2.jar trident-6.3.jar lib/trident-6.3.jar substance-6.3.jar lib/substance-6.3.jar jaudiotagger-2.2.3.jar lib/jaudiotagger-2.2.3.jar </Class-Path>-->
-                        <Class-Path>lib/JTattoo-1.6.11.jar lib/nimrod-laf-1.2.jar lib/napkinlaf-1.2.jar lib/trident-6.3.jar lib/substance-6.3.jar lib/jaudiotagger-21e1b39.jar </Class-Path>
+                        <!--<Class-Path>lib/JTattoo-1.6.11.jar lib/nimrod-laf-1.2.jar lib/napkinlaf-1.2.jar lib/trident-6.3.jar lib/substance-6.3.jar lib/jaudiotagger-21e1b39.jar </Class-Path>-->
                         <SplashScreen-Image>jcomicdownloader/tools/resource/logo.png</SplashScreen-Image>
                     </manifestEntries>
                  </archive>
