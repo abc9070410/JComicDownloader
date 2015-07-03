@@ -114,6 +114,8 @@ public class SetUp
     private static int singleScriptWaitTime;
     // 是否下載小說封面圖
     private static boolean downloadNovelCover;
+    // 是否產生錯誤紀錄檔
+    private static boolean outputErrorRecord;
     // 要從幾張圖裡面挑選適合的小說封面圖
     private static int coverSelectAmountIndex;
 
@@ -244,6 +246,8 @@ public class SetUp
 
         downloadNovelCover = false;  // 是否下載小說封面圖
         coverSelectAmountIndex = 1; // 要從幾張圖裡面挑選適合的小說封面圖
+        
+        outputErrorRecord = true; // 預設會輸出錯誤紀錄檔
     }
 
     // 將目前的設定寫入到設定檔(set.ini)
@@ -380,6 +384,8 @@ public class SetUp
                 + "\ndownloadNovelCover = " + downloadNovelCover
                 + "\n# 蒐集小說封面圖的數目索引"
                 + "\ncoverSelectAmountIndex = " + coverSelectAmountIndex
+                + "\n# 是否產生錯誤紀錄檔"
+                + "\noutputErrorRecord = " + outputErrorRecord
                 + "\n";
 
         Common.outputFile( setString, Common.getNowAbsolutePath(), Common.setFileName );
@@ -468,6 +474,8 @@ public class SetUp
         // 小說封面
         Common.debugPrintln( "downloadNovelCover = " + downloadNovelCover );
         Common.debugPrintln( "coverSelectAmountIndex = " + coverSelectAmountIndex );
+        
+        Common.debugPrintln( "outputErrorRecord = " + outputErrorRecord );
 
         Common.debugPrintln( "-----------------------" );
     }
@@ -550,6 +558,8 @@ public class SetUp
 
         boolean existDownloadNovelCover = false; // 是否下載小說封面圖
         boolean existCoverSelectAmountIndex = false; // 蒐集小說封面圖的數量索引
+        
+        boolean existOutputErrorRecord = false; // 是否產生錯誤紀錄
 
 
         for ( int i = 0; i < lines.length; i++ )
@@ -1213,6 +1223,15 @@ public class SetUp
                             setCoverSelectAmountIndex( Integer.parseInt( split[1] ) );
                         }
                     }
+                    else if ( split[0].equals( "outputErrorRecord" ) )
+                    {
+                        existOutputErrorRecord = true;
+                        if ( split.length > 1 )
+                        {
+                            boolean value = split[1].matches( "(?s).*true(?s).*" ) ? true : false;
+                            setOutputErrorRecord( value );
+                        }
+                    }
                 }
             }
             catch ( Exception ex )
@@ -1272,6 +1291,7 @@ public class SetUp
                 && existSingleDoneScriptFile
                 && existDefaultShellScript // 是否存在執行腳本的Shell名稱
                 && existSingleScriptWaitTime // 等待單一任務腳本執行的時間（秒數）
+                && existOutputErrorRecord
                 )
         {
             Common.debugPrintln( "設定檔全部讀取完畢" );
@@ -2021,5 +2041,15 @@ public class SetUp
     public static void setDownloadNovelCover( boolean download )
     {
         downloadNovelCover = download;
+    }
+    
+    public static boolean getOutputErrorRecord()
+    {
+        return outputErrorRecord;
+    }
+
+    public static void setOutputErrorRecord( boolean output )
+    {
+        outputErrorRecord = output;
     }
 }

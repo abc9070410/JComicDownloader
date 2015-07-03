@@ -3001,6 +3001,11 @@ public class Common
     // 輸出錯誤訊息到檔案
     public static void outputErrorMessage( Exception ex, String tipString )
     {
+        if (!SetUp.getOutputErrorRecord())
+        {
+            return; // 如果沒有勾選產生錯誤紀錄檔，就不輸出檔案
+        }
+        
         String timeString = new Date().toString(); // 取得當前時間的字串
         timeString = Common.getStringRemovedIllegalChar( timeString ); // 拿掉不合法字元
         String outputFileName = "error_report_" + timeString + ".txt";

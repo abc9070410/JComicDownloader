@@ -93,6 +93,7 @@ public class OptionFrame extends JFrame implements MouseListener
     private JCheckBox trayMessageCheckBox;  // 縮小到系統框後是否顯示下載完成訊息
     private JCheckBox choiceAllVolumeCheckBox;  // 是否勾選全部集數
     private JCheckBox coverCheckBox; // 是否一併下載小說封面圖
+    private JCheckBox errorRecordCheckBox; // 是否輸出錯誤紀錄檔
     private JTextField proxyServerTextField; // 輸入代理伺服器位址 ex. proxy.hinet.net
     private JTextField proxyPortTextField; // 輸入代理伺服器連接阜 ex. 80
     private JButton confirmButton;  // about confirm
@@ -538,6 +539,9 @@ public class OptionFrame extends JFrame implements MouseListener
         // 下載小說封面的相關設置
         coverCheckBox = getCheckBox( "搜尋並下載小說封面圖", "search & download the novel cover", SetUp.getDownloadNovelCover() );
         CommonGUI.setToolTip( coverCheckBox, "小說下載後，以Google圖片搜尋適合的封面圖" );
+        
+        errorRecordCheckBox = getCheckBoxBold( "產生錯誤紀錄", "output error record", SetUp.getOutputErrorRecord() );
+        CommonGUI.setToolTip( errorRecordCheckBox, "如果沒有勾選就不會在程式資料夾產生錯誤紀錄檔" );
 
         if ( SetUp.getDefaultLanguage() == LanguageEnum.ENGLISH )
         {
@@ -557,9 +561,9 @@ public class OptionFrame extends JFrame implements MouseListener
         coverPanel.add( coverBox );
         coverPanel.setOpaque( !SetUp.getUsingBackgroundPicOfOptionFrame() );
 
-
         JPanel otherPanel = new JPanel( new GridLayout( 6, 1, 2, 2 ) );
         otherPanel.add( coverPanel );
+        otherPanel.add( errorRecordCheckBox );
         otherPanel.setOpaque( !SetUp.getUsingBackgroundPicOfOptionFrame() );
 
         panel.add( otherPanel );
@@ -642,8 +646,6 @@ public class OptionFrame extends JFrame implements MouseListener
 
         downloadCheckBox = getCheckBoxBold( "分析後下載圖檔（預設）", "download pics", SetUp.getDownloadPicFile() );
         CommonGUI.setToolTip( downloadCheckBox, "如果沒有勾選就不會有下載行為，建議要勾選（但若只想輸出真實下載位址，就不要勾選此選項）" );
-
-
 
         JPanel textFormatPanelHorizontal = new JPanel( new GridLayout( 1, 2, 5, 5 ) );
         setTextFormatPanel( textFormatPanelHorizontal );
@@ -1311,6 +1313,8 @@ public class OptionFrame extends JFrame implements MouseListener
                 // 小說封面圖相關設定
                 SetUp.setDownloadNovelCover( coverCheckBox.isSelected() );
                 SetUp.setCoverSelectAmountIndex( coverBox.getSelectedIndex() );
+                
+                SetUp.setOutputErrorRecord( errorRecordCheckBox.isSelected() );
 
 
                 String compressFormatString = "";
