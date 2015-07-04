@@ -1,10 +1,12 @@
 /*
  ----------------------------------------------------------------------------------------------------
  Program Name : JComicDownloader
- Authors  : surveyorK
- Last Modified : 2013/4/14
+ Authors  : surveyorK, icearea(Latest)
+ Last Modified : 2015/6/22
  ----------------------------------------------------------------------------------------------------
  ChangeLog:
+ 5.19: fixed path (URL) concatenation procedure. (288e3f7)
+ 5.19: rewritten due to the new page layout and restrictions for different countries (bc68431)
  5.16: 修復dm5沒有標題名稱時解析錯誤的問題。
  5.05: 修復dm5部分解析網址錯誤的問題。
  5.03: 修復dm5下載錯誤的問題。
