@@ -794,7 +794,7 @@ public class Common
             URL url = new URL( urlString );
 
             HttpURLConnection connection = ( HttpURLConnection ) url.openConnection();
-            connection.setRequestProperty( "User-Agent", "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-TW; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8" );
+            connection.setRequestProperty( "User-Agent", "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0" );
 
             connection.connect();
 
