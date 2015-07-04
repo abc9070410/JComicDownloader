@@ -1,12 +1,13 @@
 /*
 ----------------------------------------------------------------------------------------------------
 Program Name : JComicDownloader
-Authors  : surveyorK
-Last Modified : 2012/11/24
+Authors  : surveyorK, icearea(latest)
+Last Modified : 2015/05/27
 ----------------------------------------------------------------------------------------------------
 ChangeLog:
- 5.09: 修復dmeden.net解析位址錯誤的問題。
- 5.08: 修復dmeden.net解析位址錯誤的問題。
+5.19: 修復dmeden.net解析位址錯誤的問題。
+5.09: 修復dmeden.net解析位址錯誤的問題。
+5.08: 修復dmeden.net解析位址錯誤的問題。
 3.17: 1. 修復dmeden標題名稱解析錯誤的問題。
 3.09: 1. 修復對dmeden.net的支援。
 3.04: 1. 修復dmeden標題名稱解析不全的bug。
