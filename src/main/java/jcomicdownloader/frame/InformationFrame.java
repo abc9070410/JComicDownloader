@@ -6,6 +6,7 @@
  Last Modified : 2012/12/15
  ----------------------------------------------------------------------------------------------------
  ChangeLog:
+ 5.20: Google Sites 版本資訊已經停用，改為使用 GitHub API 取得 repo 上的 release info；修正 vars 及 methods 的命名
  5.12: 修復資訊視窗在沒有網路時無窮等待的問題。
  5.10: 換新的回報專區網址。
  5.04: 提供執行甫更新的新版本的選項。
@@ -33,7 +34,13 @@ import jcomicdownloader.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Map;
+import java.util.TimeZone;
 import javax.swing.*;
+import com.owlike.genson.*;
 
 public class InformationFrame extends JFrame implements ActionListener, MouseListener
 {
@@ -43,36 +50,36 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
     private JLabel versionLabel, dateLabel;
     private JLabel supportedSiteLabel;
     private String resourceFolder;
-    private JButton versionButton;
+//    private JButton versionButton;
     public static JButton downloadButton;
-    private String officialName;
+    private final String strFileNameLatestVersionInfo;
     //private String downloadPageName;
     //private String downloadPageURL;
-    private String officialURL;
+    private final String strUrlLatestVersionInfo;
     public static JFrame thisFrame; // for change look and feel
     private static boolean downloadLock = false; // 用來檢查是否已取得最新版本資訊，之後才可以下載最新版本
     private Dimension frameDimension;
 
-    /**
+    private String strUrlDownloadLatestExecutable = null;
 
-     @author user
-     */
+
     public InformationFrame()
     {
         super( "關於本程式" );
 
         thisFrame = this; // for change look and feel
         resourceFolder = "resource/";
-        officialName = "official.html";
+        strFileNameLatestVersionInfo = "github_latest.json";
         //downloadPageName = "downloadPage.html";
         //downloadPageURL = "https://sites.google.com/site/jcomicdownloader/release";
-        officialURL = "https://github.com/abc9070410/JComicDownloader/tree/master/dist";//"https://sites.google.com/site/jcomicdownloader/";
+        strUrlLatestVersionInfo = "https://api.github.com/repos/abc9070410/JComicDownloader/releases/latest";//"https://sites.google.com/site/jcomicdownloader/";
 
         setUpUIComponent();
         setUpeListener();
-        setVisible( true );
+        setVisible(true);
+//        setResizable(false);
 
-        deleteOfficialHtml(); // 刪除官方網頁檔案
+        deleteLatestVersionInfo(); // 刪除官方網頁檔案
 
         setNewestVersion(); // 檢查是否有新版本
     }
@@ -111,9 +118,9 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
             setResizable( true );
         }
 
-        setDefaultLookAndFeelDecorated( false ); // 讓標題欄可以隨look and feel改變
-        setLocationRelativeTo( this );  // set the frame in middle position of screen
-        setIconImage( new CommonGUI().getImage( CommonGUI.mainIcon ) );
+        setDefaultLookAndFeelDecorated(false); // 讓標題欄可以隨look and feel改變
+        setLocationRelativeTo(this);  // set the frame in middle position of screen
+        setIconImage(new CommonGUI().getImage(CommonGUI.mainIcon));
 
         Container contentPane;
         if ( SetUp.getUsingBackgroundPicOfInformationFrame() )
@@ -128,7 +135,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
             contentPane = getContentPane();
         }
 
-        setTextLayout( contentPane );
+        setTextLayout(contentPane);
     }
 
     private void setTextLayout( Container contentPane )
@@ -206,99 +213,112 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
 
     }
 
+    @Deprecated
     private String getHtmlString( String str )
     {
         return "<html><font size=\"5\">" + str + "</font></html>";
     }
 
+    @Deprecated
     private String getHtmlStringWithColor( String str, String colorName )
     {
         return "<font color=\"" + colorName + "\" size=\"5\">" + str + "</font>";
     }
 
     // 直接抓取官網網頁
-    private void downloadOfficialHtml()
+    private void downloadLatestVersionInfo()
     {
         Run.isAlive = true;
-        Common.downloadFile( officialURL, SetUp.getTempDirectory(), officialName, false, "" );
+        Common.downloadFile(strUrlLatestVersionInfo, SetUp.getTempDirectory(), strFileNameLatestVersionInfo, false, "");
         //Common.downloadFile( downloadPageURL, SetUp.getTempDirectory(), downloadPageName, false, "" );
     }
 
     // 刪除官方網頁
-    private void deleteOfficialHtml()
+    private void deleteLatestVersionInfo()
     {
-        String officialFile = SetUp.getTempDirectory() + officialName;
-        Common.debugPrintln( "刪除" + officialFile );
-        File file = new File( officialFile );
-        //File file2 = new File( SetUp.getTempDirectory() + downloadPageName );
+        String strPathLatestVersionInfo = SetUp.getTempDirectory() + strFileNameLatestVersionInfo;
+        Common.debugPrintln("刪除" + strPathLatestVersionInfo);
+        File file = new File( strPathLatestVersionInfo );
         if ( file.exists() )
-        {
             file.delete();
-        }
-        /*
-         if ( file2.exists() )
-         {
-         file2.delete();
-         }
-         */
     }
 
     // 回傳最新版本的字串
     private String getUpdateVersionString()
     {
-        String allPageString = Common.getFileString( SetUp.getTempDirectory(), officialName );
+        Map json = new Genson().deserialize(Common.getFileString(SetUp.getTempDirectory(), strFileNameLatestVersionInfo), Map.class);
 
-        // 先找出最新的是第幾號版本
-        int beginIndex = allPageString.indexOf( "title=\"JComicDownloader.jar\"" );
-        beginIndex = allPageString.indexOf("datetime=", beginIndex);
-        beginIndex = allPageString.indexOf("\"", beginIndex) + 1;
-        int endIndex = allPageString.indexOf("T", beginIndex);
-        String versionString = allPageString.substring( beginIndex, endIndex );
-        
-        return Common.getStringUsingDefaultLanguage( versionString, versionString );
+        String strVersion = (String)json.get("tag_name");
+        Boolean bPreRelease = json.get("prerelease").equals("true");
+
+        return Common.getStringUsingDefaultLanguage(
+                strVersion + (bPreRelease ? "預版" : ""),
+                strVersion + (bPreRelease ? "pre" : ""));
     }
 
     // 回傳更新日期的字串
     private String getUpdateDateString()
     {
-        //String url = "https://sites.google.com/site/jcomicdownloader/release";
-        String allPageString = Common.getFileString( SetUp.getTempDirectory(), officialName );
-        /*
-         String year = "2012/";
-         if ( allPageString.indexOf( "2013/" ) > 0 )
-         {
-         year = "2013/";
-         }
-
-         int endIndex = allPageString.lastIndexOf( "class=\"td-user\"" );
-         int beginIndex = allPageString.lastIndexOf( year, endIndex );
-         Common.debugPrintln( beginIndex + " ___________ " + endIndex );
-         endIndex = allPageString.indexOf( "<", beginIndex );
-         String tempString = allPageString.substring( beginIndex, endIndex );
-         String dateString = " (" + tempString + " )";
-         String dateEnString = " (" + tempString + " )";
-         */
+        Map json = new Genson().deserialize(Common.getFileString(SetUp.getTempDirectory(), strFileNameLatestVersionInfo), Map.class);
 
         // 再找出發佈最新版本的日期
-        int tempIndex = allPageString.indexOf( "countdown-fromdateutc" );
-        String[] tokens = allPageString.substring( tempIndex, allPageString.length() ).split( "-|\"" );
-        String dateString = "（" + tokens[2] + "年" + tokens[3] + "月" + tokens[4] + "日發佈）";
-        String dateEnString = "（" + tokens[2] + "." + tokens[3] + "." + tokens[4] + " update）";
+        Calendar calPublish = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        {
+            String strPublish = (String)json.get("published_at");
 
-        return Common.getStringUsingDefaultLanguage( dateString, dateEnString ); // 使用預設語言 dateString;
+            try {
+                calPublish.setTime(
+                        (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")).parse(strPublish)
+                );
+            } catch (java.text.ParseException e) {
+                Common.debugPrintln(String.format("當解析更新日期時發生錯誤，原值為：「%s」", strPublish));
+                return "";
+            }
+        }
+
+        String dateString = "（%04d年%d月%d日發佈）";
+        String dateEnString = "(released at %04d-%02d-%02d";
+
+        return Common.getStringUsingDefaultLanguage(
+                String.format(dateString, calPublish.get(Calendar.YEAR), calPublish.get(Calendar.MONTH), calPublish.get(Calendar.DATE)),
+                String.format(dateEnString, calPublish.get(Calendar.YEAR), calPublish.get(Calendar.MONTH), calPublish.get(Calendar.DATE))); // 使用預設語言 dateString;
     }
 
     // 回傳目前已經支援網站數目的字串
     private String getUpdateSupportedSiteString()
     {
-        String allPageString = Common.getFileString( SetUp.getTempDirectory(), officialName );
+        return "81+";
 
-        // 找出目前支援列表數目
-        int supportedSiteAmount = allPageString.split( "<td style=" ).length / 2 + 1;
+        // TODO: 是否需要在其他地方提供最新版本支援網站數目 -- hkgsherlock
 
-        String supportedSiteString = supportedSiteAmount + " 個網站";
-        String supportedSiteEnString = supportedSiteAmount + " websites";
-        return Common.getStringUsingDefaultLanguage( supportedSiteString, supportedSiteEnString );
+//        String allPageString = Common.getFileString( SetUp.getTempDirectory(), strFileNameLatestVersionInfo);
+//
+//        // 找出目前支援列表數目
+//        int supportedSiteAmount = allPageString.split( "<td style=" ).length / 2 + 1;
+//
+//        String supportedSiteString = supportedSiteAmount + " 個網站";
+//        String supportedSiteEnString = supportedSiteAmount + " websites";
+//        return Common.getStringUsingDefaultLanguage( supportedSiteString, supportedSiteEnString );
+    }
+
+    /**
+     * To store the URL for downloading the executable JAR of the latest version.
+     */
+    private void fetchUrlDownloadLatestExecutable() {
+        Map json = new Genson().deserialize(Common.getFileString(SetUp.getTempDirectory(), strFileNameLatestVersionInfo), Map.class);
+        // looping assets array and use the best matching one
+        for (Object e : (ArrayList)json.get("assets")) {
+            Map me = (Map)e;
+
+            String strBrowserDownloadUrl = (String)me.get("browser_download_url");
+            String strContentType = (String)me.get("content_type");
+
+            if (strBrowserDownloadUrl.matches("^https://github\\.com/.+\\.jar$") && strContentType.equals("application/octet-stream")) {
+                this.strUrlDownloadLatestExecutable = strBrowserDownloadUrl;
+                return;
+            }
+        }
+        Common.debugPrintln("無法找到符合格式的最新版下載網址。");
     }
 
     // 察覺沒有網路的後續工作
@@ -307,7 +327,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
         String message = "無法連線到官網，請檢查網路是否正常 !!";
         Common.debugPrintln( message );
         InformationFrame.downloadLock = false;
-        CommonGUI.showMessageDialog( InformationFrame.thisFrame, message );
+        CommonGUI.showMessageDialog(InformationFrame.thisFrame, message);
 
     }
 
@@ -320,7 +340,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
             public void run()
             {
 
-                if ( !Common.urlIsOK( officialURL ) )
+                if ( !Common.urlIsOK(strUrlLatestVersionInfo) )
                 {
                     noNetworkProcess(); // 察覺沒有網路的後續工作
                     return;
@@ -329,17 +349,18 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
                 // 取得介面設定值（不用UIManager.getLookAndFeel().getName()是因為這樣才能讀到_之後的參數）
                 String nowSkinName = SetUp.getSkinClassName();
 
-                downloadOfficialHtml(); // 下載官方網頁
-                versionLabel.setText( "" ); // 從官方網頁提取更新版本資訊
+                downloadLatestVersionInfo(); // 下載官方網頁
+                versionLabel.setText(getUpdateVersionString()); // 從官方網頁提取更新版本資訊
                 synchronized ( InformationFrame.thisFrame )
                 { // lock main frame
                     InformationFrame.thisFrame.notifyAll();
                     InformationFrame.downloadLock = false;
                 }
 
-                dateLabel.setText( getUpdateVersionString() ); // 從官方網頁提取更新日期資訊
+                dateLabel.setText(getUpdateDateString()); // 從官方網頁提取更新日期資訊
+                supportedSiteLabel.setText(getUpdateSupportedSiteString()); // 從官方網頁提取支援網站資訊
+                fetchUrlDownloadLatestExecutable();
 
-                supportedSiteLabel.setText( "?" ); // 從官方網頁提取支援網站資訊
                 repaint();
 
                 if ( !CommonGUI.isDarkSytleSkin( nowSkinName ) )
@@ -358,7 +379,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
 
                 //Thread.currentThread().interrupt();
 
-                deleteOfficialHtml(); // 刪除官方網頁檔案
+                deleteLatestVersionInfo(); // 刪除官方網頁檔案
 
             }
         } );
@@ -384,7 +405,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
 
         if ( SetUp.getUsingBackgroundPicOfInformationFrame() )
         { // 若設定為透明，就用白色字體。
-            label.setForeground( SetUp.getInformationFrameOtherDefaultColor() );
+            label.setForeground(SetUp.getInformationFrameOtherDefaultColor());
         }
 
         label.setOpaque( !SetUp.getUsingBackgroundPicOfInformationFrame() );
@@ -429,6 +450,44 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
     // 下載最新版本的JComicDownloader
     private void downloadLastestVersion()
     {
+        if (this.strUrlDownloadLatestExecutable == null || this.strUrlDownloadLatestExecutable.length() == 0)
+        {
+            JPanel pnl = new JPanel();
+            pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
+            pnl.add(new JLabel("<html><p>無法取得最新版本執行檔的下載網址！</p>" +
+                    "<p>請到本程式在</p></html>"));
+            {
+                JButton btnReport = new JButton("GitHub 的 Release 頁面");
+                btnReport.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        new RunBrowser().runBroswer("https://github.com/abc9070410/JComicDownloader/releases");
+                    }
+                });
+                pnl.add(btnReport);
+            }
+            pnl.add(new JLabel("<html><p>中查閱。</p>" +
+                    "<br/><p>如果可以的話，請同時</p></html>"));
+            {
+                JButton btnReport = new JButton("回報此錯誤");
+                btnReport.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        new RunBrowser().runBroswer("https://github.com/abc9070410/JComicDownloader/issues/new?title=Error+fetching+URL+for+downloading+latest+executable&body=Current+Version:+" + ComicDownGUI.versionString.replace("JComicDownloader v", "") + "%0A%0A");
+                    }
+                });
+                pnl.add(btnReport);
+            }
+            pnl.add(new JLabel("<html><p>給開發者修正，謝謝。</p></html>"));
+
+            JOptionPane.showMessageDialog(
+                    informationPanel,
+                    pnl,
+                    "無法下載最新版程式",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         InformationFrame.downloadButton.setText( "開始下載最新版本..." );
 
         new Thread( new Runnable()
@@ -436,7 +495,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
 
             public void run()
             {
-                if ( !Common.urlIsOK( officialURL ) )
+                if ( !Common.urlIsOK(strUrlLatestVersionInfo) )
                 {
                     noNetworkProcess(); // 察覺沒有網路的後續工作
                     return;
@@ -476,12 +535,11 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
                             Common.debugPrintln( "OK" );
                         }
                         
-                        deleteOfficialHtml(); // 刪除官方網頁檔案
+                        deleteLatestVersionInfo(); // 刪除官方網頁檔案
 
                         String fileName = "JComicDownloader.jar";
 
-                        String lastestVersionURL = "https://github.com/abc9070410/JComicDownloader/blob/master/dist/JComicDownloader.jar?raw=true";
-                        Common.downloadFile( lastestVersionURL, Common.getNowAbsolutePath(), fileName, false, null );
+                        Common.downloadFile(strUrlDownloadLatestExecutable, Common.getNowAbsolutePath(), fileName, false, null );
 
                         InformationFrame.downloadButton.setText( "最新版本下載完成" );
 
