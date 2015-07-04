@@ -20,35 +20,27 @@ import jcomicdownloader.tools.*;
 import jcomicdownloader.enums.*;
 import jcomicdownloader.*;
 
-import java.io.*;
 import java.util.*;
-import java.text.*;
-import jcomicdownloader.encode.Encoding;
 import jcomicdownloader.encode.Zhcode;
+import org.jsoup.nodes.*;
+import org.jsoup.parser.*;
+import org.jsoup.select.*;
 
 
 public class ParseEC extends ParseOnlineComicSite {
-
-    protected int radixNumber; // use to figure out the name of pic
-    protected String volpic; // pic url: http://~/2011/111/dagui/06/
-    protected int tpf2; // pic url: http://pic"tpf2".89890.com/~
-    protected int tpf; // length of pic name: (tpf+1)*2
     protected String jsName;
-    protected String indexName;
-    protected String indexEncodeName;
+    protected String indexWrongEncodingFileName;
+    protected String indexFileName;
     private String volumeNoString; // 每一集都有數字編號
-    private String itemid; // 每本漫畫的編號
 
     public ParseEC() {
         siteID = Site.EIGHT_COMIC;
         siteName = "8comic";
-        indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_parse_", "html" );
-        indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_encode_parse_", "html" );
+        indexWrongEncodingFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_wrong_encode_parse_", "html" );
+        indexFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_parse_", "html" );
 
         jsName = "index_8comic.js";
-        radixNumber = 18527345; // default value, not always be useful!!
         volumeNoString = "";
-        itemid = "";
     }
 
     public ParseEC( String webSite, String titleName ) {
@@ -61,12 +53,13 @@ public class ParseEC extends ParseOnlineComicSite {
     public void setParameters() { // let all the non-set attributes get values
         Common.debugPrintln( "開始解析各參數 :" );
 
-        Common.debugPrintln( "開始解析title和wholeTitle :" );
+        Common.debugPrintln("開始解析title和wholeTitle :");
 
-        Common.downloadFile( webSite, SetUp.getTempDirectory(), indexName, false, "", "" );
-        Common.simpleDownloadFile( webSite, SetUp.getTempDirectory(), indexName, webSite );
-        Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName, Zhcode.BIG5 );
-        String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
+        Common.downloadFile(webSite, SetUp.getTempDirectory(), indexWrongEncodingFileName, false, "", "");
+        Common.simpleDownloadFile(webSite, SetUp.getTempDirectory(), indexWrongEncodingFileName, webSite);
+        Common.newEncodeFile(SetUp.getTempDirectory(), indexWrongEncodingFileName, indexFileName, Zhcode.BIG5);
+        Common.deleteFile(indexWrongEncodingFileName);
+        String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexFileName);
         
         // ex. http://www.8comic.com/love/drawing-8170.html?ch=3
         volumeNoString = webSite.split( "/|=" )[webSite.split( "/|=" ).length - 1];
@@ -95,7 +88,7 @@ public class ParseEC extends ParseOnlineComicSite {
         }
         Common.debugPrintln( "ch: " + ch );
 
-        String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
+        String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexFileName);
         
         // 取得chs
         beginIndex = allPageString.indexOf( "var chs" );
@@ -117,9 +110,11 @@ public class ParseEC extends ParseOnlineComicSite {
         endIndex = allPageString.indexOf( "\'", beginIndex );
         String allcodes = allPageString.substring( beginIndex, endIndex );
 
+        // use re-gened JS for de-obfuscation
         NView_Java nv = new NView_Java(Integer.parseInt(chs), Integer.parseInt(itemid), allcodes, ch);
         this.comicURL = new String[nv.getPagesCount()];
         nv.setPage(1);
+        // must be started from 1 since this index follows the real page number
         for (int d = 1; d <= nv.getPagesCount(); nv.setPage(++d)) {
             this.comicURL[d - 1] = nv.parse();
         }
@@ -127,22 +122,18 @@ public class ParseEC extends ParseOnlineComicSite {
 
     @Override
     public String getAllPageString( String urlString ) {
-        String indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_", "html" );
-        String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_encode_", "html" );
-        Common.downloadFile( urlString, SetUp.getTempDirectory(), indexName, false, "" );
-        Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName, Zhcode.BIG5 );
+        String indexWrongEncodingFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_", "html" );
+        String indexFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_wrong_encode_", "html" );
+        Common.downloadFile( urlString, SetUp.getTempDirectory(), indexWrongEncodingFileName, false, "" );
+        Common.newEncodeFile(SetUp.getTempDirectory(), indexWrongEncodingFileName, indexFileName, Zhcode.BIG5);
+        Common.deleteFile(indexWrongEncodingFileName);
 
-        return Common.getFileString( SetUp.getTempDirectory(), indexEncodeName ).replace( "&#22338;", "阪" );
+        return Common.getFileString( SetUp.getTempDirectory(), indexFileName ).replace( "&#22338;", "阪" );
     }
 
     @Override
     public boolean isSingleVolumePage( String urlString ) {
-        if ( urlString.matches( "(?s).*/show/(?s).*" ) ) // ex. http://www.8comic.com/love/drawing-2245.html?ch=51
-        {
-            return true;
-        } else {
-            return false;
-        }
+        return urlString.matches( "(?s).*/show/(?s).*" ); // ex. http://www.8comic.com/love/drawing-2245.html?ch=51
     }
 
     @Override
@@ -159,70 +150,53 @@ public class ParseEC extends ParseOnlineComicSite {
 
     @Override
     public String getTitleOnMainPage( String urlString, String allPageString ) {
-        int beginIndex = allPageString.indexOf( "addhistory(" );
-        beginIndex = allPageString.indexOf( ",", beginIndex );
-        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
-        int endIndex = allPageString.indexOf( "\"", beginIndex );
-
-        String titleString = allPageString.substring( beginIndex, endIndex ).trim();
-        
-        System.out.println( titleString );
-
-        return Common.getStringRemovedIllegalChar( Common.getTraditionalChinese( titleString ) );
+        Document nodes = Parser.parse(allPageString, urlString);
+        String ret = nodes.select("body > table:nth-of-type(2) table table:first-of-type tr:first-of-type font").text();
+        return ret;
     }
 
     @Override
     public List<List<String>> getVolumeTitleAndUrlOnMainPage( String urlString, String allPageString ) {
-        // combine volumeList and urlList into combinationList, return it.
+        Document nodes = Parser.parse(allPageString, urlString);
 
+        // combine volumeList and urlList into combinationList, return it.
         List<List<String>> combinationList = new ArrayList<List<String>>();
         List<String> urlList = new ArrayList<String>();
         List<String> volumeList = new ArrayList<String>();
 
-        totalVolume = allPageString.split( "onclick=\"cview" ).length - 1;
+        Elements linksToEpisodes = nodes.select("#rp_tb_comic_0 table a.Vol, a.Ch");
+        totalVolume = linksToEpisodes.size();
         Common.debugPrintln( "共有" + totalVolume + "集" );
 
-        int beginIndex = 0;
-        int endIndex = 0;
-        
-        for ( int i = 0 ; i < totalVolume ; i++ ) {
-            
-            // ex. cview('2245-49.html' 取 2245-49.html
-            beginIndex = allPageString.indexOf( "onclick=\"cview", beginIndex );
-            beginIndex = allPageString.indexOf( "'", beginIndex ) + 1;
-            endIndex = allPageString.indexOf( "'", beginIndex );
-            String idAndVolume = allPageString.substring( beginIndex, endIndex );
-            
-            // ex.cview('104-97.html',8) -> 取8
-            beginIndex = allPageString.indexOf( ",", beginIndex ) + 1;
-            endIndex = allPageString.indexOf( ")", beginIndex ); 
-            String catid = allPageString.substring( beginIndex, endIndex ).trim();
+        for (Element ele : linksToEpisodes) {
+            ele.attributes();
+            String strJsEnterPageArgs = ele.attr("onclick");
+            strJsEnterPageArgs = strJsEnterPageArgs.substring(strJsEnterPageArgs.indexOf("cview(") + 6, strJsEnterPageArgs.length() - ");return false;".length());
+            String[] jsEnterPageArgs = strJsEnterPageArgs.split(",");
 
-            // 取得單集位址
-            String idString = idAndVolume.split( "-|\\." )[0];
-            String volumeNoString = idAndVolume.split( "-|\\." )[1];
-            String tempURL = getSinglePageURL( idString, volumeNoString, catid );
-            urlList.add( tempURL );
-            
-            // 取得單集名稱
-            beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
-            endIndex = allPageString.indexOf( "<", beginIndex ); 
-            String volumeTitle = allPageString.substring( beginIndex, endIndex ).trim();
-            
-            if ( volumeTitle == null || volumeTitle.matches( "" )  ) 
-            {
-                beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
-                endIndex = allPageString.indexOf( "<", beginIndex ); 
-                volumeTitle = allPageString.substring( beginIndex, endIndex ).trim();
-            }
-            
+            // ex. cview('2245-49.html' 取 2245-49.html
+            String[] idAndVolume = jsEnterPageArgs[0].replace("'", "").split( "-|\\." );
+            // ex.cview('104-97.html',8) -> 取8
+            String catid = jsEnterPageArgs[1].trim();
+
+            // get URLs of every single episodes
+            String strId = idAndVolume[0];
+            String strVolume = idAndVolume[1];
+            urlList.add(getSinglePageURL(strId, strVolume, catid));
+
+            String volumeTitle = ele.text().trim();
+
+            // fix until being reported, no example to test
+//            if ( volumeTitle == null || volumeTitle.equals("")  )
+//            {
+//                beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
+//                endIndex = allPageString.indexOf( "<", beginIndex );
+//                volumeTitle = allPageString.substring( beginIndex, endIndex ).trim();
+//            }
+
             volumeTitle = getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
                     Common.getTraditionalChinese( volumeTitle.trim() ) ) );
-            volumeList.add( getVolumeWithFormatNumber( volumeTitle ) );
-            
-            
-            //Common.debugPrintln( tempURL + " " + volumeTitle );
-
+            volumeList.add( getVolumeWithFormatNumber(volumeTitle) );
         }
 
         combinationList.add( volumeList );
@@ -234,24 +208,45 @@ public class ParseEC extends ParseOnlineComicSite {
     // 取得單集頁面的網址
     public String getSinglePageURL( String idString, String volumeNoString, String catidString ) {
 
-        String baseurl= "";
-        String volumeString = "?ch=" + volumeNoString;
+        String ret = "";
+
+        switch (Integer.parseInt( catidString )) {
+            case 4:
+            case 6:
+            case 12:
+            case 22:
+
+            case 1:
+            case 17:
+            case 19:
+            case 21:
+
+            case 2:
+            case 5:
+            case 7:
+            case 9:
+                ret += "http://new.comicvip.com/show/cool-";
+                break;
+            case 10:
+            case 11:
+            case 13:
+            case 14:
+
+            case 3:
+            case 8:
+            case 15:
+            case 16:
+            case 18:
+            case 20:
+                ret += "http://new.comicvip.com/show/best-manga-";
+                break;
+            default:
+                throw new IllegalArgumentException("The catid is not whithin the valid range.");
+        }
+
+        ret += idString + ".html?ch=" + volumeNoString;
         
-        int catid = Integer.parseInt( catidString );
-        
-        if(catid==4 || catid==6 || catid==12 ||catid==22 ) 
-            baseurl="http://new.comicvip.com/show/cool-";
-        if(catid==1 || catid==17 || catid==19 || catid==21) 
-            baseurl="http://new.comicvip.com/show/cool-";
-        if(catid==2 || catid==5 || catid==7 || catid==9)  
-            baseurl="http://new.comicvip.com/show/cool-";
-        if(catid==10 || catid==11 || catid==13 || catid==14) 
-            baseurl="http://new.comicvip.com/show/best-manga-";
-        if(catid==3 || catid==8 || catid==15 || catid==16 ||catid==18 ||catid==20)
-            baseurl="http://new.comicvip.com/show/best-manga-";
-        
-        
-        return baseurl + idString + ".html" + volumeString;
+        return ret;
     }
 
     @Override
@@ -272,8 +267,8 @@ class ParseECphoto extends ParseEC {
 
     public ParseECphoto() {
         siteID = Site.EIGHT_COMIC_PHOTO;
-        indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_photo_parse_", "html" );
-        indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_photo_encode_parse_", "html" );
+        indexWrongEncodingFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_photo_parse_", "html" );
+        indexFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_photo_encode_parse_", "html" );
 
         jsName = "index_8comic_photo.js";
     }
@@ -286,12 +281,12 @@ class ParseECphoto extends ParseEC {
 
         String allPageString = getAllPageString( webSite );
 
-        if ( getWholeTitle() == null || getWholeTitle().equals( "" ) ) {
+        if ( this.getWholeTitle() == null || this.getWholeTitle().equals( "" ) ) {
             int beginIndex = allPageString.indexOf( "<title>" ) + 7;
             int endIndex = allPageString.indexOf( "</title>", beginIndex );
             String titleString = allPageString.substring( beginIndex, endIndex );
 
-            setWholeTitle( getVolumeWithFormatNumber( 
+            this.setWholeTitle( getVolumeWithFormatNumber(
                     Common.getStringRemovedIllegalChar( titleString ) ) );
         }
 
@@ -303,6 +298,7 @@ class ParseECphoto extends ParseEC {
     public void parseComicURL() { // parse URL and save all URLs in comicURL
         // 先取得前面的下載伺服器網址
         String allPageString = getAllPageString( webSite );
+//        Document doc = Parser.parse(getAllPageString(webSite), webSite);
 
         Common.debugPrint( "開始解析這一集有幾頁 :" );
         totalPage = allPageString.split( "\\.jpe'" ).length - 1;
@@ -324,12 +320,7 @@ class ParseECphoto extends ParseEC {
 
     @Override
     public boolean isSingleVolumePage( String urlString ) {
-        if ( urlString.matches( "(?s).*\\d+-\\d+.html(?s).*" ) ) // ex. http://www.8comic.com/photo/1-1.html
-        {
-            return false;
-        } else {
-            return true;
-        }
+        return !urlString.matches( "(?s).*\\d+-\\d+.html(?s).*" );
     }
 
     @Override
