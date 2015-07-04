@@ -16,7 +16,7 @@ https://github.com/abc9070410/JComicDownloader/releases
 See [Building this project](../../wiki/Building-this-project).
 * Using Maven <br/>
 `mvn clean install`
-<br/>Files will be placed at output folder <br/>
+<br/>Files will be placed at output folder
 
 ## External Library
 * Zhcode <br/>
@@ -31,9 +31,12 @@ http://napkinlaf.sourceforge.net/
 https://java.net/projects/substance/
 * JAudioTagger <br/>
 https://bitbucket.org/ijabz/jaudiotagger/
+* jsoup <br/>
+http://jsoup.org/
 
 ## Icon Information
 [Double-J Design](http://www.doublejdesign.co.uk/)
 
 ## License
-This software is released under a GNU General Public License version 3 license. See http://www.gnu.org/copyleft/gpl.html for more information.
+This software is released under a GNU General Public License version 3 license. <br/>
+See http://www.gnu.org/copyleft/gpl.html for more information.
