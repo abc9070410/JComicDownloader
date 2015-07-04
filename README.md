@@ -33,6 +33,8 @@ https://java.net/projects/substance/
 https://bitbucket.org/ijabz/jaudiotagger/
 * jsoup <br/>
 http://jsoup.org/
+* Genson<br/>
+http://owlike.github.io/genson/
 
 ## Icon Information
 [Double-J Design](http://www.doublejdesign.co.uk/)
