@@ -771,7 +771,7 @@ public class Common
             {
                 Common.hadleErrorMessage( e, "無法正確下載" + webSite );
 
-                if ( ++retryTimes > 0 )
+                if ( ( retryTimes + 1 ) > 0 )
                 { // 即使retryTimes設零，也會重傳一次
                     Flag.downloadErrorFlag = false;
                     downloadFile( webSite, outputDirectory, outputFileName,
