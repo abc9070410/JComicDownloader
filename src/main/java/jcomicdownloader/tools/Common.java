@@ -341,7 +341,7 @@ public class Common
         {
             URL url = new URL( urlString );
             HttpsURLConnection connection = ( HttpsURLConnection ) url.openConnection();
-            connection.setRequestProperty( "User-Agent", "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-TW; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8" );
+            connection.setRequestProperty( "User-Agent", Common.getUserAgent() );
             connection.setDoInput( true );
             connection.setDoOutput( true );
             connection.setRequestMethod( "POST" );
@@ -401,7 +401,7 @@ public class Common
         {
             URL url = new URL( urlString );
             HttpsURLConnection connection = ( HttpsURLConnection ) url.openConnection();
-            connection.setRequestProperty( "User-Agent", "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-TW; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8" );
+            connection.setRequestProperty( "User-Agent", Common.getUserAgent() );
 
             if ( referURL != null )
             {
@@ -644,6 +644,23 @@ public class Common
                     if ( connection.getResponseCode() == 500 )
                     {
                     }
+                    else if (connection.getResponseCode() == 301)
+                    {
+                        // get redirect url from "location" header field
+                        String newUrl = connection.getHeaderField("Location");
+ 
+                        // get the cookie if need, for login
+                        String cookies = connection.getHeaderField("Set-Cookie");
+
+                        // open the new connnection again
+                        connection = (HttpURLConnection) new URL(newUrl).openConnection();
+                        connection.setRequestProperty("Cookie", cookies);
+                        connection.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+                        connection.addRequestProperty("User-Agent", "Mozilla");
+                        connection.addRequestProperty("Referer", "google.com");
+
+                        Common.debugPrintln("Redirect to URL : " + newUrl);
+                    }
                     else if ( connection.getResponseCode() != 200 )
                     {
                         //Common.debugPrintln( "第二次失敗，不再重試!" );
@@ -794,7 +811,7 @@ public class Common
             URL url = new URL( urlString );
 
             HttpURLConnection connection = ( HttpURLConnection ) url.openConnection();
-            connection.setRequestProperty( "User-Agent", "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0" );
+            connection.setRequestProperty( "User-Agent", Common.getUserAgent() );
 
             connection.connect();
 
@@ -1367,10 +1384,13 @@ public class Common
             }
             else if ( oldString.charAt( i ) == '.' )
             {
-                newString += String.valueOf( '‧' );
+                newString += String.valueOf( '_' );
             }
-            else if ( oldString.charAt( i ) == '?'
-                    || oldString.charAt( i ) == ':' )
+            else if ( oldString.charAt( i ) == '?' 
+                    || oldString.charAt( i ) == ',' 
+                    || oldString.charAt( i ) == '\'' 
+                    || oldString.charAt( i ) == ':' 
+                    || oldString.charAt( i ) == '–')
             {
                 newString += String.valueOf( '_' );
             }
@@ -3418,7 +3438,10 @@ public class Common
         return unsuan99(srcString, keyString);
     }
 
-
+    public static String getUserAgent()
+    {
+        return "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0";
+    }
 }
 
 class TimeoutTask extends TimerTask

@@ -32,7 +32,8 @@ public class ParseCKNovel extends ParseOnlineComicSite {
     protected String indexEncodeName;
     protected String baseURL;
     protected int floorCountInOnePage; // 一頁有幾層樓
-
+    private List<String> coverUrlList = new ArrayList<String>();
+    
     /**
      *
      * @author user
@@ -209,6 +210,8 @@ public class ParseCKNovel extends ParseOnlineComicSite {
         for ( int i = 0 ; i < fileList.length && Run.isAlive ; i++ ) {
             Common.debugPrintln( "處理第" + (i + 1) + "頁: " + fileList[i] );
             allPageString = Common.getFileString( getDownloadDirectory(), fileList[i] );
+            
+            parseCoverUrl(allPageString);
 
             allNovelText += getRegularNovel( allPageString, i ); // 每一頁處理過都加總起來 
             //Common.debugPrintln( "處理第" + (i + 1) + "頁: " + fileList[i] );
@@ -231,17 +234,31 @@ public class ParseCKNovel extends ParseOnlineComicSite {
 
         textFilePath = textOutputDirectory + getWholeTitle() + "." + Common.getDefaultTextExtension();
 
-
-
-        if ( SetUp.getDownloadNovelCover() ) {
-            if ( coverURL != null ) { // 下載樓主提供的封面
-                String coverFile = author + "_" + getWholeTitle() + ".jpg";
-                Common.downloadFile( coverURL, textOutputDirectory, coverFile, false, "" );
-            }
-            else {
-                downloadCover( getWholeTitle(), author ); // 下載Google搜尋到的封面
+        if ( coverUrlList.size() != 0 ) { // 下載樓主提供的封面
+            for (int i = 0; i < coverUrlList.size(); i ++)
+            {
+                String coverFile = author + "_" + getWholeTitle() + "_" + (i + 1) + ".jpg";
+                Common.downloadFile( coverUrlList.get(i), textOutputDirectory, coverFile, false, "" );
             }
         }
+        else if ( SetUp.getDownloadNovelCover() ) {
+            downloadCover( getWholeTitle(), author ); // 下載Google搜尋到的封面
+        }
+    }
+    
+    private void parseCoverUrl(String allPageString)
+    {
+        String[] tokens = allPageString.split("src=\"static/image/common/none.gif\" ");
+        
+        for (int i = 1; i < tokens.length; i ++)
+        {
+            int beginIndex = tokens[i].indexOf("http://");
+            int endIndex = tokens[i].indexOf("\"", beginIndex);
+            
+            coverUrlList.add(tokens[i].substring(beginIndex, endIndex));
+        }
+        
+        Common.debugPrintln("找到 " + coverUrlList.size() + " 張小說插圖");
     }
 
     // 處理小說網頁，將標籤去除
@@ -270,6 +287,7 @@ public class ParseCKNovel extends ParseOnlineComicSite {
                 }
                 else {
                     oneFloorText = replaceProcessToText( oneFloorText );
+                    
                     allFloorText += oneFloorText
                             + "\n\n--------------------------------------------"
                             + (i + nowPage * floorCountInOnePage) + "\n"; // 每一樓的文字加總起來
@@ -343,7 +361,7 @@ public class ParseCKNovel extends ParseOnlineComicSite {
         urlString = getRegularURL( urlString ); // 轉為普通位址
 
         if ( urlString.matches( "(?s).*thread-(?s).*" ) ) { // 網址為文章頁面
-            beginIndex = allPageString.indexOf( "name=\"keywords\"" );
+            beginIndex = allPageString.indexOf( "og:title" );
             beginIndex = allPageString.indexOf( "content=", beginIndex );
             beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
             endIndex = allPageString.indexOf( "\"", beginIndex );
