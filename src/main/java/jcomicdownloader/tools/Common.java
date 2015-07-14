@@ -596,6 +596,7 @@ public class Common
                 // (如果不设此项,在传送序列化对象时,当WEB服务默认的不是这种类型时可能抛java.io.EOFException)
                 connection.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded" );
                 //connection.setRequestProperty( "Accept-Language", "zh-cn" );
+                connection.setRequestProperty( "Accept-Language", "en-US,en;q=0.8,zh;q=0.4" );//fix for dm5
                 // connection.setRequestProperty("Content-Length", ""+data.length());
                 connection.setRequestProperty( "Cache-Control", "no-cache" );
                 connection.setRequestProperty( "Pragma", "no-cache" );
