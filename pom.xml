@@ -210,7 +210,9 @@
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
-                        <manifestEntries><!-- Custom add classpath instead of maven gen-->
+                        <manifestEntries>
+                            <Class-Path>lib/</Class-Path>
+                            <!-- Custom add classpath instead of maven gen-->
                             <!--<Class-Path>JTattoo-1.6.11.jar lib/JTattoo-1.6.11.jar nimrod-laf-1.2.jar lib/nimrod-laf-1.2.jar napkinlaf-1.2.jar lib/napkinlaf-1.2.jar trident-6.3.jar lib/trident-6.3.jar substance-6.3.jar lib/substance-6.3.jar jaudiotagger-2.2.3.jar lib/jaudiotagger-2.2.3.jar </Class-Path>-->
                             <!--<Class-Path>lib/JTattoo-1.6.11.jar lib/nimrod-laf-1.2.jar lib/napkinlaf-1.2.jar lib/trident-6.3.jar lib/substance-6.3.jar lib/jaudiotagger-21e1b39.jar </Class-Path>-->
                             <SplashScreen-Image>jcomicdownloader/tools/resource/logo.png</SplashScreen-Image>
@@ -221,16 +223,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.5.1</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
-                        <phase>package</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib/</outputDirectory>
+                            <outputDirectory>${project.build.directory}/classes/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
                 </executions>
@@ -254,6 +258,26 @@
                         <goals>
                             <goal>run</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>jcomicdownloader.ComicDownGUI</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
