@@ -2717,7 +2717,7 @@ public class Common
             //connection.setRequestProperty( "Cache-Control", "max-age=0" );
             //connection.setRequestProperty( "Connection", "keep-alive" );
             //connection.setRequestProperty( "Host", "f1.xiami.net" );
-            connection.setRequestProperty( "User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11" );
+            connection.setRequestProperty( "User-Agent", "    Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36" );
 
 
             if ( referString != null && !"".equals( referString ) )
