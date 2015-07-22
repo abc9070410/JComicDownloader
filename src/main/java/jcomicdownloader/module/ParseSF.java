@@ -1,21 +1,26 @@
 /*
 ----------------------------------------------------------------------------------------------------
 Program Name : JComicDownloader
-Authors  : surveyorK
-Last Modified : 2013/11/23
+Authors  : surveyorK, hkgsherlock
+Last Modified : 2015/07/22
 ----------------------------------------------------------------------------------------------------
 ChangeLog:
+5.20: 修正並改用 jsoup 來選取章節 （使用 CSS selector） // TODO: 在這個 module 全面改用 jsoup
 5.19: 修復SFacg無法解析的問題。
-* 5.18: 修復SFacg最新集數無法解析的問題。
- *  2.02: 1. 新增對www.sky-fire.com的支援。
+5.18: 修復SFacg最新集數無法解析的問題。
+2.02: 1. 新增對www.sky-fire.com的支援。
 ----------------------------------------------------------------------------------------------------
  */
 package jcomicdownloader.module;
 
 import jcomicdownloader.tools.*;
 import jcomicdownloader.enums.*;
+
 import java.util.*;
 import jcomicdownloader.SetUp;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 
 public class ParseSF extends ParseOnlineComicSite {
 
@@ -167,35 +172,17 @@ public class ParseSF extends ParseOnlineComicSite {
         List<String> urlList = new ArrayList<String>();
         List<String> volumeList = new ArrayList<String>();
 
-        int beginIndex = allPageString.indexOf( "class=\"serialise_list Blue_link2\"" );
-        int endIndex = allPageString.indexOf( "</ul>", beginIndex );
-        
-        String tempString = allPageString.substring( beginIndex, endIndex );
+        int volumeCount = 0;
 
-        int volumeCount = tempString.split( "href=\"" ).length - 1;
+        Document nodes = Parser.parse(allPageString, urlString);
+        for (Element e : nodes.select(".serialise_list.Blue_link2 li>a")) {
+            String strUrl = pageBaseURL + e.attr("href");
+            String strChapterName = e.text();
 
-        String volumeTitle = "";
-        beginIndex = endIndex = 0;
-        for ( int i = 0 ; i < volumeCount ; i++ ) {
-            // 取得單集位址
-            beginIndex = tempString.indexOf( "href=\"", beginIndex ) + 6;
-            endIndex = tempString.indexOf( "\"", beginIndex );
-            urlList.add( pageBaseURL + tempString.substring( beginIndex, endIndex ) );
+            urlList.add(strUrl);
+            volumeList.add(strChapterName);
 
-            // 取得單集名稱
-            beginIndex = tempString.indexOf( ">", beginIndex ) + 1;
-            endIndex = tempString.indexOf( "<", beginIndex );
-            if ( beginIndex == endIndex )
-            {
-                beginIndex = tempString.indexOf( ">", beginIndex ) + 1;
-                endIndex = tempString.indexOf( "<", beginIndex );
-            }
-            
-            volumeTitle = tempString.substring( beginIndex, endIndex );
-
-            volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
-                        Common.getTraditionalChinese( volumeTitle.trim() ) ) ) );
-
+            volumeCount++;
         }
 
         totalVolume = volumeCount;
