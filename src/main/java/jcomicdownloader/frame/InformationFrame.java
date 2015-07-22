@@ -114,7 +114,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
         {
             int extendWidth = (SetUp.getDefaultFontSize() - 18) * 20; // 跟隨字體加寬
             extendWidth = extendWidth > 0 ? extendWidth : 0;
-            setSize( 470 + extendWidth, 690 + extendWidth / 2 );
+            setSize( 500 + extendWidth, 710 + extendWidth / 2 );
             setResizable( true );
         }
 
@@ -145,12 +145,12 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
         String informationText = "";
         informationLabel = new JLabel( informationText );
 
-        JLabel informLabel = getLabel( "目前最新版本: ", "lastest version: " );
-        versionLabel = getLabel( "偵測中...", "check..." );
+        JLabel informLabel = getLabel( "目前最新版本: ", "Lastest version: " );
+        versionLabel = getLabel( "偵測中...", "fetching..." );
         dateLabel = getLabel( "", "" );
 
-        JLabel informLabel2 = getLabel( "目前總共支援: ", "support " );
-        supportedSiteLabel = getLabel( "偵測中...", "check..." );
+        JLabel informLabel2 = getLabel( "目前總共支援: ", "Supported sites: " );
+        supportedSiteLabel = getLabel( "偵測中...", "fetching..." );
 
         JPanel versionPanel = new JPanel( new FlowLayout( FlowLayout.LEFT ) );
         versionPanel.add( informLabel );
@@ -168,20 +168,20 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
         updatePanel.add( supportedSitePanel );
         updatePanel.setOpaque( !SetUp.getUsingBackgroundPicOfInformationFrame() );
 
-        JButton supportedSiteButton = getButton( " 支援網站列表", "supported site list", "information_supportedSite.png",
+        JButton supportedSiteButton = getButton( " 支援網站列表", "Supported site list", "information_supportedSite.png",
                                                  "https://sites.google.com/site/jcomicdownloader/home", KeyEvent.VK_S );
 
-        downloadButton = getButton( " 最新版本下載", "download lastest version", "information_download.png",
+        downloadButton = getButton( " 最新版本下載", "Download lastest version", "information_download.png",
                                     null, KeyEvent.VK_D );
         downloadButton.addActionListener( this );
 
-        JButton teachingButton = getButton( " 線上使用教學", "online manual", "information_manual.png",
+        JButton teachingButton = getButton( " 線上使用教學", "Online manual", "information_manual.png",
                                             "https://sites.google.com/site/jcomicdownloader/step-by-step", KeyEvent.VK_I );
-        JButton searchComicButton = getButton( " 漫畫搜尋引擎", "comic search", "information_search.png",
+        JButton searchComicButton = getButton( " 漫畫搜尋引擎", "Comic search", "information_search.png",
                                                "http://www.google.com/cse/home?cx=002948535609514911011:ls5mhwb6sqa&hl=zh-TW", KeyEvent.VK_C );
-        JButton searchNovelButton = getButton( " 小說搜尋引擎", "novel search", "information_novel_search.png",
+        JButton searchNovelButton = getButton( " 小說搜尋引擎", "Novel search", "information_novel_search.png",
                                                "http://www.google.com/cse/home?cx=002948535609514911011:_vv3hzthlt8&hl=zh-TW", KeyEvent.VK_N );
-        JButton messageButton = getButton( " 疑難問題回報", "bug report", "information_report.png",
+        JButton messageButton = getButton( " 疑難問題回報", "Bug report", "information_report.png",
                                            "https://github.com/abc9070410/JComicDownloader/issues", KeyEvent.VK_R );
 
         JLabel authorLabel = getLabel( "作者：surveyorK （abc9070410@gmail.com）",
@@ -350,16 +350,17 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
                 String nowSkinName = SetUp.getSkinClassName();
 
                 downloadLatestVersionInfo(); // 下載官方網頁
+
                 versionLabel.setText(getUpdateVersionString()); // 從官方網頁提取更新版本資訊
+                dateLabel.setText(getUpdateDateString()); // 從官方網頁提取更新日期資訊
+                supportedSiteLabel.setText(getUpdateSupportedSiteString()); // 從官方網頁提取支援網站資訊
+                fetchUrlDownloadLatestExecutable();
+
                 synchronized ( InformationFrame.thisFrame )
                 { // lock main frame
                     InformationFrame.thisFrame.notifyAll();
                     InformationFrame.downloadLock = false;
                 }
-
-                dateLabel.setText(getUpdateDateString()); // 從官方網頁提取更新日期資訊
-                supportedSiteLabel.setText(getUpdateSupportedSiteString()); // 從官方網頁提取支援網站資訊
-                fetchUrlDownloadLatestExecutable();
 
                 repaint();
 

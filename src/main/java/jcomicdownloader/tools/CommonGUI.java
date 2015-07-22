@@ -45,7 +45,7 @@ public class CommonGUI
     public static int nowMouseAtRow = 10000;
     // 背景圖如果照正常貼上去，開出來的frame會比原圖小一點，所以需要修正。
     public static int widthGapOfBackgroundPic = 2;
-    public static int heightGapOfBackgroundPic = 33;
+    public static int heightGapOfBackgroundPic = 35;
     public static int optionDialogChoice = -1; // OptionDialog視窗的選擇
     public static String showInputDialogValue = "IntialValue"; // OptionDialog視窗輸入的值
     public static boolean showMessageOK = false;
