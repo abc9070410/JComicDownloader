@@ -59,8 +59,7 @@ public class ParseEC extends ParseOnlineComicSite {
         Common.simpleDownloadFile(webSite, SetUp.getTempDirectory(), indexWrongEncodingFileName, webSite);
         Common.newEncodeFile(SetUp.getTempDirectory(), indexWrongEncodingFileName, indexFileName, Zhcode.BIG5);
         Common.deleteFile(indexWrongEncodingFileName);
-        String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexFileName);
-        
+
         // ex. http://www.8comic.com/love/drawing-8170.html?ch=3
         volumeNoString = webSite.split( "/|=" )[webSite.split( "/|=" ).length - 1];
 
@@ -152,6 +151,10 @@ public class ParseEC extends ParseOnlineComicSite {
     public String getTitleOnMainPage( String urlString, String allPageString ) {
         Document nodes = Parser.parse(allPageString, urlString);
         String ret = nodes.select("body > table:nth-of-type(2) table table:first-of-type tr:first-of-type font").text();
+
+        if (ret.length() == 0)
+            Common.errorReport("取得標題失敗！值為空");
+
         return ret;
     }
 
