@@ -228,7 +228,7 @@ public class ParseEC extends ParseOnlineComicSite {
             case 5:
             case 7:
             case 9:
-                ret += "http://new.comicvip.com/show/cool-";
+                ret += "http://comicvip.com/show/cool-";
                 break;
             case 10:
             case 11:
@@ -241,7 +241,7 @@ public class ParseEC extends ParseOnlineComicSite {
             case 16:
             case 18:
             case 20:
-                ret += "http://new.comicvip.com/show/best-manga-";
+                ret += "http://comicvip.com/show/best-manga-";
                 break;
             default:
                 throw new IllegalArgumentException("The catid is not whithin the valid range.");
@@ -453,7 +453,7 @@ class ParseSixComic extends ParseEC {
 }
 
 /**
- * The Java Class of translated JavaScript file "http://new.comicvip.com//js/nview.js"
+ * The Java Class of translated JavaScript file "http://comicvip.com//js/nview.js"
  * @author hkgsherlock
  */
 class NView_Java {

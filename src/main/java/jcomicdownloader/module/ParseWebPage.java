@@ -119,7 +119,7 @@ public class ParseWebPage
         //else if ( webSite.matches( "(?s).*\\.178.com(?s).*" ) )
         //    siteID = Site.ONE_SEVEN_EIGHT;
         else if ( webSite.matches( "(?s).*\\.8comic.com(?s).*" ) ||
-                  webSite.matches( "(?s).*\\.comicvip.com(?s).*") )
+                  webSite.matches( "(?s).*comicvip.com(?s).*") )
         {
             if ( webSite.matches( "(?s).*photo(?s).*" )
                     || webSite.matches( "(?s).*PHOTO(?s).*" )
