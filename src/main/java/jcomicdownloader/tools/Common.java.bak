@@ -3156,7 +3156,7 @@ public class Common
             public void run()
             {
                 CommonGUI.showMessageDialog( ComicDownGUI.mainFrame,
-                                             fileName[0] + "下載完畢，請注意，程式即將重新啟動! ",
+                                             fileName + "下載完畢，請注意，程式即將重新啟動! ",
                                              "提醒訊息", JOptionPane.INFORMATION_MESSAGE );
                 //Common.restartApplication(); // 重新開啟程式
                 Common.restart();

@@ -258,17 +258,6 @@ public class ParseEC extends ParseOnlineComicSite {
         System.out.println( "|                          " );
         System.out.println( "| Run the 8comic module: " );
         System.out.println( "|______________________________\n" );
-        
-        checkJar();
-    }
-    
-    private void checkJar()
-    {
-        String jarFileName = "jsoup-1.8.2.jar";
-        if ( !Common.existJAR( jarFileName ) )
-        {
-            Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
-        }
     }
 
     @Override

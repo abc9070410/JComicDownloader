@@ -1089,10 +1089,8 @@ public class Parse178 extends ParseOnlineComicSite
             System.exit(0);
         }
         
-        
         // 取得所有位址編碼代號
-        String token = isMobilePage() ? "[" : "'[";
-        int beginIndex = allPageString.indexOf( token ) + 2;
+        int beginIndex = allPageString.indexOf( "'[" ) + 2;
         int endIndex = allPageString.indexOf( "\"]", beginIndex ) + 1;
 
         String allCodeString = allPageString.substring( beginIndex, endIndex );
@@ -1101,62 +1099,61 @@ public class Parse178 extends ParseOnlineComicSite
         Common.debugPrintln( "共 " + totalPage + " 頁" );
         comicURL = new String[ totalPage ];
         refers = new String[ totalPage ];
-        
-        String basePicURL = "";
-        String parentPicURL = "";
+
+
+        // 取得位址編碼代號的替換字元
+        beginIndex = allPageString.indexOf( ",'", endIndex ) + 2;
+        endIndex = allPageString.indexOf( "'.", beginIndex );
+        String allVarString = allPageString.substring( beginIndex, endIndex );
+
+        String[] varTokens = allVarString.split( "\\|" );
+
+        for ( int i = 0; i < varTokens.length; i++ )
+        {
+            Common.debugPrintln( i + " " + varTokens[i] ); // test
+        }
+        //System.exit( 0 );
+
+        String basePicURL = "http://images.dmzj.com/";//"http://images.manhua.178.com/";
         String[] codeTokens = allCodeString.split( "\",\"" );
 
-        if (!isMobilePage())
-        {
-        
-            // 取得位址編碼代號的替換字元
-            beginIndex = allPageString.indexOf( ",'", endIndex ) + 2;
-            endIndex = allPageString.indexOf( "'.", beginIndex );
-            String allVarString = allPageString.substring( beginIndex, endIndex );
 
-            String[] varTokens = allVarString.split( "\\|" );
 
-            for ( int i = 0; i < varTokens.length; i++ )
-            {
-                Common.debugPrintln( i + " " + varTokens[i] ); // test
-            }
-            basePicURL = "http://images.dmzj.com/";//"http://images.manhua.178.com/";
-            
-            codeTokens = getRealCodeTokens( codeTokens, varTokens );
-            String firstCode = codeTokens[0].replaceAll( "\"", "" );
-            
-            String firstPicURL = "";
-            Common.debugPrintln( "第一張編碼：" + firstCode );
-            firstPicURL = basePicURL + Common.getFixedChineseURL( getDecodeURL( firstCode ) );
-            firstPicURL = firstPicURL.replaceAll( "\\\\", "" );
+        codeTokens = getRealCodeTokens( codeTokens, varTokens );
 
-            Common.debugPrintln( "第一張圖片網址：" + firstPicURL );
-            
-            endIndex = firstPicURL.lastIndexOf( "/" ) + 1;
-            parentPicURL = firstPicURL.substring( 0, endIndex );
-        }
-        
+        String firstCode = codeTokens[0].replaceAll( "\"", "" );
+
+        String firstPicURL = "";
+        Common.debugPrintln( "第一張編碼：" + firstCode );
+        firstPicURL = basePicURL + Common.getFixedChineseURL( getDecodeURL( firstCode ) );
+        firstPicURL = firstPicURL.replaceAll( "\\\\", "" );
+
+        Common.debugPrintln( "第一張圖片網址：" + firstPicURL );
+
+        //System.exit( 0 );
+
+
         String[] picNames = new String[ totalPage ];
         for ( int i = 0; i < picNames.length; i++ )
         {
             codeTokens[i] = codeTokens[i].replaceAll( "\"", "" );
             beginIndex = codeTokens[i].lastIndexOf( "/" ) + 1;
             endIndex = codeTokens[i].length(); //.lastIndexOf( "\"" );
-            String temp = isMobilePage() ? codeTokens[i] : codeTokens[i].substring( beginIndex, endIndex );
             //Common.debugPrintln( codeTokens[i] + " " + beginIndex + " " + endIndex );
-            picNames[i] = Common.getFixedChineseURL(getDecodeURL( temp ));
+            picNames[i] = Common.getFixedChineseURL(
+                    getDecodeURL( codeTokens[i].substring( beginIndex, endIndex ) ) );
 
             //System.exit( 0 ); // debug
         }
 
-        
+        endIndex = firstPicURL.lastIndexOf( "/" ) + 1;
+        String parentPicURL = firstPicURL.substring( 0, endIndex );
 
         for ( int i = 0; i < codeTokens.length && Run.isAlive; i++ )
         {
             comicURL[i] = parentPicURL + picNames[i]; // 存入每一頁的網頁網址
-            comicURL[i] = comicURL[i].replaceAll("\\\\", "");
             refers[i] = webSite;
-            Common.debugPrintln( ( i + 1 ) + " " + comicURL[i]  ); // debug
+            //Common.debugPrintln( ( i + 1 ) + " " + comicURL[i]  ); // debug
 
         }
 
@@ -1387,12 +1384,6 @@ public class Parse178 extends ParseOnlineComicSite
             beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
             endIndex = allPageString.indexOf( "\"", beginIndex );
         }
-        else if (isMobilePage(urlString))
-        {
-            beginIndex = allPageString.indexOf( "id=\"comicName\"" );
-            beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
-            endIndex = allPageString.indexOf( "<", beginIndex );
-        }
         
         // Common.debugPrintln( "B: " + beginIndex + "  E: " + endIndex );
         
@@ -1427,77 +1418,37 @@ public class Parse178 extends ParseOnlineComicSite
 
         int beginIndex = allPageString.indexOf( "class=\"cartoon_online_border\"" );
         int endIndex = allPageString.indexOf( "document.write", beginIndex );
-
+        
         if (urlString.indexOf("mh.") > 0)
         {
             beginIndex = allPageString.indexOf( "chapter_list" );
             endIndex = allPageString.indexOf( "</script>", beginIndex );
-        }
-        else if (isMobilePage(urlString))
-        {
-            beginIndex = allPageString.indexOf( "initIntroData" );
-            endIndex = allPageString.indexOf( " openApp()", beginIndex );
+            
         }
 
         String tempString = allPageString.substring( beginIndex, endIndex );
-        int volumeCount = 0;
+
+        int volumeCount = tempString.split( "href=\"" ).length - 1;
+
         String volumeTitle = "";
         beginIndex = endIndex = 0;
-       
-        if (isMobilePage(urlString))
+        for ( int i = 0; i < volumeCount; i++ )
         {
-            String[] tokens = getUtf8Text(tempString).split(":|,");
-            String id = "";
-            String comic_id = "";
-            String chapter_name = "";
-            String base = "http://m.dmzj.com/view/";
-            
-            for (int i = 0; i < tokens.length; i ++)
-            {
-                if (tokens[i].indexOf("\"id\"") >= 0)
-                {
-                    id = tokens[i+1];
-                }
-                else if (tokens[i].indexOf("\"comic_id\"") >= 0)
-                {
-                    comic_id = tokens[i+1];
-                }
-                else if (tokens[i].indexOf("\"chapter_name\"") >= 0)
-                {
-                    chapter_name = tokens[i+1].replaceAll("\"", "");
-                    
-                    // http://m.dmzj.com/view/10073/38926.html
-                    urlList.add( base + comic_id + "/" + id + ".html" );
-                    volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
-                        Common.getTraditionalChinese( chapter_name ) ) ) );
-                    
-                    volumeCount++;
-                }
-                
-            }
+            // 取得單集位址
+            beginIndex = tempString.indexOf( "href=\"", beginIndex ) + 6;
+            endIndex = tempString.indexOf( "\"", beginIndex );
+            urlList.add( baseURL + tempString.substring( beginIndex, endIndex ) );
+
+            // 取得單集名稱
+            beginIndex = tempString.indexOf( ">", beginIndex ) + 1;
+            endIndex = tempString.indexOf( "<", beginIndex );
+            volumeTitle = tempString.substring( beginIndex, endIndex );
+
+            volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
+                    Common.getTraditionalChinese( volumeTitle.trim() ) ) ) );
+
         }
-        else
-        {
-             volumeCount = tempString.split( "href=\"" ).length - 1;
-            
-            for ( int i = 0; i < volumeCount; i++ )
-            {
-                // 取得單集位址
-                beginIndex = tempString.indexOf( "href=\"", beginIndex ) + 6;
-                endIndex = tempString.indexOf( "\"", beginIndex );
-                urlList.add( baseURL + tempString.substring( beginIndex, endIndex ) );
 
-                // 取得單集名稱
-                beginIndex = tempString.indexOf( ">", beginIndex ) + 1;
-                endIndex = tempString.indexOf( "<", beginIndex );
-                volumeTitle = tempString.substring( beginIndex, endIndex );
-
-                volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
-                        Common.getTraditionalChinese( volumeTitle.trim() ) ) ) );
-
-            }
-        }
-        
         totalVolume = volumeCount;
         Common.debugPrintln( "共有" + totalVolume + "集" );
 
@@ -1505,17 +1456,6 @@ public class Parse178 extends ParseOnlineComicSite
         combinationList.add( urlList );
 
         return combinationList;
-    }
-    
-    // ex. http://m.dmzj.com/info/gsmmx21.html
-    private boolean isMobilePage(String url)
-    {
-        return url.indexOf("m.dmzj.com") > 0;
-    }
-    
-    private boolean isMobilePage()
-    {
-        return isMobilePage(webSite);
     }
 
     @Override
