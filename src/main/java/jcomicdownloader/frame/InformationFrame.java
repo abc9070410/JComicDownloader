@@ -80,17 +80,15 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
 //        setResizable(false);
 
         deleteLatestVersionInfo(); // 刪除官方網頁檔案
-
-
-        String jarFileName = "genson-1.3.jar";
-        if ( !Common.existJAR( jarFileName ) )
-        {
+        
+        try{
+            Class.forName("com.owlike.genson.Genson",false,this.getClass().getClassLoader());
+        }catch(ClassNotFoundException e){
+            final String jarFileName = "genson-1.3.jar";
             Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
         }
-        else
-        {
-            setNewestVersion(); // 檢查是否有新版本
-        }
+        
+        setNewestVersion(); // 檢查是否有新版本
     }
 
     private void setUpUIComponent()
