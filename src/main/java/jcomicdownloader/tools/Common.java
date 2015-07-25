@@ -91,6 +91,8 @@ public class Common
     public static String mainIcon = "main_icon.png";
     public static String playAudioPic = "play.png";
     public static String NULL = "NULL";
+    protected static int defaultDownloadTimeout=60000; //下載timeout60秒
+
 
     public static String getZero()
     {
@@ -605,7 +607,7 @@ public class Common
                 connection.setRequestProperty( "Connection", "keep-alive" );
 
                 connection.setConnectTimeout( 10000 ); // 與主機連接時間不能超過十秒
-
+                connection.setReadTimeout(defaultDownloadTimeout);
 
                 if ( needCookie )
                 {
