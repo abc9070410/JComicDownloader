@@ -48,8 +48,21 @@ public class ParseSF extends ParseOnlineComicSite {
         baseURL = "http://coldpic.sfacg.com";
         
         pageBaseURL = "http://comic.sfacg.com/";
+        
+        checkJar();
+        
     }
-
+    
+    private void checkJar()
+    {
+        try{
+            Class.forName("org.jsoup.Jsoup",false, this.getClass().getClassLoader());                    
+        }catch(ClassNotFoundException e){
+            String jarFileName = "jsoup-1.8.2.jar";
+            Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
+        }
+    }
+    
     public ParseSF( String webSite, String titleName ) {
         this();
         this.webSite = webSite;

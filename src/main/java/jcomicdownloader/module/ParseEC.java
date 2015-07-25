@@ -264,9 +264,10 @@ public class ParseEC extends ParseOnlineComicSite {
     
     private void checkJar()
     {
-        String jarFileName = "jsoup-1.8.2.jar";
-        if ( !Common.existJAR( jarFileName ) )
-        {
+        try{
+            Class.forName("org.jsoup.Jsoup",false, this.getClass().getClassLoader());                    
+        }catch(ClassNotFoundException e){
+            String jarFileName = "jsoup-1.8.2.jar";
             Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
         }
     }
