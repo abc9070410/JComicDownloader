@@ -287,8 +287,8 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
         String dateEnString = "(released at %04d-%02d-%02d";
 
         return Common.getStringUsingDefaultLanguage(
-                String.format(dateString, calPublish.get(Calendar.YEAR), calPublish.get(Calendar.MONTH), calPublish.get(Calendar.DATE)),
-                String.format(dateEnString, calPublish.get(Calendar.YEAR), calPublish.get(Calendar.MONTH), calPublish.get(Calendar.DATE))); // 使用預設語言 dateString;
+                String.format(dateString, calPublish.get(Calendar.YEAR), calPublish.get(Calendar.MONTH)+1, calPublish.get(Calendar.DATE)),
+                String.format(dateEnString, calPublish.get(Calendar.YEAR), calPublish.get(Calendar.MONTH)+1, calPublish.get(Calendar.DATE))); // 使用預設語言 dateString;
     }
 
     // 回傳目前已經支援網站數目的字串
