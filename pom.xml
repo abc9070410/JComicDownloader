@@ -193,9 +193,9 @@
                                 <tasks>
                                     <copy file="${project.build.directory}/${project.build.finalName}.jar"
                                           tofile="${project.basedir}/output/${project.build.finalName}.jar"/>
-                                    <copy todir="${project.basedir}/output/lib">
+<!--                                    <copy todir="${project.basedir}/output/lib">
                                         <fileset dir="${project.build.directory}/lib"/>
-                                    </copy>
+                                    </copy>-->
                                 </tasks>
                             </configuration>
                             <goals>
@@ -209,9 +209,9 @@
     </profile>
         <profile>
             <id>full</id>
-            <activation>
+<!--            <activation>
                 <activeByDefault>true</activeByDefault>
-            </activation>
+            </activation>-->
             <build>
               <plugins>
                     <plugin>
@@ -266,9 +266,9 @@
                                     <tasks>
                                         <copy file="${project.build.directory}/${project.build.finalName}.jar"
                                               tofile="${project.basedir}/output/${project.build.finalName}.jar"/>
-                                        <copy todir="${project.basedir}/output/lib">
+<!--                                        <copy todir="${project.basedir}/output/lib">
                                             <fileset dir="${project.build.directory}/lib"/>
-                                        </copy>
+                                        </copy>-->
                                     </tasks>
                                 </configuration>
                                 <goals>
