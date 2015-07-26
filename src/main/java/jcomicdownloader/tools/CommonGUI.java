@@ -841,46 +841,64 @@ public class CommonGUI
     // 檢查skin是否由外部jar支援，若是外部skin且沒有此jar，則下載
       public static boolean checkSkin()
     {
-
-
         boolean foundJAR = false; // 是否有設定值需要用到的JAR檔
 
         if ( SetUp.getSkinClassName().matches( jtattooClassName )
                 && !Common.existJAR( jtattooFileName ) )
         {
-            new CommonGUI().downloadNewTheme( "JTattoo", jtattooFileName,
-                                              "https://abc9070410.github.io/JComicDownloader/JTattoo-1.6.11.jar" ); // 下載JTattoo.jar
+            try{ //just check one skin if jtattoo exists.                
+                Class.forName("com.jtattoo.plaf.noire.NoireLookAndFeel",false,CommonGUI.class.getClassLoader());
+                foundJAR = true;
+            }catch(ClassNotFoundException e){
+                new CommonGUI().downloadNewTheme( "JTattoo", jtattooFileName,
+                                                  "https://abc9070410.github.io/JComicDownloader/JTattoo-1.6.11.jar" ); // 下載JTattoo.jar
+            }
         }
         else if ( SetUp.getSkinClassName().matches( nimrodClassName )
                 && !Common.existJAR( nimrodFileName ) )
         {
-            new CommonGUI().downloadNewTheme( "NimRod", nimrodFileName,
+            try{ //just check one skin if it exists.                
+                Class.forName("net.sf.nimrod.NimRODLookAndFeel_Night",false,CommonGUI.class.getClassLoader());
+                foundJAR = true;
+            }catch(ClassNotFoundException e){
+                new CommonGUI().downloadNewTheme( "NimRod", nimrodFileName,
                                               "https://abc9070410.github.io/JComicDownloader/nimrod-laf-1.2.jar" ); // 下載nimrodlf-1.2.jar
+            }
         }
         else if ( SetUp.getSkinClassName().matches( napkinClassName )
                 && !Common.existJAR( napkinFileName ) )
-        {
-            new CommonGUI().downloadNewTheme( "Napkin", napkinFileName,
+        { 
+            try{ //just check one skin if it exists.                
+                Class.forName("net.sourceforge.napkinlaf.NapkinLookAndFeel",false,CommonGUI.class.getClassLoader());
+                foundJAR = true;
+            }catch(ClassNotFoundException e){
+                new CommonGUI().downloadNewTheme( "Napkin", napkinFileName,
                                               "https://abc9070410.github.io/JComicDownloader/napkinlaf-1.2.jar" ); // 下載napkinlaf-1.2.jar
+            }
         }
         else if ( SetUp.getSkinClassName().matches( substanceClassName )
                 && (!Common.existJAR( substanceFileName ) || !Common.existJAR( tridentFileName )) )
         {
-            String[] themeNames = new String[]
-            {
-                "Substance", "Trident"
-            };
-            String[] fileNames = new String[]
-            {
-                substanceFileName, tridentFileName
-            };
-            String[] urls = new String[]
-            {
-                "https://abc9070410.github.io/JComicDownloader/substance-6.3.jar",
-                "https://abc9070410.github.io/JComicDownloader/trident-6.3.jar"
-            };
-            new CommonGUI().downloadNewTheme( themeNames, fileNames,
-                                              urls ); // 
+            try{ //just check one skin if it exists.                
+                Class.forName("org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel",false,CommonGUI.class.getClassLoader());
+                foundJAR = true;
+            }catch(ClassNotFoundException e){
+                String[] themeNames = new String[]
+                {
+                    "Substance", "Trident"
+                };
+                String[] fileNames = new String[]
+                {
+                    substanceFileName, tridentFileName
+                };
+                String[] urls = new String[]
+                {
+                    "https://abc9070410.github.io/JComicDownloader/substance-6.3.jar",
+                    "https://abc9070410.github.io/JComicDownloader/trident-6.3.jar"
+                };
+                new CommonGUI().downloadNewTheme( themeNames, fileNames,
+                                                  urls ); // 
+            }
         }
         else
         {
