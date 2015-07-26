@@ -3118,13 +3118,8 @@ public class Common
             final String jarName =jarFileName;
             Runtime.getRuntime().addShutdownHook(new Thread(){
                 public void run(){
-                    String j = System.getProperty("java.home")+"/bin/java";  
-                    String[] cmd =  {
-                        j ," -jar "+Common.getNowAbsolutePath() + jarName
-                    };
-                    try{
-                        Common.debugPrintln("Restart "+j +" -jar "+Common.getNowAbsolutePath() + jarName);
-                        Runtime.getRuntime().exec( j +" -jar "+Common.getNowAbsolutePath() + jarName);
+                    try{ 
+                        Runtime.getRuntime().exec( "java -jar "+Common.getNowAbsolutePath() + jarName);
                     }catch(Exception e ){
                         Common.debugPrintln("Restart Fail");
                     }
