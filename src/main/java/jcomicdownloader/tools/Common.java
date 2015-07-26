@@ -2163,7 +2163,6 @@ public class Common
     {
         try
         {
-
             String[] cmds = new String[]
             {
                 cmd, path
@@ -2204,40 +2203,42 @@ public class Common
 
         String firstCompressFileName = "";
         boolean existCompressFile = false;
-        for ( int i = 0; i < fileList.length; i++ )
-        {
-            //Common.debugPrintln( "FILE: " + fileList[i] );
-            if ( fileList[i].matches( "(?s).*\\.zip" )
-                    || fileList[i].matches( "(?s).*\\.cbz" ) )
+        if( fileList!=null ){
+            for ( int i = 0; i < fileList.length; i++ )
             {
-                firstCompressFileName = fileList[i];
-                existCompressFile = true;
-                break;
-            }
-        }
-
-        if ( !openFileManger )
-        {
-            if ( existCompressFile )
-            {
-                // 資料夾內存在壓縮檔
-                path = file + Common.getSlash() + firstCompressFileName;
-            }
-            else
-            {
-                String[] picList = new File( file + Common.getSlash() + fileList[0] ).list();
-                String firstPicFileInFirstVolume = "";
-
-                if ( picList != null )
+                //Common.debugPrintln( "FILE: " + fileList[i] );
+                if ( fileList[i].matches( "(?s).*\\.zip" )
+                        || fileList[i].matches( "(?s).*\\.cbz" ) )
                 {
-                    firstPicFileInFirstVolume = picList[0];
+                    firstCompressFileName = fileList[i];
+                    existCompressFile = true;
+                    break;
                 }
+            }
+      
+    
+            if ( !openFileManger )
+            {
+                if ( existCompressFile )
+                {
+                    // 資料夾內存在壓縮檔
+                    path = file + Common.getSlash() + firstCompressFileName;
+                }
+                else
+                {
+                    String[] picList = new File( file + Common.getSlash() + fileList[0] ).list();
+                    String firstPicFileInFirstVolume = "";
 
-                path = file + Common.getSlash() + fileList[0]
-                        + Common.getSlash() + firstPicFileInFirstVolume;
+                    if ( picList != null )
+                    {
+                        firstPicFileInFirstVolume = picList[0];
+                    }
+
+                    path = file + Common.getSlash() + fileList[0]
+                            + Common.getSlash() + firstPicFileInFirstVolume;
+                }
             }
         }
-
         Common.debugPrintln( "開啟命令：" + cmd + " " + path );
 
         try
@@ -3107,14 +3108,28 @@ public class Common
 
     // 執行指定jar檔並結束目前程式
     public static void startJARandExit( String jarFileName )
-    {
+    {     
         if ( Common.isWindows() )
         {
             Common.runUnansiCmd( "java -jar ", Common.getNowAbsolutePath() + jarFileName );
         }
         else
-        {
-            Common.runCmd( "java -jar", Common.getNowAbsolutePath() + jarFileName, false );
+        {      
+            final String jarName =jarFileName;
+            Runtime.getRuntime().addShutdownHook(new Thread(){
+                public void run(){
+                    String j = System.getProperty("java.home")+"/bin/java";  
+                    String[] cmd =  {
+                        j ," -jar "+Common.getNowAbsolutePath() + jarName
+                    };
+                    try{
+                        Common.debugPrintln("Restart "+j +" -jar "+Common.getNowAbsolutePath() + jarName);
+                        Runtime.getRuntime().exec( j +" -jar "+Common.getNowAbsolutePath() + jarName);
+                    }catch(Exception e ){
+                        Common.debugPrintln("Restart Fail");
+                    }
+                }
+            });
         }
 
         ComicDownGUI.exit();
