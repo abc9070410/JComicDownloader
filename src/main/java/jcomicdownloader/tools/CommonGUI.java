@@ -1347,14 +1347,31 @@ public class CommonGUI
     {
         CommonGUI.showMessageOK = false;
 
-
         JOptionPane.showMessageDialog(
                 parentComponent, "<html><font size="
                 + CommonGUI.geteMessageFontSize()
                 + ">"
                 + message
-                + "</font></html>", title, messageType );
-
+                + "</font></html>", title, messageType );        
+        
+        while (!CommonGUI.showMessageOK){           
+            try { 
+                Frame[] activeframes = Frame.getFrames();
+                CommonGUI.showMessageOK=true;
+                for (int i=0; i<activeframes.length; i++) {
+                    // Get frame's title
+                    if  (title.equals(activeframes[i].getTitle())){
+                        CommonGUI.showMessageOK=false;
+                    }                
+                }
+             // 每睡0.5秒就檢查一次
+                Thread.sleep( 500 );
+                Common.debugPrint( "." );
+             }
+             catch ( InterruptedException ex ) {
+                Common.hadleErrorMessage( ex, "無法讓Thread睡眠（sleep）" );
+             }
+        }
         /*
          SwingUtilities.invokeLater( new Runnable() {
          public void run() {
