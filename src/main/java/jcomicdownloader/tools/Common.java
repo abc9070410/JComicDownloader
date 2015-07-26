@@ -3171,25 +3171,35 @@ public class Common
     {
         /*
          */
+        Class AudioFile,AudioFileIO,Tag,FieldKey,ID3v23Tag,Artwork,StandardArtwork;
 
-        //String jarFileName = "jaudiotagger-2.0.4-20111207.115108-15.jar";
         String jarClassName = "jaudiotagger-21e1b39.jar";
-
-        // 若jar檔不存在 就下載
-        if ( !Common.existJAR( jarClassName ) )
-        {
-          //  String jarFileURL = "https://sites.google.com/site/jcomicdownloader/release/jaudiotagger-2.0.4-20111207.115108-15.jar?attredirects=0&d=1";
+        try{         
+            Class.forName("org.jaudiotagger.audio.AudioFile",false,Common.class.getClassLoader());
+            
+            AudioFile = Class.forName("org.jaudiotagger.audio.AudioFile" );
+            AudioFileIO = Class.forName( "org.jaudiotagger.audio.AudioFileIO" );
+            Tag = Class.forName( "org.jaudiotagger.tag.Tag" );
+            FieldKey = Class.forName( "org.jaudiotagger.tag.FieldKey" );
+            ID3v23Tag = Class.forName( "org.jaudiotagger.tag.id3.ID3v23Tag" );
+            Artwork = Class.forName( "org.jaudiotagger.tag.images.Artwork" );
+            StandardArtwork = Class.forName( "org.jaudiotagger.tag.images.StandardArtwork" );
+            
+        }catch(ClassNotFoundException e){
+             // 若jar檔不存在 就下載
             String jarFileURL = "https://abc9070410.github.io/JComicDownloader/jaudiotagger-21e1b39.jar";
             Common.downloadJarFile( jarFileURL, jarClassName );
+            
+            AudioFile = CommonGUI.getOuterClass( "org.jaudiotagger.audio.AudioFile", jarClassName );
+            AudioFileIO = CommonGUI.getOuterClass( "org.jaudiotagger.audio.AudioFileIO", jarClassName );
+            Tag = CommonGUI.getOuterClass( "org.jaudiotagger.tag.Tag", jarClassName );
+            FieldKey = CommonGUI.getOuterClass( "org.jaudiotagger.tag.FieldKey", jarClassName );
+            ID3v23Tag = CommonGUI.getOuterClass( "org.jaudiotagger.tag.id3.ID3v23Tag", jarClassName );
+            Artwork = CommonGUI.getOuterClass( "org.jaudiotagger.tag.images.Artwork", jarClassName );
+            StandardArtwork = CommonGUI.getOuterClass( "org.jaudiotagger.tag.images.StandardArtwork", jarClassName );
         }
 
-        Class AudioFile = CommonGUI.getOuterClass( "org.jaudiotagger.audio.AudioFile", jarClassName );
-        Class AudioFileIO = CommonGUI.getOuterClass( "org.jaudiotagger.audio.AudioFileIO", jarClassName );
-        Class Tag = CommonGUI.getOuterClass( "org.jaudiotagger.tag.Tag", jarClassName );
-        Class FieldKey = CommonGUI.getOuterClass( "org.jaudiotagger.tag.FieldKey", jarClassName );
-        Class ID3v23Tag = CommonGUI.getOuterClass( "org.jaudiotagger.tag.id3.ID3v23Tag", jarClassName );
-        Class Artwork = CommonGUI.getOuterClass( "org.jaudiotagger.tag.images.Artwork", jarClassName );
-        Class StandardArtwork = CommonGUI.getOuterClass( "org.jaudiotagger.tag.images.StandardArtwork", jarClassName );
+
 
         //Object f = CommonGUI.getNewInstanceFromClass( AudioFile );
 
