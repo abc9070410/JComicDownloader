@@ -1361,7 +1361,8 @@ public class CommonGUI
                 for (int i=0; i<activeframes.length; i++) {
                     // Get frame's title
                     if  (title.equals(activeframes[i].getTitle())){
-                        CommonGUI.showMessageOK=false;
+                        CommonGUI.showMessageOK=!activeframes[i].isVisible();
+                        break;
                     }                
                 }
              // 每睡0.5秒就檢查一次
