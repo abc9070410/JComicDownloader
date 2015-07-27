@@ -232,6 +232,10 @@ public class SetUp
         else if ( Locale.getDefault().getCountry().matches( "TW" ) )
         {
             defaultLanguage = LanguageEnum.TRADITIONAL_CHINESE; // 預設正體中文
+        }  
+        else if ( Locale.getDefault().getCountry().matches( "HK" ) )
+        {
+            defaultLanguage = LanguageEnum.TRADITIONAL_CHINESE; // 預設正體中文
         }
         else
         {
