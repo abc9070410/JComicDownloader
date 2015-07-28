@@ -652,7 +652,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
             //setSize( frameDimension );
             setResizable(false);
         } else {
-            int extendWidth = (SetUp.getDefaultFontSize() - 18) * 10; // 跟隨字體加寬
+            int extendWidth = (SetUp.getDefaultFontSize() - 16) * 10; // 跟隨字體加寬
             extendWidth = extendWidth > 0 ? extendWidth : 0;
             setSize(790 + extendWidth, 540);
             setResizable(true);
