@@ -246,7 +246,7 @@ public class RunModule {
     }
 
     // 此任務是否為小說網站
-    public static boolean isNovelSite( int siteID ) {
+    public static boolean isNovelSite( Site siteID ) {
         if ( siteID == Site.CK_NOVEL
             || siteID == Site.EYNY_NOVEL
             || siteID == Site.WIKI
@@ -273,7 +273,7 @@ public class RunModule {
     }
 
     // 此任務是否為部落格網站
-    public static boolean isBlogSite( int siteID ) {
+    public static boolean isBlogSite( Site siteID ) {
         if ( siteID == Site.BLOGSPOT
             || siteID == Site.PIXNET_BLOG
             || siteID == Site.XUITE_BLOG
@@ -286,7 +286,7 @@ public class RunModule {
     }
 
     // 此任務是否為音樂網站
-    public static boolean isMusicSite( int siteID ) {
+    public static boolean isMusicSite( Site siteID ) {
         if ( siteID == Site.SOGOU
             || siteID == Site.TING1
             || siteID == Site.XIAMI ) {
@@ -298,7 +298,7 @@ public class RunModule {
     }
 
     // 有些站在解析圖片網址的同時就在下載了，那就不用再進入到整本下載區
-    public boolean isDownloadBefore( int siteID ) {
+    public boolean isDownloadBefore( Site siteID ) {
         if ( siteID == Site.EH
             || siteID == Site.EX
             || siteID == Site.JUMPCN

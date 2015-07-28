@@ -31,7 +31,7 @@ import jcomicdownloader.tools.CommonGUI;
  */
 abstract public class ParseOnlineComicSite {
 
-    protected int siteID; // 網站編號
+    protected Site siteID; // 網站編號
     protected String siteName; // 網站名稱
     protected String pageExtension; // 網頁副檔名
     protected int pageCode; //  網頁預設編碼
@@ -127,7 +127,7 @@ abstract public class ParseOnlineComicSite {
         return comicURL;
     }
 
-    public int getSiteID() {
+    public Site getSiteID() {
         return siteID;
     }
 

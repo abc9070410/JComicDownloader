@@ -13,93 +13,100 @@ package jcomicdownloader.enums;
 /**
  * 網站的代號，當作Enum用
  * */
-public class Site {
-    public final static int UNKNOWN = 0;
-    public final static int CC = 1;
-    public final static int KUKU = 2;
-    public final static int EH = 3;
-    public final static int NINENINE_MANGA = 4;
-    public final static int NINENINE_COMIC = 5;
-    public final static int NINENINE_99770 = 6;
-    public final static int NINENINE_COCO = 7;
-    public final static int NINENINE_MH = 8;
-    public final static int NINENINE_1MH = 9;
-    public final static int NINENINE_3G = 10;
-    public final static int ONE_SEVEN_EIGHT = 11;
-    public final static int EIGHT_COMIC = 11;
-    public final static int EIGHT_COMIC_PHOTO = 12;
-    public final static int JUMPCNCN = 13;
-    public final static int DMEDEN = 14;
-    public final static int JUMPCN = 15;
-    public final static int MANGAFOX = 16;
-    public final static int MANMANKAN = 17; 
-    public final static int XINDM = 18; 
-    public final static int EX = 19; 
-    public final static int WY = 20; 
-    public final static int GOOGLE_PIC = 21;
-    public final static int BING_PIC = 22;
-    public final static int BAIDU_PIC = 23;
-    public final static int NANA = 24;
-    public final static int CITY_MANGA = 25;
-    public final static int IIBQ = 26;
-    public final static int BAIDU = 27;
-    public final static int SF = 28;
-    public final static int KKKMH = 29;
-    public final static int SIX_COMIC = 30;
-    public final static int MANHUA_178 = 31;
-    public final static int KANGDM = 32;
-    public final static int BENGOU = 33;
-    public final static int EMLAND = 34;
-    public final static int MOP = 35;
-    public final static int DM5 = 36;
-    public final static int CK = 37;
-    public final static int TUKU = 38;
-    public final static int HH = 39;
-    public final static int IASK = 40;
-    public final static int NINENINE_MH_99770 = 41;
-    public final static int JM = 42;
-    public final static int DM5_ENGLISH = 43;
-    public final static int NINENINE_COMIC_TC = 44;
-    public final static int NINENINE_MANGA_TC = 45;
-    public final static int MANGA_WINDOW = 46;
-    public final static int CK_NOVEL = 47;
-    public final static int MYBEST = 48;
-    public final static int IMANHUA = 49;
-    public final static int VERYIM = 50;
-    public final static int WENKU = 51;
-    public final static int FUMANHUA = 52;
-    public final static int SIX_MANGA = 53;
-    public final static int NINENINE_COCO_TC = 54;
-    public final static int XXBH = 55;
-    public final static int COMIC_131 = 56; 
-    public final static int BLOGSPOT = 57; // 
-    public final static int PIXNET_BLOG = 58;
-    public final static int XUITE_BLOG = 59;
-    public final static int YAM_BLOG = 60;
-    public final static int EYNY_NOVEL = 61;
-    //public final static int KKMH = 62;
-    public final static int ZUIWANJU = 63; // zuiwanju.
-    public final static int TWO_ECY = 64; 
-    public final static int TIANYA_BOOK = 65; 
-    public final static int NINENINE_MANGA_WWW= 66; 
-    public final static int EIGHT_NOVEL= 67; 
-    public final static int QQ_BOOK= 68; 
-    public final static int SINA_BOOK = 69; 
-    public final static int FIVEONE_CTO = 70;
-    public final static int ONESEVEN_KK = 71;
-    public final static int QQ_ORIGIN_BOOK = 72; 
-    public final static int UUS8 = 73; 
-    public final static int WENKU8 = 74; 
-    public final static int IFENG_BOOK = 75; 
-    public final static int XUNLOOK = 76; 
-    public final static int WENKU7 = 77;  // 
-    public final static int WOYOUXIAN = 78;  // 
-    public final static int SHUNONG = 79;
-    public final static int SOGOU = 80;
-    public final static int TING1 = 81;
-    public final static int XIAMI = 82;
-    public final static int WIKI = 83;
-    public final static int PTT = 84;
-    public final static int ISHUHUI = 85; // ishuhui
+public enum Site {
+    UNKNOWN(0),
+    CC(1),
+    KUKU(2),
+    EH(3),
+    NINENINE_MANGA(4),
+    NINENINE_COMIC(5),
+    NINENINE_99770(6),
+    NINENINE_COCO(7),
+    NINENINE_MH(8),
+    NINENINE_1MH(9),
+    NINENINE_3G(10),
+    ONE_SEVEN_EIGHT(11),
+    EIGHT_COMIC(11),
+    EIGHT_COMIC_PHOTO(12),
+    JUMPCNCN(13),
+    DMEDEN(14),
+    JUMPCN(15),
+    MANGAFOX(16),
+    MANMANKAN(17), 
+    XINDM(18), 
+    EX(19), 
+    WY(20), 
+    GOOGLE_PIC(21),
+    BING_PIC(22),
+    BAIDU_PIC(23),
+    NANA(24),
+    CITY_MANGA(25),
+    IIBQ(26),
+    BAIDU(27),
+    SF(28),
+    KKKMH(29),
+    SIX_COMIC(30),
+    MANHUA_178(31),
+    KANGDM(32),
+    BENGOU(33),
+    EMLAND(34),
+    MOP(35),
+    DM5(36),
+    CK(37),
+    TUKU(38),
+    HH(39),
+    IASK(40),
+    NINENINE_MH_99770(41),
+    JM(42),
+    DM5_ENGLISH(43),
+    NINENINE_COMIC_TC(44),
+    NINENINE_MANGA_TC(45),
+    MANGA_WINDOW(46),
+    CK_NOVEL(47),
+    MYBEST(48),
+    IMANHUA(49),
+    VERYIM(50),
+    WENKU(51),
+    FUMANHUA(52),
+    SIX_MANGA(53),
+    NINENINE_COCO_TC(54),
+    XXBH(55),
+    COMIC_131(56), 
+    BLOGSPOT(57), // 
+    PIXNET_BLOG(58),
+    XUITE_BLOG(59),
+    YAM_BLOG(60),
+    EYNY_NOVEL(61),
+    //t KKMH(62),
+    ZUIWANJU(63), // zuiwanju.
+    TWO_ECY(64), 
+    TIANYA_BOOK(65), 
+    NINENINE_MANGA_WWW(66), 
+    EIGHT_NOVEL(67), 
+    QQ_BOOK(68), 
+    SINA_BOOK(69), 
+    FIVEONE_CTO(70),
+    ONESEVEN_KK(71),
+    QQ_ORIGIN_BOOK(72), 
+    UUS8(73), 
+    WENKU8(74), 
+    IFENG_BOOK(75), 
+    XUNLOOK(76), 
+    WENKU7(77),  // 
+    WOYOUXIAN(78),  // 
+    SHUNONG(79),
+    SOGOU(80),
+    TING1(81),
+    XIAMI(82),
+    WIKI(83),
+    PTT(84),
+    ISHUHUI(85); // ishuhui
     
+    private int value;
+
+    private Site(int value){
+        this.value=value;
+    }
+    
+ 
 }

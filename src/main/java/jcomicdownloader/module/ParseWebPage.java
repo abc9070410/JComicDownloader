@@ -25,7 +25,7 @@ public class ParseWebPage
 {
 
     private String webSite;
-    private int siteID;
+    private Site siteID;
 
     /**
      @author user
@@ -405,7 +405,7 @@ public class ParseWebPage
         }
     }
 
-    public int getSiteID()
+    public Site getSiteID()
     {
         return siteID;
     }
