@@ -786,11 +786,11 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     private void setTextLayout(Container contentPane) {
         if (Common.isMac()) {
             urlField = new JTextField(
-                    Common.getStringUsingDefaultLanguage("請貼上欲下載的漫畫頁面網址，而後點擊『加入』按鈕", "paste the URL"));
+                    Common.getStringUsingDefaultLanguage("請貼上欲下載的漫畫頁面網址，而後點擊『加入』按鈕", "Paste the URL"));
 
         } else {
             urlField = new JTextField(
-                    Common.getStringUsingDefaultLanguage("請複製欲下載的漫畫頁面網址，此輸入欄會自動捕捉", "copy the URL"));
+                    Common.getStringUsingDefaultLanguage("請複製欲下載的漫畫頁面網址，此輸入欄會自動捕捉", "Copy the URL"));
         }
         urlField.setFont(SetUp.getDefaultFont(3));
 
@@ -2381,6 +2381,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         //if ( event.isPopupTrigger() ) {
         System.out.print("|");
         Common.debugPrintln(event.getX() + "," + event.getY());
+        CommonGUI.updateUI(urlFieldPopup);
         urlFieldPopup.show(event.getComponent(), event.getX() + 15, event.getY());
         //}
     }
