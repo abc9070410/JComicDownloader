@@ -204,7 +204,7 @@ public class ChoiceFrame extends JFrame implements
         setRadioButtonUI( contentPane );
         setVolumeTableUI( contentPane );
         setButtonUI( contentPane );
-
+        CommonGUI.updateUI(contentPane);
 
         setUpeListener();
     }
