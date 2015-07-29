@@ -50,13 +50,13 @@ abstract public class ParseOnlineComicSite {
     protected int runMode; // 只分析、只下載或分析加下載
     protected String textFilePath; // 小說檔案完整目錄位置，包含檔名（只有下載小說時才有用）
 
-    protected String enumName;//for dynamic enum
-    protected String parserName;//for dynamic enum
+    protected   String enumName;//for dynamic enum
+    protected   String parserName;//for dynamic enum
     
-    protected boolean novelSite = false;
-    protected boolean musicSite = false;
-    protected boolean blogSite = false;
-    protected boolean downloadBefore = false;
+    protected   boolean novelSite = false;
+    protected   boolean musicSite = false;
+    protected   boolean blogSite = false;
+    protected   boolean downloadBefore = false;
     
     abstract public void setParameters(); // 須取得title和wholeTitle（title可用getTitle()）
 
@@ -72,13 +72,13 @@ abstract public class ParseOnlineComicSite {
 
     abstract public String getMainUrlFromSingleVolumeUrl( String volumeURL ); // 由單集位址轉為全集位址
 
-    public boolean isNovelSite(){ return this.novelSite; }
-    public boolean isMusicSite(){ return this.musicSite; }
-    public boolean isBlogSite(){ return this.blogSite; }
-    public boolean isDownloadBefore(){ return this.downloadBefore; }
+    public   boolean isNovelSite(){ return novelSite; }
+    public   boolean isMusicSite(){ return musicSite; }
+    public   boolean isBlogSite(){ return blogSite; }
+    public   boolean isDownloadBefore(){ return downloadBefore; }
    
-    public String getParserName(){ return this.parserName; }   
-    public String getEnumName(){ return this.enumName; }
+    public   String getParserName(){ return parserName; }   
+    public   String getEnumName(){ return enumName; }
     
     // 顯示目前解析的漫畫網站名稱
     public void printLogo() {
