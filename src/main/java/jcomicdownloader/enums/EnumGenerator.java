@@ -151,407 +151,98 @@ public class EnumGenerator {
 
     public static void addSiteEnums(){
         ParseOnlineComicSite s;
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseKUKU").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
         
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseEH").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse99Manga").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse99Comic").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse99770").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseCoco").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse99Mh").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse1Mh").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse3G").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse178").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseEC").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseECphoto").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseJumpcncn").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseDmeden").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseJumpcn").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseMangaFox").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseManmankan").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseXindm").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseEX").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseGooglePic").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseNANA").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseCityManga").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseIIBQ").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseBAIDU").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseSF").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseKKKMH").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseSixComic").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse178").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseKangdm").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseBengou").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseEmland").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseMOP").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseDM5").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseCK").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseTUKU").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseHH").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseIASK").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseMh99770").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseJM").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse99ComicTC").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse99MangaTC").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseMangaWindow").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseCKNovel").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseMyBest").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseImanhua").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseVeryim").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseWenku").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseFumanhua").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseSixManga").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseCocoTC").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseXXBH").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse131").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseBlogspot").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParsePixnetBlog").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseXuiteBlog").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseYamBlog").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseEynyNovel").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseZuiwanju").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse2ecy").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseTianyaBook").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse99MangaWWW").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseEightNovel").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseQQBook").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseSinaBook").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse51Cto").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse17KK").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseQQOriginBook").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseUUS8").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseWenku8").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseIfengBook").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseXunlook").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseWENKU7").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseWOYOUXIAN").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseShunong").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseSogou").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.Parse1Ting").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseXiami").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseWiki").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParsePtt").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        try{
-            s = (ParseOnlineComicSite ) Class.forName("jcomicdownloader.module.ParseIshuhui").newInstance();
-            addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
-        }catch(Exception e){}
-
-        Common.debugPrint("Support Enum: ");
+        String[] parserModules =        
+            {"jcomicdownloader.module.ParseKUKU",
+            "jcomicdownloader.module.ParseEH",
+            "jcomicdownloader.module.Parse99Manga",
+            "jcomicdownloader.module.Parse99Comic",
+            "jcomicdownloader.module.Parse99770",
+            "jcomicdownloader.module.ParseCoco",
+            "jcomicdownloader.module.Parse99Mh",
+            "jcomicdownloader.module.Parse1Mh",
+            "jcomicdownloader.module.Parse3G",
+            "jcomicdownloader.module.Parse178",
+            "jcomicdownloader.module.ParseEC",
+            "jcomicdownloader.module.ParseECphoto",
+            "jcomicdownloader.module.ParseJumpcncn",
+            "jcomicdownloader.module.ParseDmeden",
+            "jcomicdownloader.module.ParseJumpcn",
+            "jcomicdownloader.module.ParseMangaFox",
+            "jcomicdownloader.module.ParseManmankan",
+            "jcomicdownloader.module.ParseXindm",
+            "jcomicdownloader.module.ParseEX",
+            "jcomicdownloader.module.ParseGooglePic",
+            "jcomicdownloader.module.ParseNANA",
+            "jcomicdownloader.module.ParseCityManga",
+            "jcomicdownloader.module.ParseIIBQ",
+            "jcomicdownloader.module.ParseBAIDU",
+            "jcomicdownloader.module.ParseSF",
+            "jcomicdownloader.module.ParseKKKMH",
+            "jcomicdownloader.module.ParseSixComic",
+            "jcomicdownloader.module.Parse178",
+            "jcomicdownloader.module.ParseKangdm",
+            "jcomicdownloader.module.ParseBengou",
+            "jcomicdownloader.module.ParseEmland",
+            "jcomicdownloader.module.ParseMOP",
+            "jcomicdownloader.module.ParseDM5",
+            "jcomicdownloader.module.ParseCK",
+            "jcomicdownloader.module.ParseTUKU",
+            "jcomicdownloader.module.ParseHH",
+            "jcomicdownloader.module.ParseIASK",
+            "jcomicdownloader.module.ParseMh99770",
+            "jcomicdownloader.module.ParseJM",
+            "jcomicdownloader.module.Parse99ComicTC",
+            "jcomicdownloader.module.Parse99MangaTC",
+            "jcomicdownloader.module.ParseMangaWindow",
+            "jcomicdownloader.module.ParseCKNovel",
+            "jcomicdownloader.module.ParseMyBest",
+            "jcomicdownloader.module.ParseImanhua",
+            "jcomicdownloader.module.ParseVeryim",
+            "jcomicdownloader.module.ParseWenku",
+            "jcomicdownloader.module.ParseFumanhua",
+            "jcomicdownloader.module.ParseSixManga",
+            "jcomicdownloader.module.ParseCocoTC",
+            "jcomicdownloader.module.ParseXXBH",
+            "jcomicdownloader.module.Parse131",
+            "jcomicdownloader.module.ParseBlogspot",
+            "jcomicdownloader.module.ParsePixnetBlog",
+            "jcomicdownloader.module.ParseXuiteBlog",
+            "jcomicdownloader.module.ParseYamBlog",
+            "jcomicdownloader.module.ParseEynyNovel",
+            "jcomicdownloader.module.ParseZuiwanju",
+            "jcomicdownloader.module.Parse2ecy",
+            "jcomicdownloader.module.ParseTianyaBook",
+            "jcomicdownloader.module.Parse99MangaWWW",
+            "jcomicdownloader.module.ParseEightNovel",
+            "jcomicdownloader.module.ParseQQBook",
+            "jcomicdownloader.module.ParseSinaBook",
+            "jcomicdownloader.module.Parse51Cto",
+            "jcomicdownloader.module.Parse17KK",
+            "jcomicdownloader.module.ParseQQOriginBook",
+            "jcomicdownloader.module.ParseUUS8",
+            "jcomicdownloader.module.ParseWenku8",
+            "jcomicdownloader.module.ParseIfengBook",
+            "jcomicdownloader.module.ParseXunlook",
+            "jcomicdownloader.module.Parse7Wenku",
+            "jcomicdownloader.module.ParseWoyouxian",
+            "jcomicdownloader.module.ParseShunong",
+            "jcomicdownloader.module.ParseSogou",
+            "jcomicdownloader.module.Parse1Ting",
+            "jcomicdownloader.module.ParseXiami",
+            "jcomicdownloader.module.ParseWiki",
+            "jcomicdownloader.module.ParsePtt",
+            "jcomicdownloader.module.ParseIshuhui"};
+        
+        for (String name:parserModules){
+            try{
+                s = (ParseOnlineComicSite ) Class.forName(name).newInstance();
+                addSiteEnum(Site.class,s.getEnumName(),s.getParserName(),s.isNovelSite(),s.isMusicSite(),s.isBlogSite(),s.isDownloadBefore());
+            }catch(Exception e){
+                Common.debugPrintln("Module "+name+" load fail");
+            }
+        }        
+        Common.debugPrint("Support Modules: ");
         Common.debugPrintln(Arrays.deepToString(Site.values()));
     }
 }
