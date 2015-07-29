@@ -562,7 +562,6 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
     public ComicDownGUI() {
         super(versionString);
-        EnumGenerator.addSiteEnums();
         Common.setHttpProxy(); // 設置代理伺服器
 
         minimizeEvent();
@@ -628,6 +627,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
         // 檢查skin是否由外部jar支援，若是外部skin且沒有此jar，則下載
         CommonGUI.checkSkin();
+        EnumGenerator.addSiteEnums();// need place as late as possible parseSF problem
 
         //buildPreprocess(); // 開發階段的預先處理(目的是讓輸出的jar檔與版本一致)
     }

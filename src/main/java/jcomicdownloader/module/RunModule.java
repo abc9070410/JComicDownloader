@@ -274,27 +274,29 @@ public class RunModule {
 
     // 此任務是否為部落格網站
     public static boolean isBlogSite( Site siteID ) {
-        if ( siteID == Site.formString("BLOGSPOT")
-            || siteID == Site.formString("PIXNET_BLOG")
-            || siteID == Site.formString("XUITE_BLOG")
-            || siteID == Site.formString("YAM_BLOG") ) {
-            return true;
-        }
-        else {
-            return false;
-        }
+//        if ( siteID == Site.formString("BLOGSPOT")
+//            || siteID == Site.formString("PIXNET_BLOG")
+//            || siteID == Site.formString("XUITE_BLOG")
+//            || siteID == Site.formString("YAM_BLOG") ) {
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+        return siteID.isBlogSite();
     }
 
     // 此任務是否為音樂網站
     public static boolean isMusicSite( Site siteID ) {
-        if ( siteID == Site.formString("SOGOU")
-            || siteID == Site.formString("TING1")
-            || siteID == Site.formString("XIAMI") ) {
-            return true;
-        }
-        else {
-            return false;
-        }
+//        if ( siteID == Site.formString("SOGOU")
+//            || siteID == Site.formString("TING1")
+//            || siteID == Site.formString("XIAMI") ) {
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+        return siteID.isMusicSite();
     }
 
     // 有些站在解析圖片網址的同時就在下載了，那就不用再進入到整本下載區

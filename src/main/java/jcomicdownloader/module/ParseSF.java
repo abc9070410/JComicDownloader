@@ -38,9 +38,8 @@ public class ParseSF extends ParseOnlineComicSite {
      */
     public ParseSF() {
         enumName = "SF";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("SF");
+	parserName=this.getClass().getName();
+        siteID=Site.formString("SF");
         siteName = "SF";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_sf_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_sf_encode_parse_", "html" );

@@ -36,9 +36,9 @@ public class ParsePixnetBlog extends ParseOnlineComicSite {
      */
     public ParsePixnetBlog() {
         enumName = "PIXNET_BLOG";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("PIXNET_BLOG");
+        parserName=this.getClass().getName();
+        blogSite=true;
+        siteID=Site.formString("PIXNET_BLOG");
         siteName = "Pixnet Blog";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_pixnet_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_pixnet_encode_parse_", "html" );

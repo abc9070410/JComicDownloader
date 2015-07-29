@@ -52,7 +52,12 @@ abstract public class ParseOnlineComicSite {
 
     protected String enumName;//for dynamic enum
     protected String parserName;//for dynamic enum
-      
+    
+    protected boolean novelSite = false;
+    protected boolean musicSite = false;
+    protected boolean blogSite = false;
+    protected boolean downloadBefore = false;
+    
     abstract public void setParameters(); // 須取得title和wholeTitle（title可用getTitle()）
 
     abstract public void parseComicURL(); // 必須解析出下載位址並傳給comicURL
@@ -67,13 +72,13 @@ abstract public class ParseOnlineComicSite {
 
     abstract public String getMainUrlFromSingleVolumeUrl( String volumeURL ); // 由單集位址轉為全集位址
 
-    public String getParserName(){
-        return this.parserName;
-    }
-    
-    public String getEnumName(){
-        return this.enumName;
-    }
+    public boolean isNovelSite(){ return this.novelSite; }
+    public boolean isMusicSite(){ return this.musicSite; }
+    public boolean isBlogSite(){ return this.blogSite; }
+    public boolean isDownloadBefore(){ return this.downloadBefore; }
+   
+    public String getParserName(){ return this.parserName; }   
+    public String getEnumName(){ return this.enumName; }
     
     // 顯示目前解析的漫畫網站名稱
     public void printLogo() {

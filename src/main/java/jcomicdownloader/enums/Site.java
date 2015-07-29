@@ -14,7 +14,7 @@ package jcomicdownloader.enums;
  * 網站的代號，當作Enum用
  * */
 public enum Site {
-      UNKNOWN("");
+      UNKNOWN("",false,false,false,false);
 //    CC(1,"ParseCC"),
 //    KUKU(2,"ParseKUKU"),
 //    EH(3,"ParseEH"),
@@ -103,7 +103,11 @@ public enum Site {
 //    ISHUHUI(85,"ParseIshuhui"); // ishuhui
 //     
     
-    private final String parserName;
+    private final String parserName;//for dynamic enum
+    private final boolean novelSite;
+    private final boolean musicSite;
+    private final boolean blogSite;
+    private final boolean downloadBefore;
  
     public static Site formString(String s){
         for (Site value : Site.values()){
@@ -111,14 +115,22 @@ public enum Site {
         }
         return Site.UNKNOWN;
     }
-    private Site(String parserName){
-        this.parserName = parserName;
-     }
-
-    public String getParserName(){
-        return this.parserName;
-    }    
     
+    private Site(String parserName,Boolean novelSite,Boolean musicSite,Boolean blogSite,Boolean downloadBefore){
+        this.parserName = parserName;
+        this.novelSite = novelSite;
+        this.musicSite = musicSite;
+        this.blogSite = blogSite; 
+        this.downloadBefore = downloadBefore;
+    }
+ 
+    public boolean isNovelSite(){ return this.novelSite; }
+    public boolean isMusicSite(){ return this.musicSite; }
+    public boolean isBlogSite(){ return this.blogSite; }
+    public boolean isDownloadBefore(){ return this.downloadBefore; }
+   
+    public String getParserName(){ return this.parserName; }   
+     
     public static Site detectSiteID(final String webSite){
         
         if ( webSite.matches( "(?s).*89890.com(?s).*" ) )

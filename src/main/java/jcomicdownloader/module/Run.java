@@ -142,13 +142,14 @@ public class Run extends Thread
         {
             ParseWebPage pw = new ParseWebPage( webSite );
             Site siteID = pw.getSiteID();
-            String parserName = siteID.getParserName(); 
-            if (parserName.equals(Site.UNKNOWN)){
+            String parserName = siteID.getParserName();
+            Common.debugPrintln("Using Parser: "+parserName);
+            if ( siteID== Site.UNKNOWN ){
                 Common.urlIsUnknown = true;
             }
             else{
                 try{
-                    ParseOnlineComicSite parse =((ParseOnlineComicSite)Class.forName("jcomicdownloader.module."+parserName).newInstance());
+                    ParseOnlineComicSite parse =((ParseOnlineComicSite)Class.forName(parserName).newInstance());
                     runSingleParseModule( parse );
                 }catch(ClassNotFoundException ex){
                     Common.urlIsUnknown = true;
