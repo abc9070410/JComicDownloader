@@ -40,6 +40,7 @@ public class ParseCKNovel extends ParseOnlineComicSite {
      */
     public ParseCKNovel() {
         enumName = "CK_NOVEL";
+        regexs= new String[]{"(?s).*ck101.com(?s).*"};
 	parserName=this.getClass().getName();
         novelSite=true;
 	siteID=Site.formString("CK_NOVEL");

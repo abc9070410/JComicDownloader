@@ -43,6 +43,7 @@ public class ParseTianyaBook extends ParseEightNovel
     {
         enumName = "UUS8";
 	parserName=this.getClass().getName();
+        regexs=new String[]{"(?s).*tianyabook.com(?s).*"};
         novelSite=true;
 	siteID=Site.formString("UUS8");
         siteName = "TianyaBook";

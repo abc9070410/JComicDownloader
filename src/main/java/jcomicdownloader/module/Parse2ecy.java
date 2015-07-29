@@ -34,6 +34,7 @@ public class Parse2ecy extends ParseOnlineComicSite {
     @author user
      */
     public Parse2ecy() {
+        regexs= new String[]{"(?s).*www.2ecy.com(?s).*"};
         enumName = "TWO_ECY";
 	parserName=this.getClass().getName();
         downloadBefore=true;

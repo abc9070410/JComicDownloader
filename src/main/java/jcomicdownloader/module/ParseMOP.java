@@ -31,6 +31,7 @@ public class ParseMOP extends ParseOnlineComicSite {
     public ParseMOP() {
         enumName = "MOP";
 	parserName=this.getClass().getName();
+        regexs=new String[]{"(?s).*game.mop.com(?s).*"};
         downloadBefore=true;
         siteID=Site.formString("MOP");
         siteName = "MOP";

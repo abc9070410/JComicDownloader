@@ -38,6 +38,7 @@ public class ParseIIBQ extends ParseOnlineComicSite {
     public ParseIIBQ() {
         enumName = "IIBQ";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*iibq.com(?s).*"};
         downloadBefore=true;
         siteID=Site.formString("IIBQ");
         siteName = "IIBQ";

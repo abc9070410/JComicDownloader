@@ -48,6 +48,7 @@ public class ParseDM5 extends ParseOnlineComicSite
      */
     public ParseDM5()
     {
+        regexs= new String[]{"(?s).*dm5.com(?).*"};
         enumName = "DM5";
 	parserName=this.getClass().getName();
         downloadBefore=true;

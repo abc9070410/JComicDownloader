@@ -32,6 +32,7 @@ public class ParseImanhua extends ParseOnlineComicSite {
     @author user
      */
     public ParseImanhua() {
+        regexs= new String[]{"(?s).*imanhua.com(?s).*"};
         enumName = "IMANHUA";
 	parserName=this.getClass().getName();
         downloadBefore=true;

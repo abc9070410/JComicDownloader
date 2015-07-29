@@ -22,9 +22,9 @@ public class Parse99Mh extends ParseNINENINE
     {
         super();
         enumName = "NINENINE_MH";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("NINENINE_MH");
+        parserName=this.getClass().getName();
+        regexs=new String[]{"(?s).*99mh.com(?s).*"};
+        siteID=Site.formString("NINENINE_MH");
         siteName = "99mh";
 
         jsURL = "http://99mh.com/script/ds.js";

@@ -24,9 +24,9 @@ public class ParseCocoTC extends ParseNINENINE
     {
         super();
         enumName = "NINENINE_COCO_TC";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("NINENINE_COCO_TC");
+        parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*www.cococomic.com(?s).*"};
+	siteID=Site.formString("NINENINE_COCO_TC");
         siteName = "www.cococomic.com";
 
         jsURL = "http://www.cococomic.com/script/ds.js";

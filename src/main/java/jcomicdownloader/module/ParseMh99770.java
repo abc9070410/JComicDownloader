@@ -19,9 +19,9 @@ public class ParseMh99770 extends ParseCocoTC
     {
         super();
         enumName = "NINENINE_MH_99770";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("NINENINE_MH_99770");
+        parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*mh.99770.cc(?s).*"};
+        siteID=Site.formString("NINENINE_MH_99770");
         siteName = "mh.99770.cc";
         jsURL = "http://mh.99770.cc/script/viewhtml.js";
     }

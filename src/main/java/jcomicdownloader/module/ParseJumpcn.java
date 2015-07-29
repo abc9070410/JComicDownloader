@@ -33,6 +33,7 @@ public class ParseJumpcn extends ParseOnlineComicSite {
     public ParseJumpcn() {
         enumName = "JUMPCN";
         parserName=this.getClass().getName();
+        regexs= new String[]{ "(?s).*\\.jumpcn.com/(?s).*"};
         downloadBefore=true;
         siteID=Site.formString("JUMPCN");
         siteName = "JumpCN";

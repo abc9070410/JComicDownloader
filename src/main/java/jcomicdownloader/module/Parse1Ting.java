@@ -32,6 +32,7 @@ public class Parse1Ting extends ParseSogou
      */
     public Parse1Ting()
     {
+        regexs= new String[]{"(?s).*1ting.com/(?s).*" };
         enumName = "TING1";
 	parserName=this.getClass().getName();
         musicSite=true;

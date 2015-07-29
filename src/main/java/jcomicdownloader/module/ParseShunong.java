@@ -38,6 +38,7 @@ public class ParseShunong extends ParseEightNovel
      */
     public ParseShunong()
     {
+        regexs= new String[]{"(?s).*shunong.com/(?s).*"};
         enumName = "SHUNONG";
 	parserName=this.getClass().getName();
         novelSite=true;

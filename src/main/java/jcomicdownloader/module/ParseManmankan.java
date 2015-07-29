@@ -30,9 +30,9 @@ public class ParseManmankan extends ParseOnlineComicSite {
  */
     public ParseManmankan() {
         enumName = "MANMANKAN";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("MANMANKAN");
+        parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*\\.manmankan.com/(?s).*"};
+        siteID=Site.formString("MANMANKAN");
         siteName = "Manmankan";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_manmankan_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_manmankan_encode_parse_", "html" );

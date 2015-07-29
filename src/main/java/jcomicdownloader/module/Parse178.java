@@ -65,9 +65,9 @@ public class Parse178 extends ParseOnlineComicSite
     public Parse178()
     {
         enumName = "MANHUA_178";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("MANHUA_178");
+        parserName=this.getClass().getName();
+        regexs=new String[]{"(?s).*178.com(?s).*" ,"(?s).*dmzj.com(?s).*" };
+        siteID=Site.formString("MANHUA_178");
         siteName = "178";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_178_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_178_encode_parse_", "html" );

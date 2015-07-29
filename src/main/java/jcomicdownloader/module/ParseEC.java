@@ -35,9 +35,9 @@ public class ParseEC extends ParseOnlineComicSite {
 
     public ParseEC() {
         enumName = "EIGHT_COMIC";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("EIGHT_COMIC");
+	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*\\.8comic.com(?s).*","(?s).*comicvip.com(?s).*"};
+        siteID=Site.formString("EIGHT_COMIC");
         siteName = "8comic";
         indexWrongEncodingFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_wrong_encode_parse_", "html" );
         indexFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_parse_", "html" );

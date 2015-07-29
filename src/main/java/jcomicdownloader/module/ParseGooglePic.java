@@ -53,6 +53,7 @@ public class ParseGooglePic extends ParseOnlineComicSite {
      */
     public ParseGooglePic() {
         enumName = "GOOGLE_PIC";
+        regexs= new String[]{"(?s).*google.com(?s).*"};
 	parserName=this.getClass().getName();
         downloadBefore=true;
         siteID=Site.formString("GOOGLE_PIC");

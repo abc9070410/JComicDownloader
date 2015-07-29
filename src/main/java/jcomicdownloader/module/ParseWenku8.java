@@ -41,6 +41,9 @@ public class ParseWenku8 extends ParseEightNovel {
      */
     public ParseWenku8() {
         enumName = "WENKU8";
+        regexs= new String[]{"(?s).*wenku8.cn/modules/article/reader.php(?s).*" 
+                ,"(?s).*wenku8.cn/novel/(?s).*"
+                ,"(?s).*wenku8.cn/modules/article/articleinfo.php(?s).*"};
 	parserName=this.getClass().getName();
         novelSite=true;
         siteID=Site.formString("WENKU8");

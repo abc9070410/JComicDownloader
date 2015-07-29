@@ -34,6 +34,7 @@ public class ParseBengou extends ParseOnlineComicSite {
     public ParseBengou() {
         enumName = "BENGOU";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*bengou.com(?s).*"};
         downloadBefore=true;
         siteID=Site.formString("BENGOU");
         siteName = "Bengou";

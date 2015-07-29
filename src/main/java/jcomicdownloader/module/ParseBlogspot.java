@@ -34,6 +34,7 @@ public class ParseBlogspot extends ParseOnlineComicSite {
     public ParseBlogspot() {
         enumName = "BLOGSPOT";
         parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*blogspot\\.(?s).*"};
         blogSite=true;
         siteID=Site.formString("BLOGSPOT");
         siteName = "BlogspotBlog";

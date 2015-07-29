@@ -22,6 +22,7 @@ public class ParseEX extends ParseEH {
     public ParseEX() {
         super();
         enumName = "EX";
+        regexs= new String[]{"(?s).*exhentai.org(?s).*"};
         parserName=this.getClass().getName();
         downloadBefore=true;
         siteID=Site.formString("EX");

@@ -37,6 +37,11 @@ public class ParseCK extends ParseOnlineComicSite
      */
     public ParseCK()
     {
+        regexs= new String[]{"(?s).*comic101.com(?s).*" 
+                    , "(?s).*comic.101.com(?s).*" 
+                    , "(?s).*mh.ck101.com(?s).*" 
+                    , "(?s).*comic.ck101.com(?s).*" 
+                    , "(?s).*.com/vols/\\d+/\\d+(?s).*" };
         enumName = "CK";
 	parserName=this.getClass().getName();
         downloadBefore=true;

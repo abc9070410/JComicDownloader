@@ -37,6 +37,7 @@ public class ParseKUKU extends ParseOnlineComicSite {
  */
     public ParseKUKU() {
         enumName = "KUKU";
+        regexs= new String[]{"(?s).*kukudm.com(?s).*" , "(?s).*socomic.com(?s).*" ,"(?s).*socomic.net(?s).*"};
 	parserName=this.getClass().getName();
         downloadBefore=true;
 	siteID=Site.formString("KUKU");

@@ -38,6 +38,7 @@ public class Parse7Wenku extends ParseEightNovel {
      * @author user
      */
     public Parse7Wenku() {
+        regexs= new String[]{ "(?s).*7tianshi.com/(?s).*" };
         enumName = "WENKU7";
 	parserName=this.getClass().getName();
         novelSite=true;

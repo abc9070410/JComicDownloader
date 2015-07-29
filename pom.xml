@@ -167,13 +167,14 @@
                     <version>2.4</version>
                     <configuration>
                         <archive>
+                            <compress>true</compress>
                             <manifest>
                                 <mainClass>jcomicdownloader.ComicDownGUI</mainClass>
                                 <addClasspath>true</addClasspath>
                                 <classpathPrefix>lib/</classpathPrefix>
                             </manifest>
                             <manifestEntries>
-                                <Class-Path>lib/</Class-Path>
+                                <!--<Class-Path>lib/</Class-Path>-->
                                 <!-- Custom add classpath instead of maven gen-->
                                 <!--<Class-Path>JTattoo-1.6.11.jar lib/JTattoo-1.6.11.jar nimrod-laf-1.2.jar lib/nimrod-laf-1.2.jar napkinlaf-1.2.jar lib/napkinlaf-1.2.jar trident-6.3.jar lib/trident-6.3.jar substance-6.3.jar lib/substance-6.3.jar jaudiotagger-2.2.3.jar lib/jaudiotagger-2.2.3.jar </Class-Path>-->
                                 <!--<Class-Path>lib/JTattoo-1.6.11.jar lib/nimrod-laf-1.2.jar lib/napkinlaf-1.2.jar lib/trident-6.3.jar lib/substance-6.3.jar lib/jaudiotagger-21e1b39.jar </Class-Path>-->
@@ -243,13 +244,14 @@
                         <version>2.4</version>
                         <configuration>
                             <archive>
+                                <compress>true</compress>
                                 <manifest>
                                     <mainClass>jcomicdownloader.ComicDownGUI</mainClass>
                                     <addClasspath>true</addClasspath>
                                     <classpathPrefix>lib/</classpathPrefix>
                                 </manifest>
                                 <manifestEntries>
-                                    <Class-Path>lib/</Class-Path>
+                                    <!--<Class-Path>lib/</Class-Path>-->
                                     <SplashScreen-Image>jcomicdownloader/tools/resource/logo.png</SplashScreen-Image>
                                 </manifestEntries>
                             </archive>

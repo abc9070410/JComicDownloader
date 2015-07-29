@@ -45,6 +45,7 @@ public class ParseXXBH extends ParseOnlineComicSite
     {
         enumName = "XXBH";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*xxbh.net(?s).*" };
         downloadBefore=true;
         siteID=Site.formString("XXBH");
         siteName = "xxbh";

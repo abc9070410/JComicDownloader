@@ -33,9 +33,9 @@ public class ParseZuiwanju extends ParseOnlineComicSite {
      */
     public ParseZuiwanju() {
         enumName = "ZUIWANJU";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("ZUIWANJU");
+        parserName=this.getClass().getName();
+        regexs= new String[]{ "(?s).*zuiwanju.com(?s).*"};
+        siteID=Site.formString("ZUIWANJU");
         siteName = "Zuiwanju";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_zuiwanju_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_zuiwanju_encode_parse_", "html" );

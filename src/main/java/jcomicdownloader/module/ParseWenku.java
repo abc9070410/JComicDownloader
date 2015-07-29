@@ -39,6 +39,7 @@ public class ParseWenku extends ParseOnlineComicSite {
     public ParseWenku() {
         enumName = "WENKU";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*\\.wenku.com(?s).*" };
         novelSite=true;
         siteID=Site.formString("WENKU");
         siteName = "wenku";

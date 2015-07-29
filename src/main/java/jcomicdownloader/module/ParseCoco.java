@@ -19,7 +19,7 @@ public class ParseCoco extends ParseNINENINE
         super();
         enumName = "NINENINE_COCO";
         parserName=this.getClass().getName();
-
+        regexs=new String[]{"(?s).*cococomic.com(?s).*"};
         siteID=Site.formString("NINENINE_COCO");
         siteName = "cococomic";
 

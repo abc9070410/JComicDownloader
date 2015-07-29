@@ -37,6 +37,7 @@ public class ParseWoyouxian extends ParseEightNovel
      */
     public ParseWoyouxian()
     {
+        regexs= new String[]{"(?s).*woyouxian.com/(?s).*"};
         enumName = "WOYOUXIAN";
 	parserName=this.getClass().getName();
         novelSite=true;

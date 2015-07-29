@@ -35,6 +35,7 @@ public class ParseXindm extends ParseOnlineComicSite {
     public ParseXindm() {
         enumName = "XINDM";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*www.xindm.cn/(?s).*"};
         downloadBefore=true;
         siteID=Site.formString("XINDM");
         siteName = "Xindm";

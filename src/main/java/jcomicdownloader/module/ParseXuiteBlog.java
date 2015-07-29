@@ -33,6 +33,7 @@ public class ParseXuiteBlog extends ParsePixnetBlog {
      */
     public ParseXuiteBlog() {
         enumName = "XUITE_BLOG";
+        regexs= new String[]{"(?s).*blog.xuite.net(?s).*"};
 	parserName=this.getClass().getName();
         blogSite=true;
         

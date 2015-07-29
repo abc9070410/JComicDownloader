@@ -7,6 +7,7 @@ package jcomicdownloader.module;
 
 import java.util.ArrayList;
 import java.util.List;
+import jcomicdownloader.enums.Site;
 import jcomicdownloader.tools.Common;
 
 /**
@@ -14,6 +15,17 @@ import jcomicdownloader.tools.Common;
  * @author apple
  */
 public class ParseSixComic extends ParseEC {
+    
+    
+    public ParseSixComic(){
+        super();
+        enumName = "SIX_COMIC";
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("SIX_COMIC");
+        siteName = "SIX_COMIC";
+        regexs= new String[]{"(?s).*6comic.com(?s).*"};
+    }
 
     @Override
     public String getTitleOnSingleVolumePage( String urlString ) {

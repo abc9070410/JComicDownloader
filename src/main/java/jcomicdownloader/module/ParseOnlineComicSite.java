@@ -17,6 +17,7 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import jcomicdownloader.ComicDownGUI;
 import jcomicdownloader.SetUp;
@@ -80,6 +81,17 @@ abstract public class ParseOnlineComicSite {
     public   String getParserName(){ return parserName; }   
     public   String getEnumName(){ return enumName; }
     
+    protected String[] regexs={};
+    
+    public boolean canParserHandle(String link){
+        
+        Common.debugPrintln(getEnumName()+" REGEX " + Arrays.deepToString(regexs));
+
+        for (String regex:regexs){
+            if (link.matches(regex)) return true;
+        }
+        return false;
+    }
     // 顯示目前解析的漫畫網站名稱
     public void printLogo() {
         System.out.println( " ______________________________" );

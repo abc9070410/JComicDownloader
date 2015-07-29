@@ -36,6 +36,7 @@ public class ParseEightNovel extends ParseOnlineComicSite {
      * @author user
      */
     public ParseEightNovel() {
+        regexs= new String[]{"(?s).*8novel.com/books/(?s).*"};
         enumName = "EIGHT_NOVEL";
 	parserName=this.getClass().getName();
         novelSite=true;

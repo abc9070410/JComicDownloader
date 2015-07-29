@@ -36,6 +36,7 @@ public class ParseIfengBook extends ParseEightNovel {
      @author user
      */
     public ParseIfengBook() {
+        regexs= new String[]{"(?s).*book.ifeng.com/(?s).*"};
         enumName = "IFENG_BOOK";
 	parserName=this.getClass().getName();
         novelSite=true;

@@ -40,6 +40,7 @@ public class Parse131 extends ParseOnlineComicSite {
      */
     public Parse131() {
         enumName = "COMIC_131";
+        regexs= new String[]{"(?s).*comic.131.com(?s).*" };
 	parserName=this.getClass().getName();
         downloadBefore=true;
 	siteID=Site.formString("COMIC_131");

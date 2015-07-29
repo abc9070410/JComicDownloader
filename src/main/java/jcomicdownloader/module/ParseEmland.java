@@ -31,6 +31,7 @@ public class ParseEmland extends ParseOnlineComicSite {
     public ParseEmland() {
         enumName = "EMLAND";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*emland.net(?s).*" };
         downloadBefore=true;
         siteID=Site.formString("EMLAND");
         siteName = "Emland";

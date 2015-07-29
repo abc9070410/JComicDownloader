@@ -33,6 +33,7 @@ public class ParseSogou extends ParseOnlineComicSite
      */
     public ParseSogou()
     {
+        regexs= new String[]{"(?s).*music.sogou.com/(?s).*"};
         enumName = "SOGOU";
 	parserName=this.getClass().getName();
         musicSite=true;

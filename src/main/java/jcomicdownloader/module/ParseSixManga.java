@@ -37,8 +37,9 @@ public class ParseSixManga extends ParseOnlineComicSite {
         enumName = "SIX_MANGA";
 	parserName=this.getClass().getName();
         downloadBefore=true;
+        regexs= new String[]{"(?s).*6manga.com(?s).*" };
         siteID=Site.formString("SIX_MANGA");
-        siteName = "6Manga";
+        siteName = "SIX_MANGA";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_6manga_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_6manga_encode_parse_", "html" );
 

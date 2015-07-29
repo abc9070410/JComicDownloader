@@ -34,6 +34,7 @@ public class ParseJM extends ParseOnlineComicSite
      */
     public ParseJM()
     {
+        regexs= new String[]{"(?s).*jmymh.com(?s).*"};
         enumName = "JM";
 	parserName=this.getClass().getName();
         downloadBefore=true;

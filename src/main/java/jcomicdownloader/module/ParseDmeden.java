@@ -40,6 +40,7 @@ public class ParseDmeden extends ParseOnlineComicSite {
     public ParseDmeden() {
         enumName = "DMEDEN";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*dmeden\\.(?s).*"};
         downloadBefore=true;
         siteID=Site.formString("DMEDEN");
         siteName = "Dmeden";

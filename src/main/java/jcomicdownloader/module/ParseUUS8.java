@@ -35,6 +35,9 @@ public class ParseUUS8 extends ParseEightNovel {
      @author user
      */
     public ParseUUS8() {
+        regexs= new String[]{"(?s).*uus8.com.*/"
+            , "(?s).*uus8.com.*/\\d+"
+            ,"(?s).*uus8.com/book/display(?s).*"};
         enumName = "UUS8";
 	parserName=this.getClass().getName();
         novelSite=true;

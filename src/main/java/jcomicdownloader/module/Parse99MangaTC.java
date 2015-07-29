@@ -23,7 +23,7 @@ public class Parse99MangaTC extends Parse99ComicTC
         super();
         enumName = "NINENINE_MANGA_TC";
         parserName=this.getClass().getName();
-
+        regexs=new String[]{"(?s).*dm.99manga.com(?s).*"};
         siteID=Site.formString("NINENINE_MANGA_TC");
         siteName = "dm.99manga.com";
 

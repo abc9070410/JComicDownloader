@@ -19,9 +19,9 @@ public class ParseECphoto extends ParseEC {
 
     public ParseECphoto() {
         enumName = "EIGHT_COMIC_PHOTO";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("EIGHT_COMIC_PHOTO");
+        parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*\\.8comic.com(?s).*(?s).*[Pp][Hh][Oo][Tt][Oo](?s).*","(?s).*comicvip.com(?s).*(?s).*[Pp][Hh][Oo][Tt][Oo](?s).*"};
+        siteID=Site.formString("EIGHT_COMIC_PHOTO");
         indexWrongEncodingFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_photo_parse_", "html" );
         indexFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_photo_encode_parse_", "html" );
 

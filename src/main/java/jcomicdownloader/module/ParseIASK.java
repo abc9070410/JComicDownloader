@@ -38,6 +38,7 @@ public class ParseIASK extends ParseOnlineComicSite
      */
     public ParseIASK()
     {
+        regexs=new String[]{"(?s).*iask.sina.com(?s).*" };
         enumName = "IASK";
         parserName=this.getClass().getName();
         downloadBefore=true;

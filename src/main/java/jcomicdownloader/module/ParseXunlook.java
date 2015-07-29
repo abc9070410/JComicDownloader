@@ -35,6 +35,7 @@ public class ParseXunlook extends ParseEightNovel {
     @author user
      */
     public ParseXunlook() {
+        regexs= new String[]{"(?s).*xunlook.com/(?s).*"};
         enumName = "XUNLOOK";
 	parserName=this.getClass().getName();
         novelSite=true;

@@ -32,9 +32,9 @@ public class ParseKangdm extends ParseOnlineComicSite {
      */
     public ParseKangdm() {
         enumName = "KANGDM";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("KANGDM");
+        parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*kangdm.com(?s).*","(?s).*kyo.cn(?s).*" };
+        siteID=Site.formString("KANGDM");
         siteName = "kangdm";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kangdm_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kangdm_encode_parse_", "html" );

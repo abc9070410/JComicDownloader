@@ -35,6 +35,7 @@ public class ParseYamBlog extends ParsePixnetBlog {
      * @author user
      */
     public ParseYamBlog() {
+        regexs= new String[]{"(?s).*blog.yam.com(?s).*"};
         enumName = "YAM_BLOG";
 	parserName=this.getClass().getName();
         blogSite=true;

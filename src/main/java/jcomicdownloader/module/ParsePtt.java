@@ -76,6 +76,7 @@ public class ParsePtt extends ParseCKNovel {
      * @author user
      */
     public ParsePtt() {
+        regexs= new String[]{"(?s).*ptt.cc/(?s).*"};
         enumName = "PTT";
 	parserName=this.getClass().getName();
         downloadBefore=true;

@@ -33,6 +33,7 @@ public class Parse17KK extends ParseOnlineComicSite {
      @author user
      */
     public Parse17KK() {
+        regexs= new String[]{"(?s).*17kk.cc/(?s).*"};
         enumName = "ONESEVEN_KK";
 	parserName=this.getClass().getName();
         downloadBefore=true;

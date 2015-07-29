@@ -37,6 +37,7 @@ public class ParseQQBook extends ParseEightNovel {
      */
     public ParseQQBook() {
         enumName = "QQ_BOOK";
+        regexs= new String[]{"(?s).*book.qq.com/s/book/(?s).*"};
 	parserName=this.getClass().getName();
         novelSite=true;
 	siteID=Site.formString("QQ_BOOK");

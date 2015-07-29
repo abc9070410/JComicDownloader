@@ -31,6 +31,7 @@ public class ParseCityManga extends ParseOnlineComicSite {
     public ParseCityManga() {
         enumName = "CITY_MANGA";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*citymanga.com(?s).*"};
         downloadBefore=true;
         siteID=Site.formString("CITY_MANGA");
         siteName = "CityManga";

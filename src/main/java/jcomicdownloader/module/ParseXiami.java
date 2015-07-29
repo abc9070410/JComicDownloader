@@ -34,6 +34,7 @@ public class ParseXiami extends ParseSogou
      */
     public ParseXiami()
     {
+        regexs= new String[]{"(?s).*xiami.com/(?s).*"};
         enumName = "XIAMI";
         parserName=this.getClass().getName();
         musicSite = true;

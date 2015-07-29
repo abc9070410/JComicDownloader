@@ -33,6 +33,7 @@ public class ParseVeryim extends ParseOnlineComicSite {
      @author user
      */
     public ParseVeryim() {
+        regexs= new String[]{"(?s).*veryim.com(?s).*" };
         enumName = "VERYIM";
 	parserName=this.getClass().getName();
         downloadBefore=true;

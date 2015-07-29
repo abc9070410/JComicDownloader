@@ -36,6 +36,7 @@ public class Parse51Cto extends ParseEightNovel {
     public Parse51Cto() {
         enumName = "FIVEONE_CTO";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*book.51cto.com/art(?s).*"};
         novelSite=true;
         siteID=Site.formString("FIVEONE_CTO");
         siteName = "51cto";

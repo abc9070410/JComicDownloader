@@ -37,6 +37,7 @@ public class ParsePixnetBlog extends ParseOnlineComicSite {
     public ParsePixnetBlog() {
         enumName = "PIXNET_BLOG";
         parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*pixnet.net(?s).*"};
         blogSite=true;
         siteID=Site.formString("PIXNET_BLOG");
         siteName = "Pixnet Blog";

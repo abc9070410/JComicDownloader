@@ -43,6 +43,7 @@ public class ParseBAIDU extends ParseOnlineComicSite {
     public ParseBAIDU() {
         enumName = "BAIDU";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*baidu.com(?s).*"};
         downloadBefore=true;
 	siteID=Site.formString("BAIDU");
         siteName = "Baidu";

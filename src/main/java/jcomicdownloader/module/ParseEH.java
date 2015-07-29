@@ -44,6 +44,7 @@ public class ParseEH extends ParseOnlineComicSite {
      */
     public ParseEH() {
         enumName = "EH";
+        regexs= new String[]{"(?s).*e-hentai(?s).*" };
         downloadBefore=true;
         parserName=this.getClass().getName();
         siteName = "EH";

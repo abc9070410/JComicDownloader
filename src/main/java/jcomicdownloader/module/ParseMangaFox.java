@@ -33,6 +33,7 @@ public class ParseMangaFox extends ParseOnlineComicSite {
     public ParseMangaFox() {
         enumName = "MANGAFOX";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*mangafox.me/(?s).*"};
         downloadBefore=true;
         siteID=Site.formString("MANGAFOX");
         siteName = "MangaFox";

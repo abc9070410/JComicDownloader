@@ -10,6 +10,10 @@
  */
 package jcomicdownloader.enums;
 
+import static jcomicdownloader.enums.EnumGenerator.addSiteEnum;
+import jcomicdownloader.module.ParseOnlineComicSite;
+import jcomicdownloader.tools.Common;
+
 /**
  * 網站的代號，當作Enum用
  * */
@@ -132,355 +136,448 @@ public enum Site {
     public String getParserName(){ return this.parserName; }   
      
     public static Site detectSiteID(final String webSite){
+        ParseOnlineComicSite s;
         
-        if ( webSite.matches( "(?s).*89890.com(?s).*" ) )
-        {
-            return Site.formString("CC");
-        }
-        else if ( webSite.matches( "(?s).*kukudm.com(?s).*" )
-                || webSite.matches( "(?s).*socomic.com(?s).*" )
-                || webSite.matches( "(?s).*socomic.net(?s).*" ) )
-        {
-            return Site.formString("KUKU");
-        }
-        else if ( webSite.matches( "(?s).*e-hentai(?s).*" ) )
-        {
-            return Site.formString("EH");
-        }
-        else if ( webSite.matches( "(?s).*exhentai.org(?s).*" ) )
-        {
-            return Site.formString("EX");
-        }
-
-        else if ( webSite.matches( "(?s).*dm.99manga.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_MANGA_TC");
-        }
-        /*else if ( webSite.matches( "(?s).*www.99manga.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_MANGA_WWW");
-        }*/
-        else if ( webSite.matches( "(?s).*99manga.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_MANGA");
-        }
-        else if ( webSite.matches( "(?s).*www.99comic.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_COMIC_TC");
-        }
-        /*else if ( webSite.matches( "(?s).*99comic.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_COMIC");
-        }*/
-        else if ( webSite.matches( "(?s).*99mh.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_MH");
-        }
-        else if ( webSite.matches( "(?s).*mh.99770.cc(?s).*" ) )
-        {
-            return Site.formString("NINENINE_MH_99770");
-        }
-        /*else if ( webSite.matches( "(?s).*99770.cc(?s).*" ) )
-        {
-            return Site.formString("NINENINE_99770");
-        }*/
-        else if ( webSite.matches( "(?s).*www.cococomic.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_COCO_TC");
-        }
-        else if ( webSite.matches( "(?s).*cococomic.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_COCO");
-        }
-        /*else if ( webSite.matches( "(?s).*1mh.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_1MH");
-        }
-        else if ( webSite.matches( "(?s).*3gmanhua.com(?s).*" ) )
-        {
-            return Site.formString("NINENINE_3G");
-        }
-        */
-        //else if ( webSite.matches( "(?s).*\\.178.com(?s).*" ) )
-        //    return Site.formString("ONE_SEVEN_EIGHT");
-        else if ( webSite.matches( "(?s).*\\.8comic.com(?s).*" ) ||
-                  webSite.matches( "(?s).*comicvip.com(?s).*") )
-        {
-            if ( webSite.matches( "(?s).*photo(?s).*" )
-                    || webSite.matches( "(?s).*PHOTO(?s).*" )
-                    || webSite.matches( "(?s).*Photo(?s).*" ) ) // 圖集
-            {
-                return Site.formString("EIGHT_COMIC_PHOTO");
+        String[] parserModules =        
+            {"jcomicdownloader.module.ParseKUKU",
+            "jcomicdownloader.module.ParseEH",
+            "jcomicdownloader.module.Parse99Manga",
+            "jcomicdownloader.module.Parse99Comic",
+            "jcomicdownloader.module.Parse99770",
+            "jcomicdownloader.module.ParseCocoTC",//need place before coco
+            "jcomicdownloader.module.ParseCoco",
+            "jcomicdownloader.module.Parse99Mh",
+            "jcomicdownloader.module.Parse1Mh",
+            "jcomicdownloader.module.Parse3G",
+            "jcomicdownloader.module.Parse178",            
+            "jcomicdownloader.module.ParseECphoto",//need place before EC
+            "jcomicdownloader.module.ParseEC",
+            "jcomicdownloader.module.ParseJumpcncn",
+            "jcomicdownloader.module.ParseDmeden",
+            "jcomicdownloader.module.ParseJumpcn",
+            "jcomicdownloader.module.ParseMangaFox",
+            "jcomicdownloader.module.ParseManmankan",
+            "jcomicdownloader.module.ParseXindm",
+            "jcomicdownloader.module.ParseEX",
+            "jcomicdownloader.module.ParseGooglePic",
+            "jcomicdownloader.module.ParseNANA",
+            "jcomicdownloader.module.ParseCityManga",
+            "jcomicdownloader.module.ParseIIBQ",
+            "jcomicdownloader.module.ParseBAIDU",
+            "jcomicdownloader.module.ParseSF",
+            "jcomicdownloader.module.ParseKKKMH",
+            "jcomicdownloader.module.ParseSixComic",
+            "jcomicdownloader.module.Parse178",
+            "jcomicdownloader.module.ParseKangdm",
+            "jcomicdownloader.module.ParseBengou",
+            "jcomicdownloader.module.ParseEmland",
+            "jcomicdownloader.module.ParseMOP",
+            "jcomicdownloader.module.ParseDM5",
+            "jcomicdownloader.module.ParseCK",
+            "jcomicdownloader.module.ParseTUKU",
+//            "jcomicdownloader.module.ParseHH",
+            "jcomicdownloader.module.ParseIASK",
+            "jcomicdownloader.module.ParseMh99770",
+            "jcomicdownloader.module.ParseJM",
+            "jcomicdownloader.module.Parse99ComicTC",
+            "jcomicdownloader.module.Parse99MangaTC",
+            "jcomicdownloader.module.ParseMangaWindow",
+            "jcomicdownloader.module.ParseCKNovel",
+            "jcomicdownloader.module.ParseMyBest",
+            "jcomicdownloader.module.ParseImanhua",
+            "jcomicdownloader.module.ParseVeryim",
+            "jcomicdownloader.module.ParseWenku",
+            "jcomicdownloader.module.ParseFumanhua",
+            "jcomicdownloader.module.ParseSixManga",
+            "jcomicdownloader.module.ParseXXBH",
+            "jcomicdownloader.module.Parse131",
+            "jcomicdownloader.module.ParseBlogspot",
+            "jcomicdownloader.module.ParsePixnetBlog",
+            "jcomicdownloader.module.ParseXuiteBlog",
+            "jcomicdownloader.module.ParseYamBlog",
+            "jcomicdownloader.module.ParseEynyNovel",
+            "jcomicdownloader.module.ParseZuiwanju",
+            "jcomicdownloader.module.Parse2ecy",
+            "jcomicdownloader.module.ParseTianyaBook",
+            "jcomicdownloader.module.Parse99MangaWWW",
+            "jcomicdownloader.module.ParseEightNovel",
+            "jcomicdownloader.module.ParseQQBook",
+            "jcomicdownloader.module.ParseSinaBook",
+            "jcomicdownloader.module.Parse51Cto",
+            "jcomicdownloader.module.Parse17KK",
+            "jcomicdownloader.module.ParseQQOriginBook",
+            "jcomicdownloader.module.ParseUUS8",
+            "jcomicdownloader.module.ParseWenku8",
+            "jcomicdownloader.module.ParseIfengBook",
+            "jcomicdownloader.module.ParseXunlook",
+            "jcomicdownloader.module.Parse7Wenku",
+            "jcomicdownloader.module.ParseWoyouxian",
+            "jcomicdownloader.module.ParseShunong",
+            "jcomicdownloader.module.ParseSogou",
+            "jcomicdownloader.module.Parse1Ting",
+            "jcomicdownloader.module.ParseXiami",
+            "jcomicdownloader.module.ParseWiki",
+            "jcomicdownloader.module.ParsePtt",
+            "jcomicdownloader.module.ParseIshuhui"};
+        
+        for (String name:parserModules){
+            try{                
+                s = (ParseOnlineComicSite ) Class.forName(name).newInstance();
+                if (s.canParserHandle(webSite)) return s.getSiteID();
+        }catch(Exception e){
+                Common.debugPrintln("Module "+name+" load fail");
             }
-            else // 漫畫
-            {
-                return Site.formString("EIGHT_COMIC");
-            }
-        }
-        else if ( webSite.matches( "(?s).*\\.jumpcn.com.cn(?s).*" ) )
-        {
-            return Site.formString("JUMPCNCN");
-        }
-        else if ( webSite.matches( "(?s).*dmeden\\.(?s).*" ) )
-        {
-            return Site.formString("DMEDEN");
-        }
-        else if ( webSite.matches( "(?s).*\\.jumpcn.com/(?s).*" ) )
-        {
-            return Site.formString("JUMPCN");
-        }
-        else if ( webSite.matches( "(?s).*mangafox.me/(?s).*" ) )
-        {
-            return Site.formString("MANGAFOX");
-        }
-        else if ( webSite.matches( "(?s).*\\.manmankan.com/(?s).*" ) )
-        {
-            return Site.formString("MANMANKAN");
-        }
-        else if ( webSite.matches( "(?s).*www.xindm.cn/(?s).*" ) )
-        {
-            return Site.formString("XINDM");
-        }
-        else if ( webSite.matches( "(?s).*google.com(?s).*" ) )
-        {
-            return Site.formString("GOOGLE_PIC");
-        }
-        else if ( webSite.matches( "(?s).*nanadm.com(?s).*" ) )
-        {
-            return Site.formString("NANA");
-        }
-        else if ( webSite.matches( "(?s).*citymanga.com(?s).*" ) )
-        {
-            return Site.formString("CITY_MANGA");
-        }
-        else if ( webSite.matches( "(?s).*iibq.com(?s).*" ) )
-        {
-            return Site.formString("IIBQ");
-        }
-        else if ( webSite.matches( "(?s).*baidu.com(?s).*" ) )
-        {
-            return Site.formString("BAIDU");
-        }
-        else if ( webSite.matches( "(?s).*sfacg.com(?s).*" ) )
-        {
-            return Site.formString("SF");
-        }
-        else if ( webSite.matches( "(?s).*kkkmh.com(?s).*" ) )
-        {
-            return Site.formString("KKKMH");
-        }
-        else if ( webSite.matches( "(?s).*6comic.com(?s).*" ) )
-        {
-            return Site.formString("SIX_COMIC");
-        }
-        else if ( webSite.matches( "(?s).*178.com(?s).*" ) || 
-                  webSite.matches( "(?s).*dmzj.com(?s).*" ) )
-        {
-            return Site.formString("MANHUA_178");
-        }
-        else if ( webSite.matches( "(?s).*kangdm.com(?s).*" ) || 
-                  webSite.matches( "(?s).*kyo.cn(?s).*" ) )
-        {
-            return Site.formString("KANGDM");
-        }
-        else if ( webSite.matches( "(?s).*bengou.com(?s).*" ) )
-        {
-            return Site.formString("BENGOU");
-        }
-        else if ( webSite.matches( "(?s).*emland.net(?s).*" ) )
-        {
-            return Site.formString("EMLAND");
-        }
-        else if ( webSite.matches( "(?s).*game.mop.com(?s).*" ) )
-        {
-            return Site.formString("MOP");
-        }
-        else if ( webSite.matches( "(?s).*dm5.com(?).*" ) )
-        {
-            return Site.formString("DM5");
-        }
-        else if ( webSite.matches( "(?s).*comic101.com(?s).*" ) || 
-                  webSite.matches( "(?s).*comic.101.com(?s).*" ) || 
-                  webSite.matches( "(?s).*mh.ck101.com(?s).*" ) ||
-                  webSite.matches( "(?s).*comic.ck101.com(?s).*" ) ||
-                  webSite.matches( "(?s).*.com/vols/\\d+/\\d+(?s).*" ) // 應付全部ck101的位址....
-                   )
-        {
-            return Site.formString("CK");
-        }
-        else if ( webSite.matches( "(?s).*tuku.cc(?s).*" ) )
-        {
-            return Site.formString("TUKU");
-        }
-        /*
-        else if ( webSite.matches( "(?s).*hhcomic.com(?s).*" ) || webSite.matches( "(?s).*3348.net(?s).*" ) )
-        {
-            return Site.formString("HH");
-        }
-        */
-        else if ( webSite.matches( "(?s).*iask.sina.com(?s).*" ) )
-        {
-            return Site.formString("IASK");
-        }
-        else if ( webSite.matches( "(?s).*jmymh.com(?s).*" ) )
-        {
-            return Site.formString("JM");
-        }
-        else if ( webSite.matches( "(?s).*mangawindow.com(?s).*" ) )
-        {
-            return Site.formString("MANGA_WINDOW");
-        }
-        else if ( webSite.matches( "(?s).*ck101.com(?s).*" ) )
-        {
-            return Site.formString("CK_NOVEL");
-        }
-        else if ( webSite.matches( "(?s).*mybest.com(?s).*" )
-                || webSite.matches( "(?s).*catcatbox.com(?s).*" ) )
-        {
-            return Site.formString("MYBEST");
-        }
-        else if ( webSite.matches( "(?s).*imanhua.com(?s).*" ) )
-        {
-            return Site.formString("IMANHUA");
-        }
-        else if ( webSite.matches( "(?s).*veryim.com(?s).*" ) )
-        {
-            return Site.formString("VERYIM");
-        }
-        else if ( webSite.matches( "(?s).*\\.wenku.com(?s).*" ) )
-        {
-            return Site.formString("WENKU");
-        }
-        /*
-        else if ( webSite.matches( "(?s).*fumanhua.com(?s).*" ) )
-        {
-            return Site.formString("FUMANHUA");
-        }
-        */
-        else if ( webSite.matches( "(?s).*6manga.com(?s).*" ) )
-        {
-            return Site.formString("SIX_MANGA");
-        }
-        else if ( webSite.matches( "(?s).*xxbh.net(?s).*" ) )
-        {
-            return Site.formString("XXBH");
-        }
-        else if ( webSite.matches( "(?s).*comic.131.com(?s).*" ) )
-        {
-            return Site.formString("COMIC_131");
-        }
-        else if ( webSite.matches( "(?s).*blogspot\\.(?s).*" ) )
-        {
-            return Site.formString("BLOGSPOT");
-        }
-        else if ( webSite.matches( "(?s).*pixnet.net(?s).*" ) )
-        {
-            return Site.formString("PIXNET_BLOG");
-        }
-        else if ( webSite.matches( "(?s).*blog.xuite.net(?s).*" ) )
-        {
-            return Site.formString("XUITE_BLOG");
-        }
-        else if ( webSite.matches( "(?s).*blog.yam.com(?s).*" ) )
-        {
-            return Site.formString("YAM_BLOG");
-        }
-        else if ( webSite.matches( "(?s).*eyny.com(?s).*" ) )
-        {
-            return Site.formString("EYNY_NOVEL");
-        }
-        else if ( webSite.matches( "(?s).*wikipedia.org/(?s).*" ) )
-        {
-            return Site.formString("WIKI");
-        }
-        else if ( webSite.matches( "(?s).*zuiwanju.com(?s).*" ) )
-        {
-            return Site.formString("ZUIWANJU");
-        }
-        else if ( webSite.matches( "(?s).*www.2ecy.com(?s).*" ) )
-        {
-            return Site.formString("TWO_ECY");
-        }
-        else if ( webSite.matches( "(?s).*tianyabook.com(?s).*" ) )
-        {
-            return Site.formString("TIANYA_BOOK");
-        }
-        else if ( webSite.matches( "(?s).*8novel.com/books/(?s).*" ) )
-        {
-            return Site.formString("EIGHT_NOVEL");
-        }
-        else if ( webSite.matches( "(?s).*book.qq.com/s/book/(?s).*" ) )
-        {
-            return Site.formString("QQ_BOOK");
-        }
-        else if ( webSite.matches( "(?s).*book.qq.com/origin/book/(?s).*" ) )
-        {
-            return Site.formString("QQ_ORIGIN_BOOK");
-        }
-        else if ( webSite.matches( "(?s).*book.sina.com.cn/book/(?s).*" ) )
-        {
-            return Site.formString("SINA_BOOK");
-        }
-        else if ( webSite.matches( "(?s).*book.51cto.com/art(?s).*" ) )
-        {
-            return Site.formString("FIVEONE_CTO");
-        }
-        else if ( webSite.matches( "(?s).*17kk.cc/(?s).*" ) )
-        {
-            return Site.formString("ONESEVEN_KK");
-        }
-        else if ( webSite.matches( "(?s).*uus8.com.*/" )
-                || webSite.matches( "(?s).*uus8.com.*/\\d+" )
-                || webSite.matches( "(?s).*uus8.com/book/display(?s).*" ) )
-        {
-            return Site.formString("UUS8");
-        }
-        else if ( webSite.matches( "(?s).*wenku8.cn/modules/article/reader.php(?s).*" )
-                || webSite.matches( "(?s).*wenku8.cn/novel/(?s).*" )
-                || webSite.matches( "(?s).*wenku8.cn/modules/article/articleinfo.php(?s).*" ) )
-        {
-            return Site.formString("WENKU8");
-        }
-        else if ( webSite.matches( "(?s).*book.ifeng.com/(?s).*" ) )
-        {
-            return Site.formString("IFENG_BOOK");
-        }
-        else if ( webSite.matches( "(?s).*xunlook.com/(?s).*" ) )
-        {
-            return Site.formString("XUNLOOK");
-        }
-        else if ( webSite.matches( "(?s).*7tianshi.com/(?s).*" ) )
-        {
-            return Site.formString("WENKU7");
-        }
-        else if ( webSite.matches( "(?s).*woyouxian.com/(?s).*" ) )
-        {
-            return Site.formString("WOYOUXIAN");
-        }
-        else if ( webSite.matches( "(?s).*shunong.com/(?s).*" ) )
-        {
-            return Site.formString("SHUNONG");
-        }
-        else if ( webSite.matches( "(?s).*music.sogou.com/(?s).*" ) )
-        {
-            return Site.formString("SOGOU");
-        }
-        else if ( webSite.matches( "(?s).*1ting.com/(?s).*" ) )
-        {
-            return Site.formString("TING1");
-        }
-        else if ( webSite.matches( "(?s).*xiami.com/(?s).*" ) )
-        {
-            return Site.formString("XIAMI");
-        }
-        else if ( webSite.matches( "(?s).*ptt.cc/(?s).*" ) )
-        {
-            return Site.formString("PTT");
-        }
-        else if ( webSite.matches( "(?s).*ishuhui.com(?s).*" ) )
-        {
-            return Site.formString("ISHUHUI");
-        }
+        }        
+        
+        
+//        if ( webSite.matches( "(?s).*89890.com(?s).*" ) )
+//        {
+//            return Site.formString("CC");
+//        }
+//        else if ( webSite.matches( "(?s).*kukudm.com(?s).*" )
+//                || webSite.matches( "(?s).*socomic.com(?s).*" )
+//                || webSite.matches( "(?s).*socomic.net(?s).*" ) )
+//        {
+//            return Site.formString("KUKU");
+//        }
+//        else if ( webSite.matches( "(?s).*e-hentai(?s).*" ) )
+//        {
+//            return Site.formString("EH");
+//        }
+//        else if ( webSite.matches( "(?s).*exhentai.org(?s).*" ) )
+//        {
+//            return Site.formString("EX");
+//        }
+//
+//        else if ( webSite.matches( "(?s).*dm.99manga.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_MANGA_TC");
+//        }
+//        /*else if ( webSite.matches( "(?s).*www.99manga.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_MANGA_WWW");
+//        }*/
+//        else if ( webSite.matches( "(?s).*99manga.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_MANGA");
+//        }
+//        else if ( webSite.matches( "(?s).*www.99comic.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_COMIC_TC");
+//        }
+//        /*else if ( webSite.matches( "(?s).*99comic.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_COMIC");
+//        }*/
+//        else if ( webSite.matches( "(?s).*99mh.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_MH");
+//        }
+//        else if ( webSite.matches( "(?s).*mh.99770.cc(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_MH_99770");
+//        }
+//        /*else if ( webSite.matches( "(?s).*99770.cc(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_99770");
+//        }*/
+//        else if ( webSite.matches( "(?s).*www.cococomic.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_COCO_TC");
+//        }
+//        else if ( webSite.matches( "(?s).*cococomic.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_COCO");
+//        }
+//        /*else if ( webSite.matches( "(?s).*1mh.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_1MH");
+//        }
+//        else if ( webSite.matches( "(?s).*3gmanhua.com(?s).*" ) )
+//        {
+//            return Site.formString("NINENINE_3G");
+//        }
+//        */
+//        //else if ( webSite.matches( "(?s).*\\.178.com(?s).*" ) )
+//        //    return Site.formString("ONE_SEVEN_EIGHT");
+//        else if ( webSite.matches( "(?s).*\\.8comic.com(?s).*" ) ||
+//                  webSite.matches( "(?s).*comicvip.com(?s).*") )
+//        {
+//            if ( webSite.matches( "(?s).*photo(?s).*" )
+//                    || webSite.matches( "(?s).*PHOTO(?s).*" )
+//                    || webSite.matches( "(?s).*Photo(?s).*" ) ) // 圖集
+//            {
+//                return Site.formString("EIGHT_COMIC_PHOTO");
+//            }
+//            else // 漫畫
+//            {
+//                return Site.formString("EIGHT_COMIC");
+//            }
+//        }
+//        else if ( webSite.matches( "(?s).*\\.jumpcn.com.cn(?s).*" ) )
+//        {
+//            return Site.formString("JUMPCNCN");
+//        }
+//        else if ( webSite.matches( "(?s).*dmeden\\.(?s).*" ) )
+//        {
+//            return Site.formString("DMEDEN");
+//        }
+//        else if ( webSite.matches( "(?s).*\\.jumpcn.com/(?s).*" ) )
+//        {
+//            return Site.formString("JUMPCN");
+//        }
+//        else if ( webSite.matches( "(?s).*mangafox.me/(?s).*" ) )
+//        {
+//            return Site.formString("MANGAFOX");
+//        }
+//        else if ( webSite.matches( "(?s).*\\.manmankan.com/(?s).*" ) )
+//        {
+//            return Site.formString("MANMANKAN");
+//        }
+//        else if ( webSite.matches( "(?s).*www.xindm.cn/(?s).*" ) )
+//        {
+//            return Site.formString("XINDM");
+//        }
+//        else if ( webSite.matches( "(?s).*google.com(?s).*" ) )
+//        {
+//            return Site.formString("GOOGLE_PIC");
+//        }
+//        else if ( webSite.matches( "(?s).*nanadm.com(?s).*" ) )
+//        {
+//            return Site.formString("NANA");
+//        }
+//        else if ( webSite.matches( "(?s).*citymanga.com(?s).*" ) )
+//        {
+//            return Site.formString("CITY_MANGA");
+//        }
+//        else if ( webSite.matches( "(?s).*iibq.com(?s).*" ) )
+//        {
+//            return Site.formString("IIBQ");
+//        }
+//        else if ( webSite.matches( "(?s).*baidu.com(?s).*" ) )
+//        {
+//            return Site.formString("BAIDU");
+//        }
+//        else if ( webSite.matches( "(?s).*sfacg.com(?s).*" ) )
+//        {
+//            return Site.formString("SF");
+//        }
+//        else if ( webSite.matches( "(?s).*kkkmh.com(?s).*" ) )
+//        {
+//            return Site.formString("KKKMH");
+//        }
+//        else if ( webSite.matches( "(?s).*6comic.com(?s).*" ) )
+//        {
+//            return Site.formString("SIX_COMIC");
+//        }
+//        else if ( webSite.matches( "(?s).*178.com(?s).*" ) || 
+//                  webSite.matches( "(?s).*dmzj.com(?s).*" ) )
+//        {
+//            return Site.formString("MANHUA_178");
+//        }
+//        else if ( webSite.matches( "(?s).*kangdm.com(?s).*" ) || 
+//                  webSite.matches( "(?s).*kyo.cn(?s).*" ) )
+//        {
+//            return Site.formString("KANGDM");
+//        }
+//        else if ( webSite.matches( "(?s).*bengou.com(?s).*" ) )
+//        {
+//            return Site.formString("BENGOU");
+//        }
+//        else if ( webSite.matches( "(?s).*emland.net(?s).*" ) )
+//        {
+//            return Site.formString("EMLAND");
+//        }
+//        else if ( webSite.matches( "(?s).*game.mop.com(?s).*" ) )
+//        {
+//            return Site.formString("MOP");
+//        }
+//        else if ( webSite.matches( "(?s).*dm5.com(?).*" ) )
+//        {
+//            return Site.formString("DM5");
+//        }
+//        else if ( webSite.matches( "(?s).*comic101.com(?s).*" ) || 
+//                  webSite.matches( "(?s).*comic.101.com(?s).*" ) || 
+//                  webSite.matches( "(?s).*mh.ck101.com(?s).*" ) ||
+//                  webSite.matches( "(?s).*comic.ck101.com(?s).*" ) ||
+//                  webSite.matches( "(?s).*.com/vols/\\d+/\\d+(?s).*" ) // 應付全部ck101的位址....
+//                   )
+//        {
+//            return Site.formString("CK");
+//        }
+//        else if ( webSite.matches( "(?s).*tuku.cc(?s).*" ) )
+//        {
+//            return Site.formString("TUKU");
+//        }
+//        /*
+//        else if ( webSite.matches( "(?s).*hhcomic.com(?s).*" ) || webSite.matches( "(?s).*3348.net(?s).*" ) )
+//        {
+//            return Site.formString("HH");
+//        }
+//        */
+//        else if ( webSite.matches( "(?s).*iask.sina.com(?s).*" ) )
+//        {
+//            return Site.formString("IASK");
+//        }
+//        else if ( webSite.matches( "(?s).*jmymh.com(?s).*" ) )
+//        {
+//            return Site.formString("JM");
+//        }
+//        else if ( webSite.matches( "(?s).*mangawindow.com(?s).*" ) )
+//        {
+//            return Site.formString("MANGA_WINDOW");
+//        }
+//        else if ( webSite.matches( "(?s).*ck101.com(?s).*" ) )
+//        {
+//            return Site.formString("CK_NOVEL");
+//        }
+//        else if ( webSite.matches( "(?s).*mybest.com(?s).*" )
+//                || webSite.matches( "(?s).*catcatbox.com(?s).*" ) )
+//        {
+//            return Site.formString("MYBEST");
+//        }
+//        else if ( webSite.matches( "(?s).*imanhua.com(?s).*" ) )
+//        {
+//            return Site.formString("IMANHUA");
+//        }
+//        else if ( webSite.matches( "(?s).*veryim.com(?s).*" ) )
+//        {
+//            return Site.formString("VERYIM");
+//        }
+//        else if ( webSite.matches( "(?s).*\\.wenku.com(?s).*" ) )
+//        {
+//            return Site.formString("WENKU");
+//        }
+//        /*
+//        else if ( webSite.matches( "(?s).*fumanhua.com(?s).*" ) )
+//        {
+//            return Site.formString("FUMANHUA");
+//        }
+//        */
+//        else if ( webSite.matches( "(?s).*6manga.com(?s).*" ) )
+//        {
+//            return Site.formString("SIX_MANGA");
+//        }
+//        else if ( webSite.matches( "(?s).*xxbh.net(?s).*" ) )
+//        {
+//            return Site.formString("XXBH");
+//        }
+//        else if ( webSite.matches( "(?s).*comic.131.com(?s).*" ) )
+//        {
+//            return Site.formString("COMIC_131");
+//        }
+//        else if ( webSite.matches( "(?s).*blogspot\\.(?s).*" ) )
+//        {
+//            return Site.formString("BLOGSPOT");
+//        }
+//        else if ( webSite.matches( "(?s).*pixnet.net(?s).*" ) )
+//        {
+//            return Site.formString("PIXNET_BLOG");
+//        }
+//        else if ( webSite.matches( "(?s).*blog.xuite.net(?s).*" ) )
+//        {
+//            return Site.formString("XUITE_BLOG");
+//        }
+//        else if ( webSite.matches( "(?s).*blog.yam.com(?s).*" ) )
+//        {
+//            return Site.formString("YAM_BLOG");
+//        }
+//        else if ( webSite.matches( "(?s).*eyny.com(?s).*" ) )
+//        {
+//            return Site.formString("EYNY_NOVEL");
+//        }
+//        else if ( webSite.matches( "(?s).*wikipedia.org/(?s).*" ) )
+//        {
+//            return Site.formString("WIKI");
+//        }
+//        else if ( webSite.matches( "(?s).*zuiwanju.com(?s).*" ) )
+//        {
+//            return Site.formString("ZUIWANJU");
+//        }
+//        else if ( webSite.matches( "(?s).*www.2ecy.com(?s).*" ) )
+//        {
+//            return Site.formString("TWO_ECY");
+//        }
+//        else if ( webSite.matches( "(?s).*tianyabook.com(?s).*" ) )
+//        {
+//            return Site.formString("TIANYA_BOOK");
+//        }
+//        else if ( webSite.matches( "(?s).*8novel.com/books/(?s).*" ) )
+//        {
+//            return Site.formString("EIGHT_NOVEL");
+//        }
+//        else if ( webSite.matches( "(?s).*book.qq.com/s/book/(?s).*" ) )
+//        {
+//            return Site.formString("QQ_BOOK");
+//        }
+//        else if ( webSite.matches( "(?s).*book.qq.com/origin/book/(?s).*" ) )
+//        {
+//            return Site.formString("QQ_ORIGIN_BOOK");
+//        }
+//        else if ( webSite.matches( "(?s).*book.sina.com.cn/book/(?s).*" ) )
+//        {
+//            return Site.formString("SINA_BOOK");
+//        }
+//        else if ( webSite.matches( "(?s).*book.51cto.com/art(?s).*" ) )
+//        {
+//            return Site.formString("FIVEONE_CTO");
+//        }
+//        else if ( webSite.matches( "(?s).*17kk.cc/(?s).*" ) )
+//        {
+//            return Site.formString("ONESEVEN_KK");
+//        }
+//        else if ( webSite.matches( "(?s).*uus8.com.*/" )
+//                || webSite.matches( "(?s).*uus8.com.*/\\d+" )
+//                || webSite.matches( "(?s).*uus8.com/book/display(?s).*" ) )
+//        {
+//            return Site.formString("UUS8");
+//        }
+//        else if ( webSite.matches( "(?s).*wenku8.cn/modules/article/reader.php(?s).*" )
+//                || webSite.matches( "(?s).*wenku8.cn/novel/(?s).*" )
+//                || webSite.matches( "(?s).*wenku8.cn/modules/article/articleinfo.php(?s).*" ) )
+//        {
+//            return Site.formString("WENKU8");
+//        }
+//        else if ( webSite.matches( "(?s).*book.ifeng.com/(?s).*" ) )
+//        {
+//            return Site.formString("IFENG_BOOK");
+//        }
+//        else if ( webSite.matches( "(?s).*xunlook.com/(?s).*" ) )
+//        {
+//            return Site.formString("XUNLOOK");
+//        }
+//        else if ( webSite.matches( "(?s).*7tianshi.com/(?s).*" ) )
+//        {
+//            return Site.formString("WENKU7");
+//        }
+//        else if ( webSite.matches( "(?s).*woyouxian.com/(?s).*" ) )
+//        {
+//            return Site.formString("WOYOUXIAN");
+//        }
+//        else if ( webSite.matches( "(?s).*shunong.com/(?s).*" ) )
+//        {
+//            return Site.formString("SHUNONG");
+//        }
+//        else if ( webSite.matches( "(?s).*music.sogou.com/(?s).*" ) )
+//        {
+//            return Site.formString("SOGOU");
+//        }
+//        else if ( webSite.matches( "(?s).*1ting.com/(?s).*" ) )
+//        {
+//            return Site.formString("TING1");
+//        }
+//        else if ( webSite.matches( "(?s).*xiami.com/(?s).*" ) )
+//        {
+//            return Site.formString("XIAMI");
+//        }
+//        else if ( webSite.matches( "(?s).*ptt.cc/(?s).*" ) )
+//        {
+//            return Site.formString("PTT");
+//        }
+//        else if ( webSite.matches( "(?s).*ishuhui.com(?s).*" ) )
+//        {
+//            return Site.formString("ISHUHUI");
+//        }
         return Site.UNKNOWN;
     }
 }    

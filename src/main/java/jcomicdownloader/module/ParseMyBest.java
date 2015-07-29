@@ -31,6 +31,8 @@ public class ParseMyBest extends ParseCKNovel {
      * @author user
      */
     public ParseMyBest() {
+        regexs= new String[]{"(?s).*mybest.com(?s).*"
+                , "(?s).*catcatbox.com(?s).*" };
         enumName = "MYBEST";
 	parserName=this.getClass().getName();
         novelSite=true;

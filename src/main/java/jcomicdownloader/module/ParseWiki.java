@@ -44,6 +44,7 @@ public class ParseWiki extends ParseCKNovel {
      */
     public ParseWiki() {
         enumName = "WIKI";
+        regexs= new String[]{"(?s).*wikipedia.org/(?s).*"};
         parserName=this.getClass().getName();
         novelSite=true;
         siteID=Site.formString("WIKI");
