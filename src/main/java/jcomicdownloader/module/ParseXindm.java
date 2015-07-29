@@ -34,9 +34,9 @@ public class ParseXindm extends ParseOnlineComicSite {
      */
     public ParseXindm() {
         enumName = "XINDM";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("XINDM");
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("XINDM");
         siteName = "Xindm";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_xindm_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_xindm_encode_parse_", "html" );

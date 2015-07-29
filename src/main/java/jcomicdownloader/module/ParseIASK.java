@@ -39,9 +39,9 @@ public class ParseIASK extends ParseOnlineComicSite
     public ParseIASK()
     {
         enumName = "IASK";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("IASK");
+        parserName=this.getClass().getName();
+        downloadBefore=true;
+	siteID=Site.formString("IASK");
         siteName = "IASK";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_iask_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_iask_encode_parse_", "html" );

@@ -37,9 +37,9 @@ public class ParseFumanhua extends ParseOnlineComicSite {
      */
     public ParseFumanhua() {
         enumName = "FUMANHUA";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("FUMANHUA");
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+	siteID=Site.formString("FUMANHUA");
         siteName = "Fumanhua";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_fumanhua_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_fumanhua_encode_parse_", "html" );

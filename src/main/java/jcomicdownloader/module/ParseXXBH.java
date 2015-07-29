@@ -44,9 +44,9 @@ public class ParseXXBH extends ParseOnlineComicSite
     public ParseXXBH()
     {
         enumName = "XXBH";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("XXBH");
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("XXBH");
         siteName = "xxbh";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_xxbh_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_xxbh_encode_parse_", "html" );

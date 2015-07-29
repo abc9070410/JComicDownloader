@@ -247,29 +247,30 @@ public class RunModule {
 
     // 此任務是否為小說網站
     public static boolean isNovelSite( Site siteID ) {
-        if ( siteID == Site.formString("CK_NOVEL")
-            || siteID == Site.formString("EYNY_NOVEL")
-            || siteID == Site.formString("WIKI")
-            || siteID == Site.formString("MYBEST")
-            || siteID == Site.formString("WENKU")
-            || siteID == Site.formString("TIANYA_BOOK")
-            || siteID == Site.formString("EIGHT_NOVEL")
-            || siteID == Site.formString("QQ_BOOK")
-            || siteID == Site.formString("QQ_ORIGIN_BOOK")
-            || siteID == Site.formString("SINA_BOOK")
-            || siteID == Site.formString("FIVEONE_CTO")
-            || siteID == Site.formString("UUS8")
-            || siteID == Site.formString("WENKU8")
-            || siteID == Site.formString("WENKU7")
-            || siteID == Site.formString("IFENG_BOOK")
-            || siteID == Site.formString("XUNLOOK")
-            || siteID == Site.formString("WOYOUXIAN")
-            || siteID == Site.formString("SHUNONG") ) {
-            return true;
-        }
-        else {
-            return false;
-        }
+//        if ( siteID == Site.formString("CK_NOVEL")
+//            || siteID == Site.formString("EYNY_NOVEL")
+//            || siteID == Site.formString("WIKI")
+//            || siteID == Site.formString("MYBEST")
+//            || siteID == Site.formString("WENKU")
+//            || siteID == Site.formString("TIANYA_BOOK")
+//            || siteID == Site.formString("EIGHT_NOVEL")
+//            || siteID == Site.formString("QQ_BOOK")
+//            || siteID == Site.formString("QQ_ORIGIN_BOOK")
+//            || siteID == Site.formString("SINA_BOOK")
+//            || siteID == Site.formString("FIVEONE_CTO")
+//            || siteID == Site.formString("UUS8")
+//            || siteID == Site.formString("WENKU8")
+//            || siteID == Site.formString("WENKU7")
+//            || siteID == Site.formString("IFENG_BOOK")
+//            || siteID == Site.formString("XUNLOOK")
+//            || siteID == Site.formString("WOYOUXIAN")
+//            || siteID == Site.formString("SHUNONG") ) {
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+        return siteID.isNovelSite();
     }
 
     // 此任務是否為部落格網站
@@ -301,37 +302,36 @@ public class RunModule {
 
     // 有些站在解析圖片網址的同時就在下載了，那就不用再進入到整本下載區
     public boolean isDownloadBefore( Site siteID ) {
-        if ( siteID == Site.formString("EH")
-            || siteID == Site.formString("EX")
-            || siteID == Site.formString("JUMPCN")
-            || siteID == Site.formString("KUKU")
-            || siteID == Site.formString("DMEDEN")
-            || siteID == Site.formString("MANGAFOX")
-            || siteID == Site.formString("XINDM")
-            || siteID == Site.formString("WY")
-            || siteID == Site.formString("GOOGLE_PIC")
-            || siteID == Site.formString("CITY_MANGA")
-            || siteID == Site.formString("BAIDU")
-            || siteID == Site.formString("BENGOU")
-            || siteID == Site.formString("EMLAND")
-            || siteID == Site.formString("MOP")
-            || siteID == Site.formString("DM5")
-            || siteID == Site.formString("IASK")
-            || siteID == Site.formString("IMANHUA")
-            || siteID == Site.formString("VERYIM")
-            || siteID == Site.formString("SIX_MANGA")
-            || siteID == Site.formString("COMIC_131")
-            || siteID == Site.formString("XXBH")
-            || siteID == Site.formString("TWO_ECY")
-            || siteID == Site.formString("ONESEVEN_KK")
-            || siteID == Site.formString("FUMANHUA")
-            || siteID == Site.formString("CK") 
-            || siteID == Site.formString("PTT") 
-            || siteID == Site.formString("JM")
-            || siteID == Site.formString("IIBQ") ) {
-            return true;
-        }
-        else if ( isNovelSite( siteID ) || isBlogSite( siteID ) || isMusicSite( siteID ) ) {
+//        if ( siteID == Site.formString("EH")
+//            || siteID == Site.formString("EX")
+//            || siteID == Site.formString("JUMPCN")
+//            || siteID == Site.formString("KUKU")
+//            || siteID == Site.formString("DMEDEN")
+//            || siteID == Site.formString("MANGAFOX")
+//            || siteID == Site.formString("XINDM")
+//            || siteID == Site.formString("WY")//?
+//            || siteID == Site.formString("GOOGLE_PIC")
+//            || siteID == Site.formString("CITY_MANGA")
+//            || siteID == Site.formString("BAIDU")
+//            || siteID == Site.formString("BENGOU")
+//            || siteID == Site.formString("EMLAND")
+//            || siteID == Site.formString("MOP")
+//            || siteID == Site.formString("DM5")
+//            || siteID == Site.formString("IASK")
+//            || siteID == Site.formString("IMANHUA")
+//            || siteID == Site.formString("VERYIM")
+//            || siteID == Site.formString("SIX_MANGA")
+//            || siteID == Site.formString("COMIC_131")
+//            || siteID == Site.formString("XXBH")
+//            || siteID == Site.formString("TWO_ECY")
+//            || siteID == Site.formString("ONESEVEN_KK")
+//            || siteID == Site.formString("FUMANHUA")
+//            || siteID == Site.formString("CK") 
+//            || siteID == Site.formString("PTT") 
+//            || siteID == Site.formString("JM")
+//            || siteID == Site.formString("IIBQ") ) {
+//            return true;
+        if ( siteID.isDownloadBefore() ||isNovelSite( siteID ) || isBlogSite( siteID ) || isMusicSite( siteID ) ) {
             return true;
         }
         else {

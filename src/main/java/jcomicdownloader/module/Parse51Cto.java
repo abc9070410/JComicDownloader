@@ -35,9 +35,9 @@ public class Parse51Cto extends ParseEightNovel {
      */
     public Parse51Cto() {
         enumName = "FIVEONE_CTO";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("FIVEONE_CTO");
+	parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("FIVEONE_CTO");
         siteName = "51cto";
         pageExtension = "htm"; // 網頁副檔名
         pageCode = Encoding.GB2312; // 網頁預設編碼

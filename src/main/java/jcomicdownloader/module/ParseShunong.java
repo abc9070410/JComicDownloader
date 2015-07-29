@@ -39,9 +39,9 @@ public class ParseShunong extends ParseEightNovel
     public ParseShunong()
     {
         enumName = "SHUNONG";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("SHUNONG");
+	parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("SHUNONG");
         siteName = "Shunong";
         pageExtension = "html"; // 網頁副檔名
         pageCode = Encoding.GBK; // 網頁預設編碼

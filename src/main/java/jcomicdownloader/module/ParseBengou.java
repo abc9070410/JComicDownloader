@@ -33,9 +33,9 @@ public class ParseBengou extends ParseOnlineComicSite {
      */
     public ParseBengou() {
         enumName = "BENGOU";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("BENGOU");
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("BENGOU");
         siteName = "Bengou";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_bengou_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_bengou_encode_parse_", "html" );

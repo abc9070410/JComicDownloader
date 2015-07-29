@@ -26,6 +26,7 @@ public class ParseQQOriginBook extends ParseQQBook {
      */
     public ParseQQOriginBook() {
         enumName = "QQ_ORIGIN_BOOK";
+        novelSite=true;
         parserName=this.getClass().getName();
         siteID=Site.formString("QQ_ORIGIN_BOOK");
         siteName = "QQOriginBook";

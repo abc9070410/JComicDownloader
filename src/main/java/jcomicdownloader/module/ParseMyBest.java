@@ -32,9 +32,9 @@ public class ParseMyBest extends ParseCKNovel {
      */
     public ParseMyBest() {
         enumName = "MYBEST";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("MYBEST");
+	parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("MYBEST");
         siteName = "Mybest";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mybest_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mybest_encode_parse_", "html" );

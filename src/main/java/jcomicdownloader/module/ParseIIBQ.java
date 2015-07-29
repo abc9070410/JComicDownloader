@@ -37,9 +37,9 @@ public class ParseIIBQ extends ParseOnlineComicSite {
      */
     public ParseIIBQ() {
         enumName = "IIBQ";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("IIBQ");
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("IIBQ");
         siteName = "IIBQ";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_iibq_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_iibq_encode_parse_", "html" );

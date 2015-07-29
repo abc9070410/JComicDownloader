@@ -23,7 +23,7 @@ public class ParseEX extends ParseEH {
         super();
         enumName = "EX";
         parserName=this.getClass().getName();
-
+        downloadBefore=true;
         siteID=Site.formString("EX");
         siteName = "EX";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_ex_Hentai_parse_", "html" );

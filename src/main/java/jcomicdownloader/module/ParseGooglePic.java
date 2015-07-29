@@ -53,9 +53,9 @@ public class ParseGooglePic extends ParseOnlineComicSite {
      */
     public ParseGooglePic() {
         enumName = "GOOGLE_PIC";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("GOOGLE_PIC");
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("GOOGLE_PIC");
         siteName = "GooglePic";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_google_pic_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_google_pic_encode_parse_", "html" );

@@ -32,9 +32,9 @@ public class ParseMangaFox extends ParseOnlineComicSite {
      */
     public ParseMangaFox() {
         enumName = "MANGAFOX";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("MANGAFOX");
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("MANGAFOX");
         siteName = "MangaFox";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mangaFox_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mangaFox_encode_parse_", "html" );

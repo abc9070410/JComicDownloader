@@ -37,9 +37,9 @@ public class ParseQQBook extends ParseEightNovel {
      */
     public ParseQQBook() {
         enumName = "QQ_BOOK";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("QQ_BOOK");
+	parserName=this.getClass().getName();
+        novelSite=true;
+	siteID=Site.formString("QQ_BOOK");
         siteName = "QQBook";
         pageExtension = "shtml"; // 網頁副檔名
         pageCode = Encoding.GB2312; // 網頁預設編碼

@@ -44,9 +44,9 @@ public class ParseWiki extends ParseCKNovel {
      */
     public ParseWiki() {
         enumName = "WIKI";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("WIKI");
+        parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("WIKI");
         siteName = "Wiki";
         indexName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_wiki_parse_", "html");
         indexEncodeName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_wiki_encode_parse_", "html");

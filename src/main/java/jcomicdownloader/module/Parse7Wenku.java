@@ -39,9 +39,9 @@ public class Parse7Wenku extends ParseEightNovel {
      */
     public Parse7Wenku() {
         enumName = "WENKU7";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("WENKU7");
+	parserName=this.getClass().getName();
+        novelSite=true;
+	siteID=Site.formString("WENKU7");
         siteName = "7wenku";
         pageExtension = "htm"; // 網頁副檔名
         pageCode = Encoding.GBK; // 網頁預設編碼

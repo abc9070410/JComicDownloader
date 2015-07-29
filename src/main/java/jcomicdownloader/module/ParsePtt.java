@@ -77,9 +77,9 @@ public class ParsePtt extends ParseCKNovel {
      */
     public ParsePtt() {
         enumName = "PTT";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("PTT");
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+	siteID=Site.formString("PTT");
         siteName = "Ptt";
         indexName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_ptt_parse_", "html");
         indexEncodeName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_ptt_encode_parse_", "html");

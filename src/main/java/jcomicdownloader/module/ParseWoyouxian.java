@@ -38,9 +38,9 @@ public class ParseWoyouxian extends ParseEightNovel
     public ParseWoyouxian()
     {
         enumName = "WOYOUXIAN";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("WOYOUXIAN");
+	parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("WOYOUXIAN");
         siteName = "Woyouxian";
         pageExtension = "html"; // 網頁副檔名
         pageCode = Encoding.UTF8; // 網頁預設編碼

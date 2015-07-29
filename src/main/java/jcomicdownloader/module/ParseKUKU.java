@@ -37,9 +37,9 @@ public class ParseKUKU extends ParseOnlineComicSite {
  */
     public ParseKUKU() {
         enumName = "KUKU";
-		parserName=this.getClass().getName();
-
-		siteID=Site.formString("KUKU");
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+	siteID=Site.formString("KUKU");
         siteName = "kuku";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kuku_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kuku_encode_parse_", "html" );

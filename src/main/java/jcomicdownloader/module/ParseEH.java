@@ -44,6 +44,7 @@ public class ParseEH extends ParseOnlineComicSite {
      */
     public ParseEH() {
         enumName = "EH";
+        downloadBefore=true;
         parserName=this.getClass().getName();
         siteName = "EH";
         siteID=Site.formString("EH");
