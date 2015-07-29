@@ -76,7 +76,10 @@ public class ParsePtt extends ParseCKNovel {
      * @author user
      */
     public ParsePtt() {
-        siteID = Site.PTT;
+        enumName = "PTT";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("PTT");
         siteName = "Ptt";
         indexName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_ptt_parse_", "html");
         indexEncodeName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_ptt_encode_parse_", "html");

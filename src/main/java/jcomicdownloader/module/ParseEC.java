@@ -34,7 +34,10 @@ public class ParseEC extends ParseOnlineComicSite {
     private String volumeNoString; // 每一集都有數字編號
 
     public ParseEC() {
-        siteID = Site.EIGHT_COMIC;
+        enumName = "EIGHT_COMIC";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("EIGHT_COMIC");
         siteName = "8comic";
         indexWrongEncodingFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_wrong_encode_parse_", "html" );
         indexFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_parse_", "html" );
@@ -281,7 +284,10 @@ public class ParseEC extends ParseOnlineComicSite {
 class ParseECphoto extends ParseEC {
 
     public ParseECphoto() {
-        siteID = Site.EIGHT_COMIC_PHOTO;
+        enumName = "EIGHT_COMIC_PHOTO";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("EIGHT_COMIC_PHOTO");
         indexWrongEncodingFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_photo_parse_", "html" );
         indexFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_photo_encode_parse_", "html" );
 

@@ -35,7 +35,10 @@ public class ParseSinaBook extends ParseEightNovel {
     @author user
      */
     public ParseSinaBook() {
-        siteID = Site.SINA_BOOK;
+        enumName = "SINA_BOOK";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("SINA_BOOK");
         siteName = "SinaBook";
         pageExtension = "html"; // 網頁副檔名
         pageCode = Encoding.GB2312; // 網頁預設編碼

@@ -32,7 +32,10 @@ public class Parse1Ting extends ParseSogou
      */
     public Parse1Ting()
     {
-        siteID = Site.TING1;
+        enumName = "TING1";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("TING1");
         siteName = "1ting";
         pageExtension = "html";
         pageCode = Encoding.UTF8;

@@ -34,7 +34,10 @@ public class Parse2ecy extends ParseOnlineComicSite {
     @author user
      */
     public Parse2ecy() {
-        siteID = Site.TWO_ECY;
+        enumName = "TWO_ECY";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("TWO_ECY");
         siteName = "2ecy";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_2ecy_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_2ecy_encode_parse_", "html" );

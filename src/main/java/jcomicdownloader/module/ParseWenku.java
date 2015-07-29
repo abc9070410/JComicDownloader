@@ -37,7 +37,10 @@ public class ParseWenku extends ParseOnlineComicSite {
     @author user
      */
     public ParseWenku() {
-        siteID = Site.WENKU;
+        enumName = "WENKU";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("WENKU");
         siteName = "wenku";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_wenku_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_wenku_encode_parse_", "html" );

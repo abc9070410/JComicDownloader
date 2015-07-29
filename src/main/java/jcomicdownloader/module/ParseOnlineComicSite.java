@@ -50,6 +50,9 @@ abstract public class ParseOnlineComicSite {
     protected int runMode; // 只分析、只下載或分析加下載
     protected String textFilePath; // 小說檔案完整目錄位置，包含檔名（只有下載小說時才有用）
 
+    protected String enumName;//for dynamic enum
+    protected String parserName;//for dynamic enum
+      
     abstract public void setParameters(); // 須取得title和wholeTitle（title可用getTitle()）
 
     abstract public void parseComicURL(); // 必須解析出下載位址並傳給comicURL
@@ -64,6 +67,14 @@ abstract public class ParseOnlineComicSite {
 
     abstract public String getMainUrlFromSingleVolumeUrl( String volumeURL ); // 由單集位址轉為全集位址
 
+    public String getParserName(){
+        return this.parserName;
+    }
+    
+    public String getEnumName(){
+        return this.enumName;
+    }
+    
     // 顯示目前解析的漫畫網站名稱
     public void printLogo() {
         System.out.println( " ______________________________" );

@@ -29,7 +29,10 @@ public class ParseMOP extends ParseOnlineComicSite {
      * @author user
      */
     public ParseMOP() {
-        siteID = Site.MOP;
+        enumName = "MOP";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("MOP");
         siteName = "MOP";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mop_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mop_encode_parse_", "html" );

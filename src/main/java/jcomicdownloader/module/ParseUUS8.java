@@ -35,7 +35,10 @@ public class ParseUUS8 extends ParseEightNovel {
      @author user
      */
     public ParseUUS8() {
-        siteID = Site.UUS8;
+        enumName = "UUS8";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("UUS8");
         siteName = "UUS8";
         pageExtension = "htm"; // 網頁副檔名
         pageCode = Encoding.GB2312; // 網頁預設編碼

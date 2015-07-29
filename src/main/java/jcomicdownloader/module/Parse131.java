@@ -39,7 +39,10 @@ public class Parse131 extends ParseOnlineComicSite {
      @author user
      */
     public Parse131() {
-        siteID = Site.COMIC_131;
+        enumName = "COMIC_131";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("COMIC_131");
         siteName = "131";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_131_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_131_encode_parse_", "html" );

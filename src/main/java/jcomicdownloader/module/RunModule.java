@@ -140,15 +140,15 @@ public class RunModule {
 
             parse.setParameters();
 
-            if ( parse.siteID == Site.EH || parse.siteID == Site.EX /*
+            if ( parse.siteID == Site.formString("EH") || parse.siteID == Site.formString("EX") /*
                  // CK小說規則：唯有當下載單一作品時，才用一層資料夾（此時標題名稱與集數名稱相同）
-                 || ( parse.siteID == Site.CK_NOVEL && parse.getTitle().equals(
+                 || ( parse.siteID == Site.formString("CK_NOVEL") && parse.getTitle().equals(
                  parse.getWholeTitle() ) )
                  // EYNY小說規則：唯有當下載單一作品時，才用一層資料夾（此時標題名稱與集數名稱相同）
-                 || ( parse.siteID == Site.EYNY_NOVEL &&
+                 || ( parse.siteID == Site.formString("EYNY_NOVEL") &&
                  parse.getTitle().equals( parse.getWholeTitle() ) )
-                 || parse.siteID == Site.MYBEST
-                 || parse.siteID == Site.WENKU
+                 || parse.siteID == Site.formString("MYBEST")
+                 || parse.siteID == Site.formString("WENKU")
                  */ ) {
                 // 下載資料夾只建立一層: 指定下載資料夾 / 標題名稱 /
                 parse.setDownloadDirectory( SetUp.getOriginalDownloadDirectory()
@@ -247,24 +247,24 @@ public class RunModule {
 
     // 此任務是否為小說網站
     public static boolean isNovelSite( Site siteID ) {
-        if ( siteID == Site.CK_NOVEL
-            || siteID == Site.EYNY_NOVEL
-            || siteID == Site.WIKI
-            || siteID == Site.MYBEST
-            || siteID == Site.WENKU
-            || siteID == Site.TIANYA_BOOK
-            || siteID == Site.EIGHT_NOVEL
-            || siteID == Site.QQ_BOOK
-            || siteID == Site.QQ_ORIGIN_BOOK
-            || siteID == Site.SINA_BOOK
-            || siteID == Site.FIVEONE_CTO
-            || siteID == Site.UUS8
-            || siteID == Site.WENKU8
-            || siteID == Site.WENKU7
-            || siteID == Site.IFENG_BOOK
-            || siteID == Site.XUNLOOK
-            || siteID == Site.WOYOUXIAN
-            || siteID == Site.SHUNONG ) {
+        if ( siteID == Site.formString("CK_NOVEL")
+            || siteID == Site.formString("EYNY_NOVEL")
+            || siteID == Site.formString("WIKI")
+            || siteID == Site.formString("MYBEST")
+            || siteID == Site.formString("WENKU")
+            || siteID == Site.formString("TIANYA_BOOK")
+            || siteID == Site.formString("EIGHT_NOVEL")
+            || siteID == Site.formString("QQ_BOOK")
+            || siteID == Site.formString("QQ_ORIGIN_BOOK")
+            || siteID == Site.formString("SINA_BOOK")
+            || siteID == Site.formString("FIVEONE_CTO")
+            || siteID == Site.formString("UUS8")
+            || siteID == Site.formString("WENKU8")
+            || siteID == Site.formString("WENKU7")
+            || siteID == Site.formString("IFENG_BOOK")
+            || siteID == Site.formString("XUNLOOK")
+            || siteID == Site.formString("WOYOUXIAN")
+            || siteID == Site.formString("SHUNONG") ) {
             return true;
         }
         else {
@@ -274,10 +274,10 @@ public class RunModule {
 
     // 此任務是否為部落格網站
     public static boolean isBlogSite( Site siteID ) {
-        if ( siteID == Site.BLOGSPOT
-            || siteID == Site.PIXNET_BLOG
-            || siteID == Site.XUITE_BLOG
-            || siteID == Site.YAM_BLOG ) {
+        if ( siteID == Site.formString("BLOGSPOT")
+            || siteID == Site.formString("PIXNET_BLOG")
+            || siteID == Site.formString("XUITE_BLOG")
+            || siteID == Site.formString("YAM_BLOG") ) {
             return true;
         }
         else {
@@ -287,9 +287,9 @@ public class RunModule {
 
     // 此任務是否為音樂網站
     public static boolean isMusicSite( Site siteID ) {
-        if ( siteID == Site.SOGOU
-            || siteID == Site.TING1
-            || siteID == Site.XIAMI ) {
+        if ( siteID == Site.formString("SOGOU")
+            || siteID == Site.formString("TING1")
+            || siteID == Site.formString("XIAMI") ) {
             return true;
         }
         else {
@@ -299,34 +299,34 @@ public class RunModule {
 
     // 有些站在解析圖片網址的同時就在下載了，那就不用再進入到整本下載區
     public boolean isDownloadBefore( Site siteID ) {
-        if ( siteID == Site.EH
-            || siteID == Site.EX
-            || siteID == Site.JUMPCN
-            || siteID == Site.KUKU
-            || siteID == Site.DMEDEN
-            || siteID == Site.MANGAFOX
-            || siteID == Site.XINDM
-            || siteID == Site.WY
-            || siteID == Site.GOOGLE_PIC
-            || siteID == Site.CITY_MANGA
-            || siteID == Site.BAIDU
-            || siteID == Site.BENGOU
-            || siteID == Site.EMLAND
-            || siteID == Site.MOP
-            || siteID == Site.DM5
-            || siteID == Site.IASK
-            || siteID == Site.IMANHUA
-            || siteID == Site.VERYIM
-            || siteID == Site.SIX_MANGA
-            || siteID == Site.COMIC_131
-            || siteID == Site.XXBH
-            || siteID == Site.TWO_ECY
-            || siteID == Site.ONESEVEN_KK
-            || siteID == Site.FUMANHUA
-            || siteID == Site.CK 
-            || siteID == Site.PTT 
-            || siteID == Site.JM
-            || siteID == Site.IIBQ ) {
+        if ( siteID == Site.formString("EH")
+            || siteID == Site.formString("EX")
+            || siteID == Site.formString("JUMPCN")
+            || siteID == Site.formString("KUKU")
+            || siteID == Site.formString("DMEDEN")
+            || siteID == Site.formString("MANGAFOX")
+            || siteID == Site.formString("XINDM")
+            || siteID == Site.formString("WY")
+            || siteID == Site.formString("GOOGLE_PIC")
+            || siteID == Site.formString("CITY_MANGA")
+            || siteID == Site.formString("BAIDU")
+            || siteID == Site.formString("BENGOU")
+            || siteID == Site.formString("EMLAND")
+            || siteID == Site.formString("MOP")
+            || siteID == Site.formString("DM5")
+            || siteID == Site.formString("IASK")
+            || siteID == Site.formString("IMANHUA")
+            || siteID == Site.formString("VERYIM")
+            || siteID == Site.formString("SIX_MANGA")
+            || siteID == Site.formString("COMIC_131")
+            || siteID == Site.formString("XXBH")
+            || siteID == Site.formString("TWO_ECY")
+            || siteID == Site.formString("ONESEVEN_KK")
+            || siteID == Site.formString("FUMANHUA")
+            || siteID == Site.formString("CK") 
+            || siteID == Site.formString("PTT") 
+            || siteID == Site.formString("JM")
+            || siteID == Site.formString("IIBQ") ) {
             return true;
         }
         else if ( isNovelSite( siteID ) || isBlogSite( siteID ) || isMusicSite( siteID ) ) {
@@ -442,3 +442,5 @@ public class RunModule {
         }
     }
 }
+
+     

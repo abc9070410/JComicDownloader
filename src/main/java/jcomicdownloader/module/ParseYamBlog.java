@@ -35,7 +35,10 @@ public class ParseYamBlog extends ParsePixnetBlog {
      * @author user
      */
     public ParseYamBlog() {
-        siteID = Site.YAM_BLOG;
+        enumName = "YAM_BLOG";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("YAM_BLOG");
         siteName = "Yam Blog";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_yam_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_yam_encode_parse_", "html" );

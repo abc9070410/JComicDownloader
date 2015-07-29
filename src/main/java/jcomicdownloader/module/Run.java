@@ -142,7 +142,7 @@ public class Run extends Thread
         {
             ParseWebPage pw = new ParseWebPage( webSite );
             Site siteID = pw.getSiteID();
-            String parserName = siteID.getParserName();
+            String parserName = siteID.getParserName(); 
             if (parserName.equals(Site.UNKNOWN)){
                 Common.urlIsUnknown = true;
             }

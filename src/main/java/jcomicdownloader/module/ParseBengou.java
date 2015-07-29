@@ -32,7 +32,10 @@ public class ParseBengou extends ParseOnlineComicSite {
      * @author user
      */
     public ParseBengou() {
-        siteID = Site.BENGOU;
+        enumName = "BENGOU";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("BENGOU");
         siteName = "Bengou";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_bengou_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_bengou_encode_parse_", "html" );

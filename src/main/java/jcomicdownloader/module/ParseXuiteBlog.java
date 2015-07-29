@@ -32,7 +32,10 @@ public class ParseXuiteBlog extends ParsePixnetBlog {
      * @author user
      */
     public ParseXuiteBlog() {
-        siteID = Site.XUITE_BLOG;
+        enumName = "XUITE_BLOG";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("XUITE_BLOG");
         siteName = "Xuite Blog";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_xuite_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_xuite_encode_parse_", "html" );

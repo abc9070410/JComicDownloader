@@ -48,7 +48,7 @@ public class ParseWebPage
 
     private void parseSiteID()
     {
-        siteID = Site.detectSiteID(webSite);//Decouple to Site enum
+        this.siteID  = Site.detectSiteID(webSite);//Decouple to Site enum
         
         if (siteID == Site.UNKNOWN){
             Common.debugPrintln( "有未知的位址:" + webSite);

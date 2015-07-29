@@ -34,7 +34,10 @@ public class ParseNANA extends ParseOnlineComicSite {
      * @author user
      */
     public ParseNANA() {
-        siteID = Site.NANA;
+        enumName = "NANA";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NANA");
         siteName = "Nana";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_nana_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_nana_encode_parse_", "html" );

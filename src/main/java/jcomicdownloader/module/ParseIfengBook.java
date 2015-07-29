@@ -36,7 +36,10 @@ public class ParseIfengBook extends ParseEightNovel {
      @author user
      */
     public ParseIfengBook() {
-        siteID = Site.IFENG_BOOK;
+        enumName = "IFENG_BOOK";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("IFENG_BOOK");
         siteName = "ifengBook";
         pageExtension = "html"; // 網頁副檔名
         pageCode = Encoding.UTF8; // 網頁預設編碼

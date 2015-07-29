@@ -346,7 +346,10 @@ class Parse99Comic extends ParseNINENINE
     public Parse99Comic()
     {
         super();
-        siteID = Site.NINENINE_COMIC;
+        enumName = "NINENINE_COMIC";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_COMIC");
         siteName = "99 comic";
     }
 }
@@ -357,7 +360,10 @@ class Parse99MangaTC extends Parse99ComicTC
     public Parse99MangaTC()
     {
         super();
-        siteID = Site.NINENINE_MANGA_TC;
+        enumName = "NINENINE_MANGA_TC";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_MANGA_TC");
         siteName = "dm.99manga.com";
 
         baseURL = "http://dm.99manga.com";
@@ -503,7 +509,10 @@ class Parse99MangaWWW extends Parse99MangaTC
     public Parse99MangaWWW()
     {
         super();
-        siteID = Site.NINENINE_MANGA_WWW;
+        enumName = "NINENINE_MANGA_WWW";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_MANGA_WWW");
         siteName = "www.99manga.com";
 
         baseURL = "http://www.99manga.com";
@@ -582,7 +591,10 @@ class Parse99Manga extends ParseNINENINE
     public Parse99Manga()
     {
         super();
-        siteID = Site.NINENINE_MANGA;
+        enumName = "NINENINE_MANGA";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_MANGA");
         siteName = "99manga.com";
 
         baseURL = "http://99manga.com";
@@ -661,7 +673,10 @@ class Parse99ComicTC extends ParseCocoTC
     public Parse99ComicTC()
     {
         super();
-        siteID = Site.NINENINE_COMIC_TC;
+        enumName = "NINENINE_COMIC_TC";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_COMIC_TC");
         siteName = "www.99comic.com";
 
         jsURL = "http://www.99comic.com/script/viewhtml.js";
@@ -814,7 +829,10 @@ class ParseMh99770 extends ParseCocoTC
     public ParseMh99770()
     {
         super();
-        siteID = Site.NINENINE_MH_99770;
+        enumName = "NINENINE_MH_99770";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_MH_99770");
         siteName = "mh.99770.cc";
         jsURL = "http://mh.99770.cc/script/viewhtml.js";
     }
@@ -835,7 +853,10 @@ class Parse99770 extends ParseNINENINE
     public Parse99770()
     {
         super();
-        siteID = Site.NINENINE_99770;
+        enumName = "NINENINE_99770";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_99770");
     }
 }
 
@@ -845,7 +866,10 @@ class Parse99Mh extends ParseNINENINE
     public Parse99Mh()
     {
         super();
-        siteID = Site.NINENINE_MH;
+        enumName = "NINENINE_MH";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_MH");
         siteName = "99mh";
 
         jsURL = "http://99mh.com/script/ds.js";
@@ -1005,7 +1029,10 @@ class ParseCoco extends ParseNINENINE
     public ParseCoco()
     {
         super();
-        siteID = Site.NINENINE_COCO;
+        enumName = "NINENINE_COCO";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_COCO");
         siteName = "cococomic";
 
         jsURL = "http://cococomic.com/v3/i3.js";
@@ -1019,7 +1046,10 @@ class ParseCocoTC extends ParseNINENINE
     public ParseCocoTC()
     {
         super();
-        siteID = Site.NINENINE_COCO_TC;
+        enumName = "NINENINE_COCO_TC";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_COCO_TC");
         siteName = "www.cococomic.com";
 
         jsURL = "http://www.cococomic.com/script/ds.js";
@@ -1210,7 +1240,10 @@ class Parse1Mh extends Parse99ComicTC
     public Parse1Mh()
     {
         super();
-        siteID = Site.NINENINE_1MH;
+        enumName = "NINENINE_1MH";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_1MH");
         siteName = "1mh.com";
 
         baseURL = "http://1mh.com";
@@ -1237,7 +1270,10 @@ class Parse3G extends ParseNINENINE
     public Parse3G()
     {
         super();
-        siteID = Site.NINENINE_3G;
+        enumName = "NINENINE_3G";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("NINENINE_3G");
         siteName = "3G";
     }
 

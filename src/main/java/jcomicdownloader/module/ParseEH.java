@@ -42,7 +42,10 @@ public class ParseEH extends ParseOnlineComicSite {
      * @author user
      */
     public ParseEH() {
-        siteID = Site.EH;
+        enumName = "EH";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("EH");
         siteName = "EH";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_e_Hentai_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_e_Hentai_encode_parse_", "html" );
@@ -295,11 +298,11 @@ public class ParseEH extends ParseOnlineComicSite {
         if ( "".equals( titleString ) ) {
             beginIndex = allPageString.indexOf( "<title>" );
             beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
-            if ( siteID == Site.EH ) {
+//            if ( siteID == Site.EH ) {
                 endIndex = allPageString.indexOf( "E-Hentai", beginIndex ) - 3;
-            } else if ( siteID == Site.EX ) {
-                endIndex = allPageString.indexOf( "ExHentai", beginIndex ) - 3;
-            }
+//            } else if ( siteID == Site.EX ) {
+//                endIndex = allPageString.indexOf( "ExHentai", beginIndex ) - 3;
+//            }
             
             titleString = allPageString.substring( beginIndex, endIndex );
         }
@@ -395,7 +398,10 @@ class ParseEX extends ParseEH {
 
     public ParseEX() {
         super();
-        siteID = Site.EX;
+        enumName = "EX";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("EX");
         siteName = "EX";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_ex_Hentai_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_ex_Hentai_encode_parse_", "html" );

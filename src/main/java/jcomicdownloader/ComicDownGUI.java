@@ -442,7 +442,7 @@
  * and open the template in the editor.
  */
 package jcomicdownloader;
-
+import java.util.Arrays;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -562,7 +562,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
     public ComicDownGUI() {
         super(versionString);
-
+        EnumGenerator.addSiteEnums();
         Common.setHttpProxy(); // 設置代理伺服器
 
         minimizeEvent();

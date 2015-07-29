@@ -35,7 +35,10 @@ public class ParseCC extends ParseOnlineComicSite {
      @author user
      */
     public ParseCC() {
-        siteID = Site.CC;
+        enumName = "CC";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("CC");
         siteName = "CC";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kuku_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kuku_encode_parse_", "html" );

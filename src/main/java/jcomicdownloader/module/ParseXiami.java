@@ -34,7 +34,10 @@ public class ParseXiami extends ParseSogou
      */
     public ParseXiami()
     {
-        siteID = Site.XIAMI;
+        enumName = "XIAMI";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("XIAMI");
         siteName = "xiami";
         pageExtension = "html";
         pageCode = Encoding.UTF8;

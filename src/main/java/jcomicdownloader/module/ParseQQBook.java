@@ -36,7 +36,10 @@ public class ParseQQBook extends ParseEightNovel {
     @author user
      */
     public ParseQQBook() {
-        siteID = Site.QQ_BOOK;
+        enumName = "QQ_BOOK";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("QQ_BOOK");
         siteName = "QQBook";
         pageExtension = "shtml"; // 網頁副檔名
         pageCode = Encoding.GB2312; // 網頁預設編碼
@@ -204,7 +207,10 @@ class ParseQQOriginBook extends ParseQQBook {
     @author user
      */
     public ParseQQOriginBook() {
-        siteID = Site.QQ_ORIGIN_BOOK;
+        enumName = "QQ_ORIGIN_BOOK";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("QQ_ORIGIN_BOOK");
         siteName = "QQOriginBook";
         pageExtension = "html"; // 網頁副檔名
         pageCode = Encoding.GB2312; // 網頁預設編碼

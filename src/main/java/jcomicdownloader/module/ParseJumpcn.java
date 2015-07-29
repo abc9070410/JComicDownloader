@@ -31,7 +31,10 @@ public class ParseJumpcn extends ParseOnlineComicSite {
      * @author user
      */
     public ParseJumpcn() {
-        siteID = Site.JUMPCN;
+        enumName = "JUMPCN";
+		parserName=this.getClass().getName();
+
+		siteID=Site.formString("JUMPCN");
         siteName = "JumpCN";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_jumpcn_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_jumpcn_encode_parse_", "html" );

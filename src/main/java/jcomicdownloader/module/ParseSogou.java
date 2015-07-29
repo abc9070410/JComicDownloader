@@ -33,7 +33,9 @@ public class ParseSogou extends ParseOnlineComicSite
      */
     public ParseSogou()
     {
-        siteID = Site.SOGOU;
+        enumName = "SOGOU";
+	parserName=this.getClass().getName();
+        siteID=Site.formString("SOGOU");
         siteName = "sogou";
         pageExtension = "html";
         pageCode = Encoding.GB2312;
