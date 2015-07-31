@@ -2734,7 +2734,7 @@ public class Common
                 connection.setRequestProperty( "Cookie", cookieString );
             }
 
-            if (isGUI) ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
+            if (Common.withGUI()) ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
 
             //tryConnect( connection );
 
