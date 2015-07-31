@@ -542,7 +542,8 @@ public class Common
         // downlaod file by URL
 
         int fileGotSize = 0;
-
+        boolean isGUI = Common.withGUI();
+        
         if ( CommonGUI.stateBarDetailMessage == null )
         {
             CommonGUI.stateBarMainMessage = "下載網頁進行分析 : ";
@@ -554,7 +555,7 @@ public class Common
             try
             {
 
-                ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
+                if ( isGUI ) ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
                 
                 trustHTTPS();
 
@@ -745,7 +746,7 @@ public class Common
                 os.flush();
                 os.close();
 
-                if ( Common.withGUI() )
+                if ( isGUI )
                 {
                     ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
                             + CommonGUI.stateBarDetailMessage
@@ -2733,7 +2734,7 @@ public class Common
                 connection.setRequestProperty( "Cookie", cookieString );
             }
 
-            ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
+            if (isGUI) ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
 
             //tryConnect( connection );
 
