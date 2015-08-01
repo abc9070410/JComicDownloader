@@ -262,19 +262,9 @@ public class ParseEC extends ParseOnlineComicSite {
         System.out.println( "| Run the 8comic module: " );
         System.out.println( "|______________________________\n" );
         
-        checkJar();
+        checkJsoupJar();
     }
     
-    private void checkJar()
-    {
-        try{
-            Class.forName("org.jsoup.Jsoup",false, this.getClass().getClassLoader());                    
-        }catch(ClassNotFoundException e){
-            String jarFileName = "jsoup-1.8.2.jar";
-            Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
-        }
-    }
-
     @Override
     public String getMainUrlFromSingleVolumeUrl( String volumeURL ) {
         throw new UnsupportedOperationException( "Not supported yet." );

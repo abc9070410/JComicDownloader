@@ -180,7 +180,16 @@ abstract public class ParseOnlineComicSite {
             Common.deleteFile( SetUp.getTempDirectory(), tempFileNames[i] );
         }
     }
-
+    
+    protected void checkJsoupJar()
+    {
+        try{
+            Class.forName("org.jsoup.Jsoup",false, this.getClass().getClassLoader());                    
+        }catch(ClassNotFoundException e){
+            String jarFileName = "jsoup-1.8.2.jar";
+            Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
+        }
+    }
     public String fixSpecialCase( String url ) {
         /*
          拿掉修正似乎就沒有問題了......奇怪當初怎麼需要修正勒..... //
