@@ -15,6 +15,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import jcomicdownloader.SetUp;
+import jcomicdownloader.encode.NewEncoding;
 import jcomicdownloader.enums.Site;
 import jcomicdownloader.tools.Common;
 
@@ -137,12 +138,12 @@ public class ParseTUKU extends ParseOnlineComicSite {
     @Override
     public String getAllPageString( String urlString ) {
         String indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_tuku_", "html" );
-        String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_tuku_encode_", "html" );
+//        String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_tuku_encode_", "html" );
 
         Common.downloadFile( urlString, SetUp.getTempDirectory(), indexName, false, "" );
-        Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName );
+//        Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName );
 
-        return Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
+        return Common.getFileString( SetUp.getTempDirectory(), indexName );
     }
 
     @Override
@@ -170,12 +171,11 @@ public class ParseTUKU extends ParseOnlineComicSite {
     
     @Override
     public String getTitleOnMainPage( String urlString, String allPageString ) {
-        int beginIndex = allPageString.indexOf( "<strong>" );
+        int beginIndex = allPageString.indexOf( "<title>" );
         beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
-        int endIndex = allPageString.indexOf( "</strong>", beginIndex );
+        int endIndex = allPageString.indexOf( "_", beginIndex );
         String title = allPageString.substring( beginIndex, endIndex ).trim();
-
-        return Common.getStringRemovedIllegalChar( Common.getTraditionalChinese( title ) );
+        return Common.getStringRemovedIllegalChar( NewEncoding.StoT(title));
     }
 
     @Override
@@ -185,41 +185,18 @@ public class ParseTUKU extends ParseOnlineComicSite {
         List<List<String>> combinationList = new ArrayList<List<String>>();
         List<String> urlList = new ArrayList<String>();
         List<String> volumeList = new ArrayList<String>();
-
-        int beginIndex = allPageString.indexOf( "class=\"ms_box2\"" );
-        int endIndex = allPageString.indexOf( "</table>", beginIndex );
-
-        String tempString = allPageString.substring( beginIndex, endIndex );
-
-        int volumeCount = tempString.split( "vAlign=middle" ).length - 1;
-
-        String volumeTitle = "";
-        beginIndex = endIndex = 0;
-        for ( int i = 0; i < volumeCount; i++ ) {
-            // 取得單集名稱
-            beginIndex = tempString.indexOf( "vAlign=middle", beginIndex );
-            beginIndex = tempString.indexOf( ">", beginIndex ) + 1;
-
-            // 檢查集數名稱最前面有沒有「.」，若有就拿掉
-            if ( "・".equals( tempString.substring( beginIndex, beginIndex + 1 ) ) ) {
-                beginIndex++;
-            }
-
-            endIndex = tempString.indexOf( "<", beginIndex );
-            volumeTitle = tempString.substring( beginIndex, endIndex );
-            volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
-                Common.getTraditionalChinese( volumeTitle.trim() ) ) ) );
-
-
-            // 取得單集位址
-            beginIndex = tempString.indexOf( "href", beginIndex );
-            beginIndex = tempString.indexOf( "'", beginIndex ) + 1;
-            endIndex = tempString.indexOf( "'", beginIndex );
-            urlList.add( urlString + tempString.substring( beginIndex, endIndex ) );
-
+        String baseURL = urlString.split("/")[0] +"//"+urlString.split("/")[2];
+        org.jsoup.nodes.Document doc= org.jsoup.Jsoup.parse(allPageString);
+        org.jsoup.nodes.Element div = doc.getElementById("charpter_content");
+        org.jsoup.select.Elements li = div.getElementsByTag("li");
+        for (org.jsoup.nodes.Element e: li){
+            String volumeTitle =  e.getElementsByClass("t").get(0).text();
+            String volumeUrl =  e.getElementsByTag("a").get(0).attr("href");
+            volumeList.add(volumeTitle);
+            urlList.add(baseURL+volumeUrl);            
         }
-
-        totalVolume = volumeCount;
+                
+        totalVolume =volumeList.size();
         Common.debugPrintln( "共有" + totalVolume + "集" );
 
         combinationList.add( volumeList );
