@@ -57,25 +57,42 @@ public class TestURL {
 
     public TestURL(Integer i,String url, String mod) {
         this.url = url;
-        this.mod = mod;;        
-        Run.isAlive=true;// tweak for no download
-        Common.consoleThreadName= Thread.currentThread().getName(); // tweak for no GUI
+        this.mod = mod;;     
+        
+        noGuiTweak:{ //just a label
+            Run.isAlive=true;// tweak for no download
+            Common.consoleThreadName= Thread.currentThread().getName(); 
+        }
+        
         Common.debugPrintln("-----------------"+i+"--------------------");
         try{
             this.s=(ParseOnlineComicSite)Class.forName(mod).newInstance(); 
-            this.s.setURL(url);// will fail if not set in some case , i think it is a bug       
+            ignoreBug_001:{// will fail if not set in some case 
+                this.s.setURL(url);      
+            }
         }catch(Exception x){
-            this.s=null;
+            s=null;
             fail("Module "+mod+" has exception : "+x.getMessage());           
         }
     }
 
-        
-    @org.junit.Test
+    @org.junit.Test 
+    public void test000Run() {
+        RunModule r =new RunModule();
+//        try{ 
+            r.runMainProcess(s, url);
+//        }catch(Exception e){
+//         fail(e.toString());
+//        }     
+    }
+    
+    @org.junit.Ignore 
+    @org.junit.Test 
     public void test001Url() {
         assertTrue(mod,s.canParserHandle(url));
     }
     
+    @org.junit.Ignore
     @org.junit.Test
     public void test002setParameters() {
         try{
@@ -86,12 +103,14 @@ public class TestURL {
         }
     }
     
+    @org.junit.Ignore   
     @org.junit.Test
     public void test003getAllPageString() {    
         String allPageString = s.getAllPageString(url);
         assertNotNull(allPageString);
     }
     
+    @org.junit.Ignore    
     @org.junit.Test
     public void test004getTitleOnMainPage() {
         String allPageString = s.getAllPageString(url); 
