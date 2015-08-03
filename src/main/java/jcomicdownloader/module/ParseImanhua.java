@@ -32,7 +32,11 @@ public class ParseImanhua extends ParseOnlineComicSite {
     @author user
      */
     public ParseImanhua() {
-        siteID = Site.IMANHUA;
+        regexs= new String[]{"(?s).*imanhua.com(?s).*"};
+        enumName = "IMANHUA";
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("IMANHUA");
         siteName = "Imanhua";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_imanhua_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_imanhua_encode_parse_", "html" );

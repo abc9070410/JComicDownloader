@@ -34,7 +34,11 @@ public class ParseXiami extends ParseSogou
      */
     public ParseXiami()
     {
-        siteID = Site.XIAMI;
+        regexs= new String[]{"(?s).*xiami.com/(?s).*"};
+        enumName = "XIAMI";
+        parserName=this.getClass().getName();
+        musicSite = true;
+        siteID=Site.formString("XIAMI");
         siteName = "xiami";
         pageExtension = "html";
         pageCode = Encoding.UTF8;

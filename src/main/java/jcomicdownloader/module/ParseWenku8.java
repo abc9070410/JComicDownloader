@@ -40,7 +40,13 @@ public class ParseWenku8 extends ParseEightNovel {
      * @author user
      */
     public ParseWenku8() {
-        siteID = Site.WENKU8;
+        enumName = "WENKU8";
+        regexs= new String[]{"(?s).*wenku8.cn/modules/article/reader.php(?s).*" 
+                ,"(?s).*wenku8.cn/novel/(?s).*"
+                ,"(?s).*wenku8.cn/modules/article/articleinfo.php(?s).*"};
+	parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("WENKU8");
         siteName = "wenku8";
         pageExtension = "htm"; // 網頁副檔名
         pageCode = Encoding.GBK; // 網頁預設編碼

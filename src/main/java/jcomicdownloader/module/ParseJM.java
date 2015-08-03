@@ -34,7 +34,11 @@ public class ParseJM extends ParseOnlineComicSite
      */
     public ParseJM()
     {
-        siteID = Site.JM;
+        regexs= new String[]{"(?s).*jmymh.com(?s).*"};
+        enumName = "JM";
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+	siteID=Site.formString("JM");
         siteName = "JM";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_jm_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_jm_encode_parse_", "html" );

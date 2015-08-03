@@ -32,7 +32,10 @@ public class ParseIshuhui extends ParseOnlineComicSite {
      @author user
      */
     public ParseIshuhui() {
-        siteID = Site.ISHUHUI;
+        enumName = "ISHUHUI";
+        parserName=this.getClass().getName();
+        regexs= new String[] {"(?s).*ishuhui.com(?s).*"};
+        siteID=Site.formString("ISHUHUI");
         siteName = "ishuhui";
         pageExtension = "htm";
         pageCode = Encoding.UTF8;

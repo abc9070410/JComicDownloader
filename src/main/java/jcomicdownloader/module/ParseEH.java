@@ -36,14 +36,20 @@ public class ParseEH extends ParseOnlineComicSite {
     protected String cookieString; // cookie要設定的參數
     protected String baseSiteURL; // 父目錄位址
     protected String collectionMainTitle; // 一次擷取整頁時的集合名稱
+    
 
     /**
      *
      * @author user
      */
     public ParseEH() {
-        siteID = Site.EH;
+        enumName = "EH";
+        regexs= new String[]{"(?s).*e-hentai(?s).*" };
+        downloadBefore=true;
+        parserName=this.getClass().getName();
         siteName = "EH";
+        siteID=Site.formString("EH");
+
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_e_Hentai_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_e_Hentai_encode_parse_", "html" );
         onePagePicCount = 40; // 40 pics on every page
@@ -295,11 +301,11 @@ public class ParseEH extends ParseOnlineComicSite {
         if ( "".equals( titleString ) ) {
             beginIndex = allPageString.indexOf( "<title>" );
             beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
-            if ( siteID == Site.EH ) {
+//            if ( siteID == Site.EH ) {
                 endIndex = allPageString.indexOf( "E-Hentai", beginIndex ) - 3;
-            } else if ( siteID == Site.EX ) {
-                endIndex = allPageString.indexOf( "ExHentai", beginIndex ) - 3;
-            }
+//            } else if ( siteID == Site.EX ) {
+//                endIndex = allPageString.indexOf( "ExHentai", beginIndex ) - 3;
+//            }
             
             titleString = allPageString.substring( beginIndex, endIndex );
         }
@@ -389,94 +395,5 @@ public class ParseEH extends ParseOnlineComicSite {
     @Override
     public String getMainUrlFromSingleVolumeUrl( String volumeURL ) {
         throw new UnsupportedOperationException( "Not supported yet." );
-    }
-}
-class ParseEX extends ParseEH {
-
-    public ParseEX() {
-        super();
-        siteID = Site.EX;
-        siteName = "EX";
-        indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_ex_Hentai_parse_", "html" );
-        indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_ex_Hentai_encode_parse_", "html" );
-
-        needCookie = true;
-        /*
-        int memberID = 0;
-        if ( SetUp.getEhMemberID() != 0 )
-        memberID = SetUp.getEhMemberID();
-        else
-        memberID = (int) ( Math.random() * 789000 + 100 );
-         */
-
-        setIDandPasswordHash(); // 輸入id和hash並存入設定檔
-
-        cookieString = "ipb_member_id=" + SetUp.getEhMemberID()
-                + ";ipb_pass_hash=" + SetUp.getEhMemberPasswordHash();
-        Common.debugPrintln( "使用的cookie: " + cookieString );
-
-        baseSiteURL = "http://exhentai.org";
-        collectionMainTitle = "EX-Hentai_Collection";
-    }
-
-    public ParseEX( String webSite, String titleName ) {
-        this();
-        this.webSite = webSite;
-        this.title = titleName;
-        //Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName );
-    }
-
-    public static void initialIDandPasswordHash() { // 重置id和hash並存入設定檔
-        SetUp.setEhMemberID( "0" );
-        SetUp.setEhMemberPasswordHash( "NULL" );
-        SetUp.writeSetFile(); // 將目前的設定存入設定檔（set.ini）
-    }
-
-    public void setIDandPasswordHash() { // 輸入id和hash並存入設定檔
-        enterMemberID(); // 輸入id
-        enterMemberPasswordHash(); // 輸入密碼hash
-        SetUp.writeSetFile(); // 將目前的設定存入設定檔（set.ini）
-    }
-
-    public void enterMemberID() { // 輸入id
-        if ( SetUp.getEhMemberID().equals( "0" ) || 
-            !SetUp.getEhMemberID().matches( "\\d+" )  ) {
-            CommonGUI.showInputDialogValue = "InitialValue";
-            String idString = CommonGUI.showInputDialog( ComicDownGUI.mainFrame,
-                    "請輸入e-hentai的ipb_member_id", "輸入視窗", JOptionPane.INFORMATION_MESSAGE );
-            
-            System.out.println( "輸入：" + idString );
-            if ( idString.matches( "\\d+" ) ) {
-                SetUp.setEhMemberID( idString );
-                //break;
-            } else {
-                CommonGUI.showMessageDialog( ComicDownGUI.mainFrame,
-                        "輸入錯誤！（必須全為數字），請重新輸入", "提醒訊息", JOptionPane.ERROR_MESSAGE );
-                return;
-            }
-        }
-    }
-
-    public void enterMemberPasswordHash() { // 輸入密碼hash
-        if ( SetUp.getEhMemberPasswordHash().equals( "NULL" ) || 
-                SetUp.getEhMemberPasswordHash().equals( "null" ) ||
-             SetUp.getEhMemberPasswordHash().equals( "InitialValue" ) ) {
-            CommonGUI.showInputDialogValue = "InitialValue";
-            String hashString = CommonGUI.showInputDialog( ComicDownGUI.mainFrame,
-                    "請輸入e-hentai的ipb_pass_hash", "輸入視窗", JOptionPane.INFORMATION_MESSAGE );
-            System.out.println( "輸入：" + hashString );
-            SetUp.setEhMemberPasswordHash( hashString );
-            
-        }
-    }
-
-    @Override
-    public String getAllPageString( String urlString ) {
-        String indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_EX_", "html" );
-        String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_EX_encode_", "html" );
-
-        Common.slowDownloadFile( urlString, SetUp.getTempDirectory(), indexName, 1000, true, cookieString );
-
-        return Common.getFileString( SetUp.getTempDirectory(), indexName );
     }
 }

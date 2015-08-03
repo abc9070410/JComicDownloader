@@ -36,7 +36,11 @@ public class ParseHH extends ParseOnlineComicSite {
      @author user
      */
     public ParseHH() {
-        siteID = Site.HH;
+        enumName = "HH";
+        parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*hhcomic.com(?s).*"
+                    ,"(?s).*3348.net(?s).*"};
+        siteID=Site.formString("HH");
         siteName = "HH";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_hh_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_hh_encode_parse_", "html" );

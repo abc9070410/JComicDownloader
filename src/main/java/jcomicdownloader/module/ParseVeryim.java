@@ -33,7 +33,11 @@ public class ParseVeryim extends ParseOnlineComicSite {
      @author user
      */
     public ParseVeryim() {
-        siteID = Site.VERYIM;
+        regexs= new String[]{"(?s).*veryim.com(?s).*" };
+        enumName = "VERYIM";
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("VERYIM");
         siteName = "Veryim";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_veryim_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_veryim_encode_parse_", "html" );

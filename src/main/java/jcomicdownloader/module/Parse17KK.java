@@ -33,7 +33,11 @@ public class Parse17KK extends ParseOnlineComicSite {
      @author user
      */
     public Parse17KK() {
-        siteID = Site.ONESEVEN_KK;
+        regexs= new String[]{"(?s).*17kk.cc/(?s).*"};
+        enumName = "ONESEVEN_KK";
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("ONESEVEN_KK");
         siteName = "17kk";
         pageExtension = "htm";
         pageCode = Encoding.GB2312;

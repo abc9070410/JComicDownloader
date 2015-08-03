@@ -38,7 +38,11 @@ public class ParseEynyNovel extends ParseCKNovel {
     @author user
      */
     public ParseEynyNovel() {
-        siteID = Site.EYNY_NOVEL;
+        regexs= new String[]{"(?s).*eyny.com(?s).*"};
+        enumName = "EYNY_NOVEL";        
+	parserName=this.getClass().getName();
+        novelSite=true;
+	siteID=Site.formString("EYNY_NOVEL");
         siteName = "EynyNovel";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_eyny_novel_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_eyny_novel_encode_parse_", "html" );

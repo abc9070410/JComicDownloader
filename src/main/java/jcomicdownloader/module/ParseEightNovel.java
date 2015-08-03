@@ -36,7 +36,11 @@ public class ParseEightNovel extends ParseOnlineComicSite {
      * @author user
      */
     public ParseEightNovel() {
-        siteID = Site.EIGHT_NOVEL;
+        regexs= new String[]{"(?s).*8novel.com/books/(?s).*"};
+        enumName = "EIGHT_NOVEL";
+	parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("EIGHT_NOVEL");
         siteName = "8Novel";
         pageExtension = "html"; // 網頁副檔名
         pageCode = Encoding.BIG5; // 網頁預設編碼

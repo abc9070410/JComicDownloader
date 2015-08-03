@@ -29,7 +29,11 @@ public class ParseEmland extends ParseOnlineComicSite {
      @author user
      */
     public ParseEmland() {
-        siteID = Site.EMLAND;
+        enumName = "EMLAND";
+	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*emland.net(?s).*" };
+        downloadBefore=true;
+        siteID=Site.formString("EMLAND");
         siteName = "Emland";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_emland_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_emland_encode_parse_", "html" );

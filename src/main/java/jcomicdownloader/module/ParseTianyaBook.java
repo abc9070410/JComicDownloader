@@ -41,7 +41,11 @@ public class ParseTianyaBook extends ParseEightNovel
      */
     public ParseTianyaBook()
     {
-        siteID = Site.UUS8;
+        enumName = "UUS8";
+	parserName=this.getClass().getName();
+        regexs=new String[]{"(?s).*tianyabook.com(?s).*"};
+        novelSite=true;
+	siteID=Site.formString("UUS8");
         siteName = "TianyaBook";
         pageExtension = "html"; // 網頁副檔名
         pageCode = Encoding.GB2312; // 網頁預設編碼

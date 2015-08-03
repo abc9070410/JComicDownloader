@@ -29,7 +29,11 @@ public class ParseCityManga extends ParseOnlineComicSite {
      * @author user
      */
     public ParseCityManga() {
-        siteID = Site.CITY_MANGA;
+        enumName = "CITY_MANGA";
+	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*citymanga.com(?s).*"};
+        downloadBefore=true;
+        siteID=Site.formString("CITY_MANGA");
         siteName = "CityManga";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_city_manga_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_city_manga_encode_parse_", "html" );

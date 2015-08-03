@@ -17,6 +17,7 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import jcomicdownloader.ComicDownGUI;
 import jcomicdownloader.SetUp;
@@ -31,7 +32,7 @@ import jcomicdownloader.tools.CommonGUI;
  */
 abstract public class ParseOnlineComicSite {
 
-    protected int siteID; // 網站編號
+    protected Site siteID; // 網站編號
     protected String siteName; // 網站名稱
     protected String pageExtension; // 網頁副檔名
     protected int pageCode; //  網頁預設編碼
@@ -50,6 +51,14 @@ abstract public class ParseOnlineComicSite {
     protected int runMode; // 只分析、只下載或分析加下載
     protected String textFilePath; // 小說檔案完整目錄位置，包含檔名（只有下載小說時才有用）
 
+    protected   String enumName;//for dynamic enum
+    protected   String parserName;//for dynamic enum
+    
+    protected   boolean novelSite = false;
+    protected   boolean musicSite = false;
+    protected   boolean blogSite = false;
+    protected   boolean downloadBefore = false;
+    
     abstract public void setParameters(); // 須取得title和wholeTitle（title可用getTitle()）
 
     abstract public void parseComicURL(); // 必須解析出下載位址並傳給comicURL
@@ -64,6 +73,25 @@ abstract public class ParseOnlineComicSite {
 
     abstract public String getMainUrlFromSingleVolumeUrl( String volumeURL ); // 由單集位址轉為全集位址
 
+    public   boolean isNovelSite(){ return novelSite; }
+    public   boolean isMusicSite(){ return musicSite; }
+    public   boolean isBlogSite(){ return blogSite; }
+    public   boolean isDownloadBefore(){ return downloadBefore; }
+   
+    public   String getParserName(){ return parserName; }   
+    public   String getEnumName(){ return enumName; }
+    
+    protected String[] regexs={};
+    
+    public boolean canParserHandle(String link){
+        
+        Common.debugPrintln(getEnumName()+" REGEX " + Arrays.deepToString(regexs));
+
+        for (String regex:regexs){
+            if (link.matches(regex)) return true;
+        }
+        return false;
+    }
     // 顯示目前解析的漫畫網站名稱
     public void printLogo() {
         System.out.println( " ______________________________" );
@@ -127,7 +155,7 @@ abstract public class ParseOnlineComicSite {
         return comicURL;
     }
 
-    public int getSiteID() {
+    public Site getSiteID() {
         return siteID;
     }
 
@@ -152,7 +180,16 @@ abstract public class ParseOnlineComicSite {
             Common.deleteFile( SetUp.getTempDirectory(), tempFileNames[i] );
         }
     }
-
+    
+    protected void checkJsoupJar()
+    {
+        try{
+            Class.forName("org.jsoup.Jsoup",false, this.getClass().getClassLoader());                    
+        }catch(ClassNotFoundException e){
+            String jarFileName = "jsoup-1.8.2.jar";
+            Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
+        }
+    }
     public String fixSpecialCase( String url ) {
         /*
          拿掉修正似乎就沒有問題了......奇怪當初怎麼需要修正勒..... //

@@ -935,7 +935,8 @@ public class OptionFrame extends JFrame implements MouseListener
             return index;
         }
         else
-        {
+        {   
+            if ("com.apple.laf.AquaLookAndFeel".equals(skinClassName)) return getSkinIndex("Default.Mac OS X");
             Common.errorReport( "超出範圍: " + index + " " + skinClassName );
             return 0;
         }

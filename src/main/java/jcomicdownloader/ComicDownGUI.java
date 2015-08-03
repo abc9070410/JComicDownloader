@@ -442,7 +442,7 @@
  * and open the template in the editor.
  */
 package jcomicdownloader;
-
+import java.util.Arrays;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -558,11 +558,10 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     private Run mainRun;
     private int nowDownloadMissionRow; // 目前正在進行下載的任務列的順序
     Dimension frameDimension;
-    public static final String versionString = "JComicDownloader v5.20.150726";//." + new SimpleDateFormat("yyMMddHHmmss").format(Calendar.getInstance().getTime());
+    public static final String versionString = "JComicDownloader v5.21.150729";//." + new SimpleDateFormat("yyMMddHHmmss").format(Calendar.getInstance().getTime());
 
     public ComicDownGUI() {
         super(versionString);
-
         Common.setHttpProxy(); // 設置代理伺服器
 
         minimizeEvent();
@@ -572,7 +571,11 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
         if (Common.isUnix()) {
             onlyDefaultSkinClassName = defaultSkinClassName = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-        } else {
+        }          else if(Common.isMac())
+        {
+            onlyDefaultSkinClassName = defaultSkinClassName  = "com.apple.laf.AquaLookAndFeel";
+        }
+        else{
             onlyDefaultSkinClassName = defaultSkinClassName = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
         }
 
@@ -628,6 +631,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
         // 檢查skin是否由外部jar支援，若是外部skin且沒有此jar，則下載
         CommonGUI.checkSkin();
+        EnumGenerator.addSiteEnums();// need place as late as possible parseSF problem
 
         //buildPreprocess(); // 開發階段的預先處理(目的是讓輸出的jar檔與版本一致)
     }

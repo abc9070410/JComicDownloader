@@ -48,7 +48,11 @@ public class ParseDM5 extends ParseOnlineComicSite
      */
     public ParseDM5()
     {
-        siteID = Site.DM5;
+        regexs= new String[]{"(?s).*dm5.com(?).*"};
+        enumName = "DM5";
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+        siteID=Site.formString("DM5");
         siteName = "dm5";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_dm5_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mop_dm5_parse_", "html" );

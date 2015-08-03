@@ -37,7 +37,15 @@ public class ParseCK extends ParseOnlineComicSite
      */
     public ParseCK()
     {
-        siteID = Site.CK;
+        regexs= new String[]{"(?s).*comic101.com(?s).*" 
+                    , "(?s).*comic.101.com(?s).*" 
+                    , "(?s).*mh.ck101.com(?s).*" 
+                    , "(?s).*comic.ck101.com(?s).*" 
+                    , "(?s).*.com/vols/\\d+/\\d+(?s).*" };
+        enumName = "CK";
+	parserName=this.getClass().getName();
+        downloadBefore=true;
+	siteID=Site.formString("CK");
         siteName = "CK101_Comic";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_ck_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_ck_encode_parse_", "html" );

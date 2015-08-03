@@ -38,7 +38,11 @@ public class ParseDmeden extends ParseOnlineComicSite {
      * @author user
      */
     public ParseDmeden() {
-        siteID = Site.DMEDEN;
+        enumName = "DMEDEN";
+	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*dmeden\\.(?s).*"};
+        downloadBefore=true;
+        siteID=Site.formString("DMEDEN");
         siteName = "Dmeden";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_dmeden_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_dmeden_encode_parse_", "html" );

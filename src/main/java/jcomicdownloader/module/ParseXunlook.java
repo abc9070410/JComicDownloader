@@ -35,7 +35,11 @@ public class ParseXunlook extends ParseEightNovel {
     @author user
      */
     public ParseXunlook() {
-        siteID = Site.XUNLOOK;
+        regexs= new String[]{"(?s).*xunlook.com/(?s).*"};
+        enumName = "XUNLOOK";
+	parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("XUNLOOK");
         siteName = "xunlook";
         pageExtension = "shtml"; // 網頁副檔名
         pageCode = Encoding.GB2312; // 網頁預設編碼

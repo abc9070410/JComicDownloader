@@ -29,7 +29,10 @@ public class ParseMangaWindow extends ParseOnlineComicSite {
      @author user
      */
     public ParseMangaWindow() {
-        siteID = Site.MANGA_WINDOW;
+        enumName = "MANGA_WINDOW";
+        parserName=this.getClass().getName();
+        regexs=new String[]{"(?s).*mangawindow.com(?s).*"};
+        siteID=Site.formString("MANGA_WINDOW");
         siteName = "Manga Window";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mangaWindow_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mangaWindow_encode_parse_", "html" );

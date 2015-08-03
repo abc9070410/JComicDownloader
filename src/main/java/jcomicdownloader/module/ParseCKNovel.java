@@ -39,7 +39,11 @@ public class ParseCKNovel extends ParseOnlineComicSite {
      * @author user
      */
     public ParseCKNovel() {
-        siteID = Site.CK_NOVEL;
+        enumName = "CK_NOVEL";
+        regexs= new String[]{"(?s).*ck101.com(?s).*"};
+	parserName=this.getClass().getName();
+        novelSite=true;
+	siteID=Site.formString("CK_NOVEL");
         siteName = "CK101_Novel";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_ck_novel_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_ck_novel_encode_parse_", "html" );

@@ -41,7 +41,11 @@ public class ParseBAIDU extends ParseOnlineComicSite {
      * @author user
      */
     public ParseBAIDU() {
-        siteID = Site.BAIDU;
+        enumName = "BAIDU";
+	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*baidu.com(?s).*"};
+        downloadBefore=true;
+	siteID=Site.formString("BAIDU");
         siteName = "Baidu";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_parse_", "html" );

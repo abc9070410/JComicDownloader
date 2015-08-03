@@ -32,7 +32,11 @@ public class Parse1Ting extends ParseSogou
      */
     public Parse1Ting()
     {
-        siteID = Site.TING1;
+        regexs= new String[]{"(?s).*1ting.com/(?s).*" };
+        enumName = "TING1";
+	parserName=this.getClass().getName();
+        musicSite=true;
+	siteID=Site.formString("TING1");
         siteName = "1ting";
         pageExtension = "html";
         pageCode = Encoding.UTF8;

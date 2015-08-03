@@ -31,7 +31,12 @@ public class ParseMyBest extends ParseCKNovel {
      * @author user
      */
     public ParseMyBest() {
-        siteID = Site.MYBEST;
+        regexs= new String[]{"(?s).*mybest.com(?s).*"
+                , "(?s).*catcatbox.com(?s).*" };
+        enumName = "MYBEST";
+	parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("MYBEST");
         siteName = "Mybest";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mybest_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mybest_encode_parse_", "html" );

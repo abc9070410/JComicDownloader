@@ -32,7 +32,11 @@ public class ParseBlogspot extends ParseOnlineComicSite {
      * @author user
      */
     public ParseBlogspot() {
-        siteID = Site.BLOGSPOT;
+        enumName = "BLOGSPOT";
+        parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*blogspot\\.(?s).*"};
+        blogSite=true;
+        siteID=Site.formString("BLOGSPOT");
         siteName = "BlogspotBlog";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_blogspot_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_blogspot_encode_parse_", "html" );

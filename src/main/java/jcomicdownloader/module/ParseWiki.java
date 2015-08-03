@@ -43,7 +43,11 @@ public class ParseWiki extends ParseCKNovel {
      * @author user
      */
     public ParseWiki() {
-        siteID = Site.WIKI;
+        enumName = "WIKI";
+        regexs= new String[]{"(?s).*wikipedia.org/(?s).*"};
+        parserName=this.getClass().getName();
+        novelSite=true;
+        siteID=Site.formString("WIKI");
         siteName = "Wiki";
         indexName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_wiki_parse_", "html");
         indexEncodeName = Common.getStoredFileName(SetUp.getTempDirectory(), "index_wiki_encode_parse_", "html");

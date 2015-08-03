@@ -33,7 +33,10 @@ public class ParseKKKMH extends ParseOnlineComicSite {
      * @author user
      */
     public ParseKKKMH() {
-        siteID = Site.KKKMH;
+        enumName = "KKKMH";
+        parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*kkkmh.com(?s).*"};
+        siteID=Site.formString("KKKMH");
         siteName = "kkkmh";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kkkmh_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_kkkmh_encode_parse_", "html" );
