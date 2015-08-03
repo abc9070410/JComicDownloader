@@ -142,6 +142,10 @@ public class SetUp
         {
             skinClassName = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
         }
+        else if(Common.isMac())
+        {
+            skinClassName = "com.apple.laf.AquaLookAndFeel";
+        }
         else
         {
             skinClassName = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";

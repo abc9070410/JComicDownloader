@@ -571,7 +571,11 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
         if (Common.isUnix()) {
             onlyDefaultSkinClassName = defaultSkinClassName = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-        } else {
+        }          else if(Common.isMac())
+        {
+            onlyDefaultSkinClassName = defaultSkinClassName  = "com.apple.laf.AquaLookAndFeel";
+        }
+        else{
             onlyDefaultSkinClassName = defaultSkinClassName = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
         }
 
