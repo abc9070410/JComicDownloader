@@ -113,8 +113,8 @@ public class ParseTUKU extends ParseOnlineComicSite {
  
         int p = 0; // 目前頁數
         for ( int i = 1; i <= totalPage && Run.isAlive; i++ ) {
-            comicURL[p++] = String.format("http://%s.%s.com/%s/%s/%s/%03d.%s", 
-            new Object[]{tokens[6],tokens[4],tokens[32],tokens[28],tokens[34],i,tokens[43]});
+            comicURL[p++] = String.format("http://%s.%s.com/%s/%s/%s/%03d.jpg", 
+            new Object[]{tokens[6],tokens[4],tokens[32],tokens[28],tokens[34],i});
             //Common.debugPrintln( p + " " + comicURL[p - 1] ); // debug
         }
 //        System.exit( 0 ); // debug
