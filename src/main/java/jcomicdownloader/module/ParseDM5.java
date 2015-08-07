@@ -1375,44 +1375,44 @@ public class ParseDM5 extends ParseOnlineComicSite
 //            return combinationList;
 //        }
 //
-//        String tempString = "";
-//        int beginIndex, endIndex;
-//
-//        List<List<String>> requestProperty = new ArrayList<List<String>>();
-//        List<String> keyList = new ArrayList<String>();
-//        List<String> valueList = new ArrayList<String>();
-//
-//        if ( allPageString.indexOf( "<div class=\"tsmy mato5" ) > 0 && 
-//                allPageString.indexOf( "id=\"checkAdult" ) == -1)
-//        {
-//            Common.debugPrintln( "此為限制漫畫，重新下載網頁" );
-//            keyList.add("Accept-Language");
-//            valueList.add("zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4");
-//            
-//            requestProperty.add(keyList);
-//            requestProperty.add(valueList);
-//
-//            Common.simpleDownloadFile( urlString, SetUp.getTempDirectory(), indexName, requestProperty );
-//
-//            allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
-//        }
-//        if ( allPageString.indexOf( "id=\"checkAdult" ) > 0 )
-//        {
-//            Common.debugPrintln( "此為限制漫畫，重新下載網頁" );
-//
-//            keyList.add("Cookie");
-//            valueList.add("isAdult=1");
-//            
-//            requestProperty.clear();
-//
-//            requestProperty.add(keyList);
-//            requestProperty.add(valueList);
-//
-//            Common.simpleDownloadFile( urlString, SetUp.getTempDirectory(), indexName, requestProperty );
-//
-//            allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
-//
-//        }
+        String tempString = "";
+        int beginIndex, endIndex;
+
+        List<List<String>> requestProperty = new ArrayList<List<String>>();
+        List<String> keyList = new ArrayList<String>();
+        List<String> valueList = new ArrayList<String>();
+
+        if ( allPageString.indexOf( "<div class=\"tsmy mato5" ) > 0 && 
+                allPageString.indexOf( "id=\"checkAdult" ) == -1)
+        {
+            Common.debugPrintln( "此為限制漫畫，重新下載網頁" );
+            keyList.add("Accept-Language");
+            valueList.add("zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4");
+            
+            requestProperty.add(keyList);
+            requestProperty.add(valueList);
+
+            Common.simpleDownloadFile( urlString, SetUp.getTempDirectory(), indexName, requestProperty );
+
+            allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
+        }
+        if ( allPageString.indexOf( "id=\"checkAdult" ) > 0 )
+        {
+            Common.debugPrintln( "此為限制漫畫，重新下載網頁" );
+
+            keyList.add("Cookie");
+            valueList.add("isAdult=1");
+            
+            requestProperty.clear();
+
+            requestProperty.add(keyList);
+            requestProperty.add(valueList);
+
+            Common.simpleDownloadFile( urlString, SetUp.getTempDirectory(), indexName, requestProperty );
+
+            allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
+
+        }
 //
 //        beginIndex = allPageString.indexOf( "id=\"cbc" );
 //        endIndex = allPageString.lastIndexOf( "id=\"cbc" );
@@ -1471,7 +1471,8 @@ public class ParseDM5 extends ParseOnlineComicSite
             this.title = doc.getElementsByTag("title").get(0).text();
             for  (org.jsoup.nodes.Element e : doc.getElementsByTag("item")){
                 volumeCount++;
-                volumeList.add(e.getElementsByTag("title").get(0).text());
+                volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
+                        Common.getTraditionalChinese( e.getElementsByTag("title").get(0).text().trim()))));
                 urlList.add( e.getElementsByTag("link").get(0).text());    
             }
         }catch(Exception ex){
