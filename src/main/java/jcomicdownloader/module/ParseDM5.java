@@ -770,14 +770,14 @@ public class ParseDM5 extends ParseOnlineComicSite
         Common.debugPrintln( "DM5_CID=" + cid );
 
         String dm5Key = "";
-        beginIndex = allPageString.indexOf( "eval(function" );
-        if ( beginIndex > 0 )
-        {
-            endIndex = allPageString.indexOf( "</script>", beginIndex );
-            tempString = allPageString.substring( beginIndex, endIndex );
-
-            dm5Key = getNewDM5Key( tempString ); // 取得dm5_key，或稱取得mkey
-        }
+//        beginIndex = allPageString.indexOf( "eval(function" );
+//        if ( beginIndex > 0 )
+//        {
+//            endIndex = allPageString.indexOf( "</script>", beginIndex );
+//            tempString = allPageString.substring( beginIndex, endIndex );
+//
+//            dm5Key = getNewDM5Key( tempString ); // 取得dm5_key，或稱取得mkey
+//        }
 
         Common.debugPrintln( "dm5_key = " + dm5Key );
 
@@ -795,11 +795,11 @@ public class ParseDM5 extends ParseOnlineComicSite
             {
                 comicDataURL[i] = frontURL;
             }
-
+//http://tel.dm5.com/m209176/chapterfun.ashx?cid=209176&page=1&key=&language=1&gtk=6
             // ex. /chapterimagefun.ashx?cid=55303&page=1&language=1&key=
-            comicDataURL[i] += "/chapterimagefun.ashx?cid="
+            comicDataURL[i] += "/chapterfun.ashx?cid="
                     + cid + "&page="
-                    + (i + 1) + "&language=1&key=" + dm5Key;
+                    + (i + 1) + "&key=&language=1&gtk=6";//&key=" + dm5Key;
 
             Common.debugPrintln( comicDataURL[i] );
         }
@@ -1359,111 +1359,124 @@ public class ParseDM5 extends ParseOnlineComicSite
     public List<List<String>> getVolumeTitleAndUrlOnMainPage( String urlString, String allPageString )
     {
         // combine volumeList and urlList into combinationList, return it.
+        checkJsoupJar();
 
         List<List<String>> combinationList = new ArrayList<List<String>>();
         List<String> urlList = new ArrayList<String>();
         List<String> volumeList = new ArrayList<String>();
         
-        if (needTsukkomiMode(urlString))
-        {
-            urlList.add( urlString );
-            volumeList.add( "dm5_tsukkomi" );
-            combinationList.add( volumeList );
-            combinationList.add( urlList );
+//        if (needTsukkomiMode(urlString))
+//        {
+//            urlList.add( urlString );
+//            volumeList.add( "dm5_tsukkomi" );
+//            combinationList.add( volumeList );
+//            combinationList.add( urlList );
+//
+//            return combinationList;
+//        }
+//
+//        String tempString = "";
+//        int beginIndex, endIndex;
+//
+//        List<List<String>> requestProperty = new ArrayList<List<String>>();
+//        List<String> keyList = new ArrayList<String>();
+//        List<String> valueList = new ArrayList<String>();
+//
+//        if ( allPageString.indexOf( "<div class=\"tsmy mato5" ) > 0 && 
+//                allPageString.indexOf( "id=\"checkAdult" ) == -1)
+//        {
+//            Common.debugPrintln( "此為限制漫畫，重新下載網頁" );
+//            keyList.add("Accept-Language");
+//            valueList.add("zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4");
+//            
+//            requestProperty.add(keyList);
+//            requestProperty.add(valueList);
+//
+//            Common.simpleDownloadFile( urlString, SetUp.getTempDirectory(), indexName, requestProperty );
+//
+//            allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
+//        }
+//        if ( allPageString.indexOf( "id=\"checkAdult" ) > 0 )
+//        {
+//            Common.debugPrintln( "此為限制漫畫，重新下載網頁" );
+//
+//            keyList.add("Cookie");
+//            valueList.add("isAdult=1");
+//            
+//            requestProperty.clear();
+//
+//            requestProperty.add(keyList);
+//            requestProperty.add(valueList);
+//
+//            Common.simpleDownloadFile( urlString, SetUp.getTempDirectory(), indexName, requestProperty );
+//
+//            allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
+//
+//        }
+//
+//        beginIndex = allPageString.indexOf( "id=\"cbc" );
+//        endIndex = allPageString.lastIndexOf( "id=\"cbc" );
+//        endIndex = allPageString.indexOf( "</ul>", endIndex );
+//
+//        // 存放集數頁面資訊的字串
+//        tempString = allPageString.substring( beginIndex, endIndex );
+//        
+//        Common.debugPrintln( tempString );
+//
+//        int volumeCount = tempString.split( "href=" ).length - 1;
+//
+//        String volumeTitle = "";
+//        beginIndex = endIndex = 0;
+//        String tempURL = "";
+//        int amountOfnonURL = 0;
+//        for ( int i = 0; i < volumeCount; i++ )
+//        {
+//            // 取得單集位址
+//            beginIndex = tempString.indexOf( "href=", beginIndex );
+//            beginIndex = tempString.indexOf( "\"", beginIndex ) + 1;
+//            endIndex = tempString.indexOf( "\"", beginIndex );
+//            tempURL = baseURL + tempString.substring( beginIndex, endIndex );
+//
+//            if ( tempURL.matches( ".*javascript:.*" ) )
+//            {
+//                amountOfnonURL++;
+//                beginIndex++;
+//            }
+//            else
+//            {
+//                urlList.add( tempURL );
+//
+//                // 取得單集名稱
+//                beginIndex = tempString.indexOf( "title=", beginIndex ) + 1;
+//                beginIndex = tempString.indexOf( "\"", beginIndex ) + 1;
+//                endIndex = tempString.indexOf( "\"", beginIndex );
+//                volumeTitle = tempString.substring( beginIndex, endIndex );
+//                
+//                // 當沒有標題名稱時，拿位址來充數
+//                if ( "".matches( volumeTitle ) )
+//                {
+//                    volumeTitle = "title_" + tempURL.replace( baseURL, "" );
+//                    Common.debugPrintln( "新的名稱: " + volumeTitle );
+//                }
+//
+//                volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
+//                        Common.getTraditionalChinese( volumeTitle.trim() ) ) ) );
+//            }
+//
+//        }
+        int volumeCount = 0;
 
-            return combinationList;
-        }
-
-        String tempString = "";
-        int beginIndex, endIndex;
-
-        List<List<String>> requestProperty = new ArrayList<List<String>>();
-        List<String> keyList = new ArrayList<String>();
-        List<String> valueList = new ArrayList<String>();
-
-        if ( allPageString.indexOf( "<div class=\"tsmy mato5" ) > 0 && 
-                allPageString.indexOf( "id=\"checkAdult" ) == -1)
-        {
-            Common.debugPrintln( "此為限制漫畫，重新下載網頁" );
-            keyList.add("Accept-Language");
-            valueList.add("zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4");
-            
-            requestProperty.add(keyList);
-            requestProperty.add(valueList);
-
-            Common.simpleDownloadFile( urlString, SetUp.getTempDirectory(), indexName, requestProperty );
-
-            allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
-        }
-        if ( allPageString.indexOf( "id=\"checkAdult" ) > 0 )
-        {
-            Common.debugPrintln( "此為限制漫畫，重新下載網頁" );
-
-            keyList.add("Cookie");
-            valueList.add("isAdult=1");
-            
-            requestProperty.clear();
-
-            requestProperty.add(keyList);
-            requestProperty.add(valueList);
-
-            Common.simpleDownloadFile( urlString, SetUp.getTempDirectory(), indexName, requestProperty );
-
-            allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
-
-        }
-
-        beginIndex = allPageString.indexOf( "id=\"cbc" );
-        endIndex = allPageString.lastIndexOf( "id=\"cbc" );
-        endIndex = allPageString.indexOf( "</ul>", endIndex );
-
-        // 存放集數頁面資訊的字串
-        tempString = allPageString.substring( beginIndex, endIndex );
-        
-        Common.debugPrintln( tempString );
-
-        int volumeCount = tempString.split( "href=" ).length - 1;
-
-        String volumeTitle = "";
-        beginIndex = endIndex = 0;
-        String tempURL = "";
-        int amountOfnonURL = 0;
-        for ( int i = 0; i < volumeCount; i++ )
-        {
-            // 取得單集位址
-            beginIndex = tempString.indexOf( "href=", beginIndex );
-            beginIndex = tempString.indexOf( "\"", beginIndex ) + 1;
-            endIndex = tempString.indexOf( "\"", beginIndex );
-            tempURL = baseURL + tempString.substring( beginIndex, endIndex );
-
-            if ( tempURL.matches( ".*javascript:.*" ) )
-            {
-                amountOfnonURL++;
-                beginIndex++;
+        try{
+            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.connect(urlString.replaceFirst("[.]com[/]manhua-", ".com/rss-")).cookie("Cookie", "isAdult=1").parser(org.jsoup.parser.Parser.xmlParser()).get();
+            this.title = doc.getElementsByTag("title").get(0).text();
+            for  (org.jsoup.nodes.Element e : doc.getElementsByTag("item")){
+                volumeCount++;
+                volumeList.add(e.getElementsByTag("title").get(0).text());
+                urlList.add( e.getElementsByTag("link").get(0).text());    
             }
-            else
-            {
-                urlList.add( tempURL );
-
-                // 取得單集名稱
-                beginIndex = tempString.indexOf( "title=", beginIndex ) + 1;
-                beginIndex = tempString.indexOf( "\"", beginIndex ) + 1;
-                endIndex = tempString.indexOf( "\"", beginIndex );
-                volumeTitle = tempString.substring( beginIndex, endIndex );
-                
-                // 當沒有標題名稱時，拿位址來充數
-                if ( "".matches( volumeTitle ) )
-                {
-                    volumeTitle = "title_" + tempURL.replace( baseURL, "" );
-                    Common.debugPrintln( "新的名稱: " + volumeTitle );
-                }
-
-                volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
-                        Common.getTraditionalChinese( volumeTitle.trim() ) ) ) );
-            }
-
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
-
         totalVolume = volumeCount;
         Common.debugPrintln( "共有" + totalVolume + "集" );
 
