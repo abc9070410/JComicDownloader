@@ -32,6 +32,10 @@ import jcomicdownloader.ComicDownGUI;
 import jcomicdownloader.Flag;
 import jcomicdownloader.SetUp;
 import jcomicdownloader.encode.Encoding;
+import jcomicdownloader.encode.NewEncoding;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 
 public class ParseDM5 extends ParseOnlineComicSite
 {
@@ -732,7 +736,10 @@ public class ParseDM5 extends ParseOnlineComicSite
     public void parseComicURL()
     { // parse URL and save all URLs in comicURL  //
         // 先取得前面的下載伺服器網址
-
+        CookieManager cm = new CookieManager();
+        cm.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cm);
+        
         String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
         Common.debugPrint( "開始解析這一集有幾頁 : " );
         
@@ -1472,7 +1479,7 @@ public class ParseDM5 extends ParseOnlineComicSite
             for  (org.jsoup.nodes.Element e : doc.getElementsByTag("item")){
                 volumeCount++;
                 volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
-                        Common.getTraditionalChinese( e.getElementsByTag("title").get(0).text().trim()))));
+                        NewEncoding.StoT(e.getElementsByTag("title").get(0).text().trim()))));
                 urlList.add( e.getElementsByTag("link").get(0).text());    
             }
         }catch(Exception ex){
