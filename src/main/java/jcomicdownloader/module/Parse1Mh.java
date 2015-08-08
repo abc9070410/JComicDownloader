@@ -20,7 +20,7 @@ public class Parse1Mh extends Parse99ComicTC
         parserName=this.getClass().getName();
         siteID=Site.formString("NINENINE_1MH");
         siteName = "1mh.com";
-
+        regexs =new String[]{"(?s).*1mh.com(?s).*"};
         baseURL = "http://1mh.com";
     }
 
