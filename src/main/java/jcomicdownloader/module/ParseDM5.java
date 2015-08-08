@@ -1489,7 +1489,7 @@ public class ParseDM5 extends ParseOnlineComicSite
 
         try{
             org.jsoup.nodes.Document doc = org.jsoup.Jsoup.connect(urlString.replaceFirst("[.]com[/]manhua-", ".com/rss-")).cookie("Cookie", "isAdult=1").parser(org.jsoup.parser.Parser.xmlParser()).get();
-            this.title = doc.getElementsByTag("title").get(0).text();
+            this.title = NewEncoding.StoT(doc.getElementsByTag("title").get(0).text());
             for  (org.jsoup.nodes.Element e : doc.getElementsByTag("item")){
                 volumeCount++;
                 volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
