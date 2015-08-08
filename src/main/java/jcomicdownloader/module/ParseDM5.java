@@ -36,6 +36,7 @@ import jcomicdownloader.encode.NewEncoding;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import javax.script.ScriptException;
 
 public class ParseDM5 extends ParseOnlineComicSite
 {
@@ -52,7 +53,7 @@ public class ParseDM5 extends ParseOnlineComicSite
      */
     public ParseDM5()
     {
-        regexs= new String[]{"(?s).*dm5.com(?).*"};
+        regexs= new String[]{"(?s).*dm5.com(?).*","(?s).*dm9.com(?).*"};
         enumName = "DM5";
 	parserName=this.getClass().getName();
         downloadBefore=true;
@@ -736,9 +737,9 @@ public class ParseDM5 extends ParseOnlineComicSite
     public void parseComicURL()
     { // parse URL and save all URLs in comicURL  //
         // 先取得前面的下載伺服器網址
-        CookieManager cm = new CookieManager();
+        CookieManager cm = new CookieManager();// try to use cookie hope to solve some problem
         cm.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        CookieHandler.setDefault(cm);
+        CookieHandler.setDefault(cm);       
         
         String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
         Common.debugPrint( "開始解析這一集有幾頁 : " );
@@ -777,14 +778,13 @@ public class ParseDM5 extends ParseOnlineComicSite
         Common.debugPrintln( "DM5_CID=" + cid );
 
         String dm5Key = "";
-//        beginIndex = allPageString.indexOf( "eval(function" );
-//        if ( beginIndex > 0 )
-//        {
-//            endIndex = allPageString.indexOf( "</script>", beginIndex );
-//            tempString = allPageString.substring( beginIndex, endIndex );
-//
-//            dm5Key = getNewDM5Key( tempString ); // 取得dm5_key，或稱取得mkey
-//        }
+        beginIndex = allPageString.indexOf( "eval(function" );
+        if ( beginIndex > 0 )
+        {
+            endIndex = allPageString.indexOf( "</script>", beginIndex );
+            tempString = allPageString.substring( beginIndex, endIndex );
+            dm5Key = getNewDM5Key( tempString ); // 取得dm5_key，或稱取得mkey
+        }
 
         Common.debugPrintln( "dm5_key = " + dm5Key );
 
@@ -806,7 +806,7 @@ public class ParseDM5 extends ParseOnlineComicSite
             // ex. /chapterimagefun.ashx?cid=55303&page=1&language=1&key=
             comicDataURL[i] += "/chapterfun.ashx?cid="
                     + cid + "&page="
-                    + (i + 1) + "&key=&language=1&gtk=6";//&key=" + dm5Key;
+                    + (i + 1) + "&key"+dm5Key+"&language=1&gtk=6";
 
             Common.debugPrintln( comicDataURL[i] );
         }
@@ -843,12 +843,13 @@ public class ParseDM5 extends ParseOnlineComicSite
 
                 for ( int i = 0; i < picURLs.length && Run.isAlive; i++ )
                 {
-                    if (isWrongPicName(picURLs[i]))
-                    {
-                        Common.debugPrintln("此為錯誤位址, 重新擷取");
-                        needChangeName = true;
-                        continue;
-                    }
+                    // new logic won't check now. because some photo name in chinese
+//                    if (isWrongPicName(picURLs[i]))
+//                    {
+//                        Common.debugPrintln("此為錯誤位址, 重新擷取");
+//                        needChangeName = true;
+//                        continue;
+//                    }
                     
                     //singlePageDownload(getTitle(), getWholeTitle(),
                     //        picURLs[i], totalPage, p + 1, 0);
@@ -907,35 +908,48 @@ public class ParseDM5 extends ParseOnlineComicSite
 
         String allPageString = Common.getFileString( SetUp.getTempDirectory(), dm5DataFileName );
 
-
-        // 取得網址的token 
-        // ex. png|pvalue|var|dm5imagefun|pix|10015|11|1_6059|2_2200|
-        //     3_1855|111728|tel||http|function|com|yourour||manhua21|
-        //     4_2658|for|10_7747|return|length|9_2296|6_2514|5_3750|8_8047|7_1301
-        int beginIndex = allPageString.indexOf( "'|" ) + 2;
-        int endIndex = allPageString.indexOf( "'.split", beginIndex );
-
-        String[] tokens = allPageString.substring( beginIndex, endIndex ).split( "\\|" );
-
-        Common.debugPrint( "網址Tokens: " );
-        for ( int i = 0; i < tokens.length; i++ )
-        {
-            Common.debugPrint( i + " [" + tokens[i] + "] " );
+        //use javascript agent
+        javax.script.ScriptEngineManager sem = new javax.script.ScriptEngineManager();
+        javax.script.ScriptEngine engine = sem.getEngineByName("js");
+        String js =allPageString.substring(5,allPageString.length()-2 );
+        String backURL="?";
+        try {
+            Object link;
+            engine.eval("abced="+js);
+            link=engine.eval("eval(abced)[0]");
+            backURL +=link.toString().split(".+[?]")[1];
+        } catch (ScriptException ex) {
+            Logger.getLogger(ParseDM5.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // 取得圖片位址?後面的部分 ( cid和key )
-        beginIndex = allPageString.indexOf( "'?" ) + 1;
-        endIndex = allPageString.indexOf( "'", beginIndex ) - 1;
-        String[] tempTokens = allPageString.substring( beginIndex, endIndex ).split( "|" );
-
-        String backURL = "";
-        Common.debugPrint( "\n網址後面部分的Token順序: " );
-        for ( int i = 0; i < tempTokens.length; i++ )
-        {
-            Common.debugPrint( " [" + tempTokens[i] + "] " );
-
-            backURL += getCorrespondingToken( tokens, tempTokens[i], -1 );
-        }
+//        // 取得網址的token 
+//        // ex. png|pvalue|var|dm5imagefun|pix|10015|11|1_6059|2_2200|
+//        //     3_1855|111728|tel||http|function|com|yourour||manhua21|
+//        //     4_2658|for|10_7747|return|length|9_2296|6_2514|5_3750|8_8047|7_1301
+//        int beginIndex = allPageString.indexOf( "'|" ) + 2;
+//        int endIndex = allPageString.indexOf( "'.split", beginIndex );
+//
+//        String[] tokens = allPageString.substring( beginIndex, endIndex ).split( "\\|" );
+//
+//        Common.debugPrint( "網址Tokens: " );
+//        for ( int i = 0; i < tokens.length; i++ )
+//        {
+//            Common.debugPrint( i + " [" + tokens[i] + "] " );
+//        }
+//
+//        // 取得圖片位址?後面的部分 ( cid和key )
+//        beginIndex = allPageString.indexOf( "'?" ) + 1;
+//        endIndex = allPageString.indexOf( "'", beginIndex ) - 1;
+//        String[] tempTokens = allPageString.substring( beginIndex, endIndex ).split( "|" );
+//
+//        String backURL = "";
+//        Common.debugPrint( "\n網址後面部分的Token順序: " );
+//        for ( int i = 0; i < tempTokens.length; i++ )
+//        {
+//            Common.debugPrint( " [" + tempTokens[i] + "] " );
+//
+//            backURL += getCorrespondingToken( tokens, tempTokens[i], -1 );
+//        }
         Common.debugPrintln( "\n網址後面部分" + backURL );
 
         return backURL;
