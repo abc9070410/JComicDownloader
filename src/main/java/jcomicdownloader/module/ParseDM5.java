@@ -804,7 +804,7 @@ public class ParseDM5 extends ParseOnlineComicSite
             }
 //http://tel.dm5.com/m209176/chapterfun.ashx?cid=209176&page=1&key=&language=1&gtk=6
             // ex. /chapterimagefun.ashx?cid=55303&page=1&language=1&key=
-            comicDataURL[i] += "/chapterfun.ashx?cid="
+            comicDataURL[i] += "/chapterimagefun.ashx?cid="
                     + cid + "&page="
                     + (i + 1) + "&key"+dm5Key+"&language=1&gtk=6";
 
@@ -908,15 +908,14 @@ public class ParseDM5 extends ParseOnlineComicSite
 
         String allPageString = Common.getFileString( SetUp.getTempDirectory(), dm5DataFileName );
 
-        //use javascript agent
+        //use javascript agent for jdk 1.7 later
         javax.script.ScriptEngineManager sem = new javax.script.ScriptEngineManager();
         javax.script.ScriptEngine engine = sem.getEngineByName("js");
-        String js =allPageString.substring(5,allPageString.length()-2 );
+        String js =allPageString.substring(5,allPageString.length()-2 );//remove "eval("  and  ")"
         String backURL="?";
         try {
-            Object link;
-            engine.eval("abced="+js);
-            link=engine.eval("eval(abced)[0]");
+            Object link= engine.eval("abced="+js+";eval(abced)[0]");
+//            link=engine.eval("eval(abced)[0]");
             backURL +=link.toString().split(".+[?]")[1];
         } catch (ScriptException ex) {
             Logger.getLogger(ParseDM5.class.getName()).log(Level.SEVERE, null, ex);
@@ -1485,13 +1484,10 @@ public class ParseDM5 extends ParseOnlineComicSite
 //            }
 //
 //        }
-        int volumeCount = 0;
-
         try{
             org.jsoup.nodes.Document doc = org.jsoup.Jsoup.connect(urlString.replaceFirst("[.]com[/]manhua-", ".com/rss-")).cookie("Cookie", "isAdult=1").parser(org.jsoup.parser.Parser.xmlParser()).get();
             this.title = NewEncoding.StoT(doc.getElementsByTag("title").get(0).text());
             for  (org.jsoup.nodes.Element e : doc.getElementsByTag("item")){
-                volumeCount++;
                 volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
                         NewEncoding.StoT(e.getElementsByTag("title").get(0).text().trim()))));
                 urlList.add( e.getElementsByTag("link").get(0).text());    
@@ -1499,7 +1495,7 @@ public class ParseDM5 extends ParseOnlineComicSite
         }catch(Exception ex){
             ex.printStackTrace();
         }
-        totalVolume = volumeCount;
+        totalVolume = volumeList.size();
         Common.debugPrintln( "共有" + totalVolume + "集" );
 
         combinationList.add( volumeList );
