@@ -20,7 +20,7 @@ import org.junit.rules.*;
  */
 @RunWith(value=Parameterized.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestParseComicURL {
+public class TestGetCidAndKey {
     @Rule 
     public TestRule watcher = new TestWatcher() {
         protected void starting(Description description) {
@@ -41,19 +41,25 @@ public class TestParseComicURL {
     public static Collection<Object[]> getParameters() {
         return Arrays.asList(
             new Object[][] {               
-                {0,"http://www.tuku.cc/comic/11977/c_67693/","GATE","jcomicdownloader.module.ParseTUKU"}
-                ,{6,"http://tel.dm5.com/m216410/","COMIC","jcomicdownloader.module.ParseDM5"}
+                //  {0,"http://www.comicvip.com/html/9718.html","jcomicdownloader.module.ParseEC"}
+                // ,{1,"http://manhua.dmzj.com/ganwumeixiaomai/","jcomicdownloader.module.Parse178"}
+                // ,{2,"http://comic.sfacg.com/HTML/GWMXM/","jcomicdownloader.module.ParseSF"}
+                // ,{3,"http://comic.kukudm.com/comiclist/1842/index.htm","jcomicdownloader.module.ParseKUKU"}
+                // ,{4,"http://comic.ck101.com/comic/18181","jcomicdownloader.module.ParseCK"}
+                // ,{5,"http://www.tuku.cc/comic/11977/","jcomicdownloader.module.ParseTUKU"} 
+                // ,
+                {6,"http:///tel.dm5.com/m216410/","jcomicdownloader.module.ParseDM5"}
             }
         );
     }
     
-    private final String url,mod,title;
+    private final String url,mod;
     private ParseOnlineComicSite s;
 
-    public TestParseComicURL(Integer i,String url,String title, String mod) {
+    public TestGetCidAndKey(Integer i,String url, String mod) {
         this.url = url;
         this.mod = mod;;     
-        this.title= title;
+        
         noGuiTweak:{ //just a label
             Run.isAlive=true;// tweak for no download
             Common.consoleThreadName= Thread.currentThread().getName(); 
@@ -63,9 +69,7 @@ public class TestParseComicURL {
         try{
             this.s=(ParseOnlineComicSite)Class.forName(mod).newInstance(); 
             ignoreBug_001:{// will fail if not set in some case 
-                this.s.setURL(url);   
-                this.s.setTitle(title);
-                this.s.setWholeTitle(title);
+                this.s.setURL(url);      
             }
         }catch(Exception x){
             s=null;
@@ -76,7 +80,8 @@ public class TestParseComicURL {
     @org.junit.Ignore    
     @org.junit.Test 
     public void test000Run() {
-        s.setParameters();
-        s.parseComicURL();
+        ((ParseDM5) s).getCidAndKey("http://tel.dm5.com/m216410/chapterfun.ashx?cid=216410&page=1&key=&language=1&gtk=6", url);
+                
     }
+    
 }
