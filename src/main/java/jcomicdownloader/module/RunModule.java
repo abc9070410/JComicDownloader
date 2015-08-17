@@ -205,8 +205,7 @@ public class RunModule {
                 }
             }
 
-
-            if ( new File( parse.getDownloadDirectory() ).exists() ) // 存在下載圖檔資料夾
+            if ( new File( parse.getDownloadDirectory() ).getAbsoluteFile().exists() ) // 存在下載圖檔資料夾
             {
                 followingWork( parse );
             }
@@ -349,7 +348,7 @@ public class RunModule {
         }
 
         //Common.debugPrintln( "將處理的壓縮檔名稱：" + file );
-        if ( new File( file ).exists() && new File( file ).length() > 1024 ) {
+        if ( new File( file ).getAbsoluteFile().exists() && new File( file ).length() > 1024 ) {
             Common.debugPrintln( file + "已經存在!" );
             return true;
         }
@@ -368,7 +367,7 @@ public class RunModule {
         }
 
         //Common.debugPrintln( "將處理的文件檔名稱：" + file );
-        if ( new File( file ).exists() && new File( file ).length() > 1024 ) {
+        if ( new File( file ).getAbsoluteFile().exists() && new File( file ).length() > 1024 ) {
             Common.debugPrintln( file + "已經存在!" );
             return true;
         }
@@ -422,7 +421,7 @@ public class RunModule {
                     if ( downloadPath.list().length < 1 ) {
                         Common.debugPrintln( "不產生壓縮檔（" + downloadPath.getAbsolutePath() + "資料夾內沒有任何檔案）" );
                     }
-                    else if ( zipFile.exists() && zipFile.length() > 1024 ) {
+                    else if ( zipFile.getAbsoluteFile().exists() && zipFile.length() > 1024 ) {
                         Common.debugPrintln( "不產生壓縮檔（" + zipFile.getAbsolutePath() + "已存在）" );
                     }
                     else {

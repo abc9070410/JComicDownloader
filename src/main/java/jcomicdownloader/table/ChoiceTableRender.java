@@ -127,8 +127,10 @@ public class ChoiceTableRender extends DefaultTableCellRenderer {
             cbzFile = new File( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".cbz" );
             rarFile = new File( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".rar" );
         }
-
-        if ( dirFile.exists() || zipFile.exists() || cbzFile.exists() || rarFile.exists() ) {
+        Common.debugPrint( "Exists check 1 :" +dirFile.exists());
+        Common.debugPrint( "Exists check 2 :" +dirFile.getAbsoluteFile().exists());
+        
+        if ( dirFile.getAbsoluteFile().exists() || zipFile.getAbsoluteFile().exists() || cbzFile.getAbsoluteFile().exists() || rarFile.getAbsoluteFile().exists() ) {
             return true;
         }
         else {

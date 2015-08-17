@@ -558,7 +558,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     private Run mainRun;
     private int nowDownloadMissionRow; // 目前正在進行下載的任務列的順序
     Dimension frameDimension;
-    public static final String versionString = "JComicDownloader v5.21.150808";//." + new SimpleDateFormat("yyMMddHHmmss").format(Calendar.getInstance().getTime());
+    public static final String versionString = "JComicDownloader v5.21.150817";//." + new SimpleDateFormat("yyMMddHHmmss").format(Calendar.getInstance().getTime());
 
     public ComicDownGUI() {
         super(versionString);
