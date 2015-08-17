@@ -20,6 +20,8 @@ import jcomicdownloader.enums.ChoiceTableEnum;
 import jcomicdownloader.frame.ChoiceFrame;
 import jcomicdownloader.tools.Common;
 import jcomicdownloader.tools.CommonGUI;
+import java.nio.file.*;
+
 
 /**
 
@@ -111,26 +113,25 @@ public class ChoiceTableRender extends DefaultTableCellRenderer {
     private boolean existsFileOnThisRow( int row ) {
         String volumeTitle = tableModel.getValueAt( row, ChoiceTableEnum.VOLUME_TITLE ).toString();
 
-        File dirFile = null;
-        File zipFile = null;
-        File cbzFile = null;
-        File rarFile = null;
+        String dirFile = null;
+        String zipFile = null;
+        String cbzFile = null;
+        String rarFile = null;
         if ( this.url.matches( "(?s).*hentai.org(?s).*" ) ) { // 讓EH和EX也能判斷是否已經下載
-            dirFile = new File( SetUp.getOriginalDownloadDirectory() + volumeTitle );
-            zipFile = new File( SetUp.getOriginalDownloadDirectory() + volumeTitle + ".zip" );
-            cbzFile = new File( SetUp.getOriginalDownloadDirectory() + volumeTitle + ".cbz" );
-            rarFile = new File( SetUp.getOriginalDownloadDirectory() + volumeTitle + ".rar" );
+            dirFile = ( SetUp.getOriginalDownloadDirectory() + volumeTitle );
+            zipFile = ( SetUp.getOriginalDownloadDirectory() + volumeTitle + ".zip" );
+            cbzFile = ( SetUp.getOriginalDownloadDirectory() + volumeTitle + ".cbz" );
+            rarFile = ( SetUp.getOriginalDownloadDirectory() + volumeTitle + ".rar" );
         }
         else {
-            dirFile = new File( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle );
-            zipFile = new File( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".zip" );
-            cbzFile = new File( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".cbz" );
-            rarFile = new File( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".rar" );
+            dirFile = ( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle );
+            zipFile = ( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".zip" );
+            cbzFile = ( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".cbz" );
+            rarFile = ( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".rar" );
         }
-        Common.debugPrint( "Exists check 1 :" +dirFile.exists());
-        Common.debugPrint( "Exists check 2 :" +dirFile.getAbsoluteFile().exists());
+        Common.debugPrintln( volumeTitle + " Exists check :" + Files.exists(Paths.get(dirFile)));
         
-        if ( dirFile.getAbsoluteFile().exists() || zipFile.getAbsoluteFile().exists() || cbzFile.getAbsoluteFile().exists() || rarFile.getAbsoluteFile().exists() ) {
+        if ( Files.exists(Paths.get(dirFile)) || Files.exists(Paths.get(zipFile)) ||  Files.exists(Paths.get(cbzFile)) || Files.exists(Paths.get(rarFile)) ) {
             return true;
         }
         else {
