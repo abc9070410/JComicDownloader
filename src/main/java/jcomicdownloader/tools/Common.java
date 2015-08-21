@@ -3155,7 +3155,13 @@ public class Common
     public static void downloadJarFiles( final String[] fileURL, final String[] fileName )
     {
         boolean backupValue = Run.isAlive; // 備份原值
-        String fileDir = Common.getNowAbsolutePath() + "lib" + Common.getSlash(); // 存於lib資料夾內
+        String dir = Common.getNowAbsolutePath();
+        
+        if (Common.runForDebug()) {
+            dir += "target" + Common.getSlash();
+        }
+        
+        String fileDir = dir + "lib" + Common.getSlash(); // 存於lib資料夾內
 
         Run.isAlive = true;
         for ( int i = 0; i < fileURL.length; i++ )
@@ -3178,6 +3184,32 @@ public class Common
             }
         } );
         downThread.start();
+    }
+    
+    public static Boolean runForDebug()
+    {
+        File nowDir = new File(Common.getNowAbsolutePath());
+        String[] filenames;
+        Boolean targetExisted = false;
+        Boolean pomExisted = false;
+        Boolean jarExisted = false;
+
+        if (nowDir.isDirectory()) {
+            filenames = nowDir.list();
+            for (int i = 0; i < filenames.length; i++) {
+                if (filenames[i].matches("target")) {
+                    targetExisted = true;
+                }
+                else if (filenames[i].matches("pom.xml")) {
+                    pomExisted = true;
+                }
+                else if (filenames[i].matches("(?s).*\\.jar")) {
+                    jarExisted = true;
+                }
+            }
+        }
+        
+        return targetExisted && targetExisted && !jarExisted;
     }
 
     public static void setMp3Tag( String filePath, String fileName, String[] tags )

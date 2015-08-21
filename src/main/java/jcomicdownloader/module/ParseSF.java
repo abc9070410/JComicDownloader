@@ -52,7 +52,7 @@ public class ParseSF extends ParseOnlineComicSite {
         
         pageBaseURL = "http://comic.sfacg.com/";
         
-        checkJar();
+        //checkJar(); -> main window would be always terminated soonly if the jar file is not found
         
     }
     
@@ -175,7 +175,7 @@ public class ParseSF extends ParseOnlineComicSite {
         int endIndex = allPageString.indexOf( ",", beginIndex );
         String title = allPageString.substring( beginIndex, endIndex );
         
-        System.out.println( "XXXX:" + title );
+        checkJsoupJar(); // check jar file when we add a new download mission
 
         return Common.getStringRemovedIllegalChar( Common.getTraditionalChinese( title ) );
     }
