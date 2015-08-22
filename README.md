@@ -2,9 +2,6 @@
 A tool for downloading online comics and light-novels from some China websites.
 ![Screenshot for the ComicDownGUI](../gh-pages/images/screenshot2.png)
 
-## Website
-https://sites.google.com/site/jcomicdownloader/
-
 ## Platform
 Any operating systems with a [Java Runtime Environment](https://java.com/zh_TW/download/) installed.
 
@@ -16,7 +13,8 @@ https://github.com/abc9070410/JComicDownloader/releases
 See [Building this project](../../wiki/Building-this-project).
 * Using Maven <br/>
 `mvn clean install`
-<br/>Files will be placed at output folder
+<br/>Files will be placed at output folder  
+See [How to build this project on command line in Windows](https://github.com/abc9070410/JComicDownloader/wiki/How-to-build-this-project-on-command-line-in-Windows)
 
 ## External Library
 * Zhcode <br/>
@@ -42,3 +40,4 @@ http://owlike.github.io/genson/
 ## License
 This software is released under a GNU General Public License version 3 license. <br/>
 See http://www.gnu.org/copyleft/gpl.html for more information.
+
