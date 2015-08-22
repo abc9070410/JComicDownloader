@@ -204,7 +204,11 @@ public class ChoiceFrame extends JFrame implements
         setRadioButtonUI( contentPane );
         setVolumeTableUI( contentPane );
         setButtonUI( contentPane );
-        CommonGUI.updateUI(contentPane);
+        
+        /* TO DO :
+        
+        CommonGUI.updateUI() could fix the issue that the ContentPane exists grey border in Mac OS X, but it would lead to the table render of Choice Frame does not work, like the font size and font color cannot be changed. */
+        //CommonGUI.updateUI(contentPane);
 
         setUpeListener();
     }
