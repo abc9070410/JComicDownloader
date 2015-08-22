@@ -71,10 +71,10 @@ public class ParseMangaFox extends ParseOnlineComicSite {
 
         String allPageString = getAllPageString( webSite );
         Common.debugPrint( "開始解析這一集有幾頁 : " );
-        int beginIndex = allPageString.indexOf( "</option>" );
-        beginIndex = allPageString.indexOf( "of ", beginIndex ) + 3;
-        int endIndex = allPageString.indexOf( "<", beginIndex );
-        totalPage = Integer.parseInt( allPageString.substring( beginIndex, endIndex ).trim() );
+        int beginIndex = allPageString.indexOf( "change_page(this)" );
+        int endIndex = allPageString.indexOf( "</select>", beginIndex );
+        Common.debugPrint( " : " +beginIndex + "," + endIndex );
+        totalPage = allPageString.substring( beginIndex, endIndex ).split("<option").length - 2;
         Common.debugPrintln( "共 " + totalPage + " 頁" );
         comicURL = new String[totalPage];
 
@@ -105,7 +105,7 @@ public class ParseMangaFox extends ParseOnlineComicSite {
     public String getAllPageString( String urlString ) {
         String indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_mangaFox_", "html" );
 
-        Common.downloadFile( urlString, SetUp.getTempDirectory(), indexName, false, "" );
+        Common.downloadGZIPInputStreamFile( urlString, SetUp.getTempDirectory(), indexName, false, "" );
 
         return Common.getFileString( SetUp.getTempDirectory(), indexName );
     }
@@ -159,8 +159,9 @@ public class ParseMangaFox extends ParseOnlineComicSite {
         }
         else {
 
-            int beginIndex = allPageString.indexOf( "<h3 " );
+            int beginIndex = allPageString.indexOf( "</h2><hr/>" );
             int endIndex = allPageString.indexOf( "id=\"discussion\"", beginIndex );
+
             String[] tokens = allPageString.substring( beginIndex, endIndex ).split( ">|<|\"" );
             int count = 0; // 計數用
             String currentVolume = "";
@@ -171,28 +172,30 @@ public class ParseMangaFox extends ParseOnlineComicSite {
                     currentVolume = tokens[i + 2];
                 }
 
-                if ( tokens[i].matches( "http://(?s).*" ) ) {
+                if ( tokens[i].matches( "http://mangafox.me/manga/(?s).*" ) ) {
                     // 取得單集位址
+                    String volumeUrl = tokens[i];
                     urlList.add( tokens[i] );
                 } else if ( tokens[i].matches( "tips" ) ) {
                     // 取得單集名稱
-                    volumeList.add( Common.getStringRemovedIllegalChar(
-                            currentVolume + " - " + tokens[i + 2].replaceAll( "\\.", "" ).trim() ) );
+                    String volumeTitle = Common.getStringRemovedIllegalChar(
+                            currentVolume + " - " + tokens[i + 2].replaceAll( "\\.", "" ).trim() );
+                    volumeList.add( volumeTitle );
 
                     count++;
                 }
-
 
                 if ( count >= totalVolume ) {
                     break;
                 }
             }
+            
+            Common.debugPrintln("Volume: " + volumeList.size());
+            Common.debugPrintln("Url: " + urlList.size());
 
             combinationList.add( volumeList );
             combinationList.add( urlList );
-
         }
-
 
         return combinationList;
     }
