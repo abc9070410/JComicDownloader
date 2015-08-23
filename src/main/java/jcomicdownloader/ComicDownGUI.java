@@ -8,6 +8,9 @@
  ----------------------------------------------------------------------------------------------------
  * 
  * ChangeLog:
+ 5.21:
+ 1. 讀取POM.properties的version。
+
  5.19:
  1. 修復baidu無法下載原始圖片的問題。
  2. 修復SFacg解析失敗的問題。
@@ -442,14 +445,16 @@
  * and open the template in the editor.
  */
 package jcomicdownloader;
-import java.util.Arrays;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Properties;
 import java.util.Vector;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -558,8 +563,40 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     private Run mainRun;
     private int nowDownloadMissionRow; // 目前正在進行下載的任務列的順序
     Dimension frameDimension;
-    public static final String versionString = "JComicDownloader v5.21.150822";// + new SimpleDateFormat("yyMMdd").format(Calendar.getInstance().getTime());
+    public static final String majorVersion = "v5.21";
+    public static final String versionString = "JComicDownloader "+ getPOMVersion();
+    
+    public static String getPOMVersion(){
+        String version;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+        try{
+            Properties props = new Properties();
+            props.load(ComicDownGUI.class.getResourceAsStream("/META-INF/maven/com.github.abc9070410/JComicDownloader/pom.properties"));
+            version = props.getProperty("version");
+        }catch(Exception ex){            
+            version = majorVersion + "."+getCompileDateString();
+        }
+        if (version.indexOf("SNAPSHOT")> 0){ //if snapshot add date form compiled time jar
+            version = version.replace("-", "."+ getCompileDateString() +"-");
+        }
+        return version;
+    }
+    
+    public static String getCompileDateString(){
+        String date="";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+        try{
+            JarFile jf = new JarFile( Common.getNowAbsolutePath() + Common.getThisFileName());
+            ZipEntry manifest = jf.getEntry("META-INF/MANIFEST.MF");           
+            date += sdf.format(manifest.getTime());
+        }catch(Exception ex){
+            date +=sdf.format(Calendar.getInstance().getTime());
+        }
+        return date;
+    }
+    
 
+    
     public ComicDownGUI() {
         super(versionString);
         Common.setHttpProxy(); // 設置代理伺服器
