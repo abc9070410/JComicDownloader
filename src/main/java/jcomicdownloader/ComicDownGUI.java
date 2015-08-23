@@ -3043,10 +3043,12 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         if (event.getSource() == button[ButtonEnum.INFORMATION]) { // button of Information
 
             // 若有反白任務，則嘗試開啟此任務的漫畫，若成功，就不再開啟資訊視窗。
-            if (viewMission()) {
-                return;
+            //if both program not set ,show information frame instead.
+            if(((SetUp.getOpenPicFileProgram() +SetUp.getOpenTextFileProgram()).trim().length())>0){
+                if (viewMission()) {
+                    return;
+                }
             }
-
             new Thread(new Runnable() {
 
                 public void run() {
