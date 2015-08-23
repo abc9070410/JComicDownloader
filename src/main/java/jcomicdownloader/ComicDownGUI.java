@@ -563,10 +563,10 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     private Run mainRun;
     private int nowDownloadMissionRow; // 目前正在進行下載的任務列的順序
     Dimension frameDimension;
-    public static final String majorVersion = "v5.21";
+    public static final String defaultMajorVersion = "v5.21";//if cannot read pom, will use this as major version
     public static final String versionString = "JComicDownloader "+ getPOMVersion();
     
-    public static String getPOMVersion(){
+    private static String getPOMVersion(){
         String version;
         try{
             Properties props = new Properties();
@@ -574,7 +574,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
             version = props.getProperty("version")+ "."+getCompileDateString();
         }catch(Exception e){
             Common.debugPrintln("Cannot read pom.properties, using current time instead");
-            version = majorVersion + "."+getCompileDateString();
+            version = defaultMajorVersion + "."+getCompileDateString();
         }
         if (version.indexOf("-SNAPSHOT")> 0){ //if snapshot add date form compiled time jar
             version = version.replace("-", "."+ getCompileDateString() +"-");
@@ -582,7 +582,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         return version;
     }
     
-    public static String getCompileDateString(){
+    private static String getCompileDateString(){
         String date="";
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         try{
@@ -605,7 +605,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         minimizeEvent();
         inittrayIcon();
 
-        mainFrame = this; // for change look and feel
+        mainFrame = (this); // for change look and feel
 
         if (Common.isUnix()) {
             onlyDefaultSkinClassName = defaultSkinClassName = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
@@ -669,7 +669,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
         // 檢查skin是否由外部jar支援，若是外部skin且沒有此jar，則下載
         CommonGUI.checkSkin();
-        EnumGenerator.addSiteEnums();// need place as late as possible parseSF problem
+        EnumGenerator.addSiteEnums();// Generated support sites enums
 
         //buildPreprocess(); // 開發階段的預先處理(目的是讓輸出的jar檔與版本一致)
     }
