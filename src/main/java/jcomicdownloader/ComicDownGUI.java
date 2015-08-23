@@ -572,7 +572,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         try{
             Properties props = new Properties();
             props.load(ComicDownGUI.class.getResourceAsStream("/META-INF/maven/com.github.abc9070410/JComicDownloader/pom.properties"));
-            version = props.getProperty("version");
+            version = props.getProperty("version")+ "."+getCompileDateString();
         }catch(Exception ex){            
             version = majorVersion + "."+getCompileDateString();
         }
