@@ -568,15 +568,15 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     
     public static String getPOMVersion(){
         String version;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         try{
             Properties props = new Properties();
             props.load(ComicDownGUI.class.getResourceAsStream("/META-INF/maven/com.github.abc9070410/JComicDownloader/pom.properties"));
             version = props.getProperty("version")+ "."+getCompileDateString();
-        }catch(Exception ex){            
+        }catch(Exception e){
+            Common.debugPrintln("Cannot read pom.properties, using current time instead");
             version = majorVersion + "."+getCompileDateString();
         }
-        if (version.indexOf("SNAPSHOT")> 0){ //if snapshot add date form compiled time jar
+        if (version.indexOf("-SNAPSHOT")> 0){ //if snapshot add date form compiled time jar
             version = version.replace("-", "."+ getCompileDateString() +"-");
         }
         return version;
@@ -590,6 +590,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
             ZipEntry manifest = jf.getEntry("META-INF/MANIFEST.MF");           
             date += sdf.format(manifest.getTime());
         }catch(Exception ex){
+            Common.debugPrintln("Cannot read jar compiled time, using current time instead");
             date +=sdf.format(Calendar.getInstance().getTime());
         }
         return date;
