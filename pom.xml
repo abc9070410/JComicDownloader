@@ -249,6 +249,7 @@
                         <artifactId>maven-jar-plugin</artifactId>
                         <version>2.4</version>
                         <configuration>
+                            <finalName>${project.build.finalName}-FULL</finalName>
                             <archive>
                                 <compress>true</compress>
                                 <manifest>
@@ -272,8 +273,8 @@
                                 <phase>install</phase>
                                 <configuration>
                                     <tasks>
-                                        <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                              tofile="${project.basedir}/output/${project.build.finalName}.jar"/>
+                                        <copy file="${project.build.directory}/${project.build.finalName}-FULL.jar"
+                                              tofile="${project.basedir}/output/${project.build.finalName}-FULL.jar"/>
 <!--                                        <copy todir="${project.basedir}/output/lib">
                                             <fileset dir="${project.build.directory}/lib"/>
                                         </copy>-->
