@@ -129,7 +129,7 @@ public class ChoiceTableRender extends DefaultTableCellRenderer {
             cbzFile = ( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".cbz" );
             rarFile = ( SetUp.getOriginalDownloadDirectory() + this.title + Common.getSlash() + volumeTitle + ".rar" );
         }
-        Common.debugPrintln( volumeTitle + " Exists check :" + Files.exists(Paths.get(dirFile)));
+//        Common.debugPrintln( volumeTitle + " Exists check :" + Files.exists(Paths.get(dirFile)));
         
         if ( Files.exists(Paths.get(dirFile)) || Files.exists(Paths.get(zipFile)) ||  Files.exists(Paths.get(cbzFile)) || Files.exists(Paths.get(rarFile)) ) {
             return true;
