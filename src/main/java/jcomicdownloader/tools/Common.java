@@ -608,7 +608,7 @@ public class Common
                 connection.setRequestProperty( "Connection", "keep-alive" );
 
                 connection.setConnectTimeout( 10000 ); // 與主機連接時間不能超過十秒
-//                connection.setReadTimeout(defaultDownloadTimeout);
+                connection.setReadTimeout(SetUp.getTimeoutTimer()*1000);
 
                 if ( needCookie )
                 {
