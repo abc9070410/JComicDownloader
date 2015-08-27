@@ -3530,6 +3530,7 @@ public class Common
     }
 
     private static final class Downloader implements RBCWrapperDelegate {
+        final boolean isGUI;
         public Downloader( String webSite, String outputDirectory, String outputFileName,
                                      boolean needCookie, String cookieString, String referURL, boolean fastMode, int retryTimes,
                                      boolean gzipEncode, boolean forceDownload) {
@@ -3540,7 +3541,7 @@ public class Common
             String localPath = outputDirectory+outputFileName;
             String remoteURL = webSite;                        
             
-            boolean isGUI = Common.withGUI();
+            isGUI = Common.withGUI();
 
             if ( CommonGUI.stateBarDetailMessage == null )
             {
@@ -3757,7 +3758,7 @@ public class Common
         public void rbcProgressCallback( RBCWrapper rbc, double progress ) {
             
             String downloadText = "";
-            if ( Common.withGUI() )
+            if ( isGUI )
             {
                 downloadText = rbc.getReadSoFar() + "Kb ( " + progress + "% ) ";
             }
@@ -3766,12 +3767,14 @@ public class Common
                 downloadText =  rbc.getReadSoFar() + " Kb ( " + rbc.getExpectedSize() + "Kb ) ";
             
             }
-            if (Common.withGUI()){
+            if (isGUI){
                 ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
                     + CommonGUI.stateBarDetailMessage
                     + " : " + downloadText );
-            }else{
-                System.out.println( String.format( "download progress %d bytes received, %.02f%%", rbc.getReadSoFar(), progress ) );
+            }               
+            System.out.print( String.format( "Download progress %d bytes received, %.02f%%\r", rbc.getReadSoFar(), progress ) );           
+            if (progress >=100){
+                System.out.println();
             }
         }
     }
