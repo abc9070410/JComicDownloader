@@ -33,6 +33,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.SecureRandom;
 import java.text.*;
 import java.util.*;
@@ -540,268 +546,274 @@ public class Common
                                      boolean gzipEncode, boolean forceDownload )
     {
         // downlaod file by URL
-
-        int fileGotSize = 0;
-        boolean isGUI = Common.withGUI();
+//        
+//        int fileGotSize = 0;
+//        boolean isGUI = Common.withGUI();
+//        
+//        if ( CommonGUI.stateBarDetailMessage == null )
+//        {
+//            CommonGUI.stateBarMainMessage = "下載網頁進行分析 : ";
+//            CommonGUI.stateBarDetailMessage = outputFileName + " ";
+//        }
+//
+//        if ( Run.isAlive || forceDownload )
+//        { // 當允許下載或強制下載時才執行連線程序
+//            try
+//            {
+//
+//                if ( isGUI ) ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
+//                
+//                trustHTTPS();
+//
+//                // google圖片下載時因為有些連線很久沒回應，所以要設置計時器，預防連線時間過長
+//                Timer timer = new Timer();
+//                if ( SetUp.getTimeoutTimer() > 0 )
+//                {
+//                    // 預設(getTimeoutTimer()*1000)秒會timeout
+//                    timer.schedule( new TimeoutTask(), SetUp.getTimeoutTimer() * 1000 );
+//                }
+//
+//                URL url = new URL( webSite );
+//                HttpURLConnection connection = ( HttpURLConnection ) url.openConnection();
+//
+//                // 偽裝成瀏覽器
+//                //connection.setRequestProperty( "User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows 2000)" );
+//                connection.setRequestProperty( "User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11" );
+//                //connection.setRequestProperty( "User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-TW; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8" );
+//
+//                // connection.setRequestMethod( "GET" ); // 默认是GET 
+//                //connection.setRequestProperty( "User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows 2000)" );
+//                //connection.setRequestProperty("User-Agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; InfoPath.1; CIBA)");
+//                //connection.setFollowRedirects( true );
+//                //connection.setDoOutput( true ); // 需要向服务器写数据
+//                connection.setDoInput( true ); //
+//
+//                // dm5加這一行無法下載...
+//                //connection.setUseCaches( false ); // // Post 请求不能使用缓存 
+//                connection.setAllowUserInteraction( false );
+//
+//                //connection.setInstanceFollowRedirects( false ); // 不轉址
+//
+//
+//                if ( referURL != null && !referURL.equals( "" ) )
+//                {
+//                    //Common.debugPrintln( "設置Referer=" + referURL );
+//                    connection.setRequestProperty( "Referer", "referURL" );
+//                }
+//
+//                // 设定传送的内容类型是可序列化的java对象   
+//                // (如果不设此项,在传送序列化对象时,当WEB服务默认的不是这种类型时可能抛java.io.EOFException)
+//                connection.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded" );
+//                //connection.setRequestProperty( "Accept-Language", "zh-cn" );
+//                connection.setRequestProperty( "Accept-Language", "en-US,en;q=0.8,zh;q=0.4" );//fix for dm5
+//                // connection.setRequestProperty("Content-Length", ""+data.length());
+//                connection.setRequestProperty( "Cache-Control", "no-cache" );
+//                connection.setRequestProperty( "Pragma", "no-cache" );
+//                //connection.setRequestProperty( "Host", "biz.finance.sina.com.cn" );
+//                connection.setRequestProperty( "Accept", "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2" );
+//                connection.setRequestProperty( "Connection", "keep-alive" );
+//
+//                connection.setConnectTimeout( 10000 ); // 與主機連接時間不能超過十秒
+//                connection.setReadTimeout(SetUp.getTimeoutTimer()*1000);
+//
+//                if ( needCookie )
+//                {
+//                    connection.setRequestMethod( "GET" );
+//                    connection.setDoOutput( true );
+//                    connection.setRequestProperty( "Cookie", cookieString );
+//                }
+//
+//                int responseCode = 0;
+//
+//                // 快速模式不下載青蛙圖！（其檔案大小就是10771......）
+//                if ( (fastMode && connection.getResponseCode() != 200)
+//                        || (fastMode && connection.getContentLength() == 10771) )
+//                {
+//                    return;
+//                }
+//
+//                if (webSite.indexOf("https:") < 0)
+//                    tryConnect( connection );
+//
+//
+//                int fileSize = connection.getContentLength() / 1000;
+//
+//                if ( Common.isPicFileName( outputFileName )
+//                        && (fileSize == 21 || fileSize == 22) )
+//                { // 連到99系列的盜連圖
+//                    Common.debugPrintln( "似乎連到盜連圖，停一秒後重新連線......" );
+//
+//                    Common.sleep( 1000, "重新下載倒數:" ); // 每次暫停一秒再重新連線
+//
+//                    if (webSite.indexOf("https:") < 0)
+//                        tryConnect( connection );
+//                }
+//                // 內部伺服器發生錯誤，讀取getErrorStream() 
+//                if (webSite.indexOf("https:") < 0)
+//                {
+//                    if ( connection.getResponseCode() == 500 )
+//                    {
+//                    }
+//                    else if (connection.getResponseCode() == 301)
+//                    {
+//                        // get redirect url from "location" header field
+//                        String newUrl = connection.getHeaderField("Location");
+// 
+//                        // get the cookie if need, for login
+//                        String cookies = connection.getHeaderField("Set-Cookie");
+//
+//                        // open the new connnection again
+//                        connection = (HttpURLConnection) new URL(newUrl).openConnection();
+//                        connection.setRequestProperty("Cookie", cookies);
+//                        connection.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+//                        connection.addRequestProperty("User-Agent", "Mozilla");
+//                        connection.addRequestProperty("Referer", "google.com");
+//
+//                        Common.debugPrintln("Redirect to URL : " + newUrl);
+//                    }
+//                    else if ( connection.getResponseCode() != 200 )
+//                    {
+//                        //Common.debugPrintln( "第二次失敗，不再重試!" );
+//                        String errorMessage = "錯誤回傳碼(responseCode): " + connection.getResponseCode();
+//                        Common.errorReport( errorMessage + " : " + webSite );
+//                        ComicDownGUI.stateBar.setText( errorMessage + " ----> 無法下載" + webSite );
+//                        return;
+//                    }
+//                }
+//                
+//                
+//
+//                Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
+//
+//                //OutputStream os = response.getOutputStream();
+//                OutputStream os = new FileOutputStream( outputDirectory + outputFileName );
+//                InputStream is = null;
+//
+//                if ( webSite.indexOf("https:") < 0 && connection.getResponseCode() == 500 )
+//                {
+//                    is = connection.getErrorStream(); // xindm
+//                }
+//                else if ( gzipEncode && fileSize < 17 ) // 178漫畫小於17kb就認定為已經壓縮過的
+//                {
+//                    try
+//                    {
+//                        is = new GZIPInputStream( connection.getInputStream() ); // ex. 178.com
+//                    }
+//                    catch ( IOException ex )
+//                    {
+//                        is = connection.getInputStream(); // 其他漫畫網
+//                    }
+//                }
+//                else
+//                {
+//                    is = connection.getInputStream(); // 其他漫畫網
+//                }
+//                Common.debugPrint( "(" + fileSize + " k) " );
+//                String fileSizeString = fileSize > 0 ? "" + fileSize : " ? ";
+//
+//                byte[] r = new byte[ 1024 ];
+//                int len = 0;
+//
+//                while ( (len = is.read( r )) > 0 && (Run.isAlive || forceDownload) )
+//                {
+//                    // 快速模式下，檔案小於1mb且連線超時 -> 切斷連線
+//                    if ( fileSize > 1024 || !Flag.timeoutFlag ) // 預防卡住的機制
+//                    {
+//                        os.write( r, 0, len );
+//                    }
+//                    else
+//                    {
+//                        break;
+//                    }
+//
+//                    fileGotSize += (len / 1000);
+//
+//                    if ( Common.withGUI() )
+//                    {
+//                        int percent = 100;
+//                        String downloadText = "";
+//                        if ( fileSize > 0 )
+//                        {
+//                            percent = (fileGotSize * 100) / fileSize;
+//                            downloadText = fileSizeString + "Kb ( " + percent + "% ) ";
+//                        }
+//                        else
+//                        {
+//                            downloadText = fileSizeString + " Kb ( " + fileGotSize + "Kb ) ";
+//                        }
+//
+//                        ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
+//                                + CommonGUI.stateBarDetailMessage
+//                                + " : " + downloadText );
+//                    }
+//                }
+//
+//                is.close();
+//                os.flush();
+//                os.close();
+//
+//                if ( isGUI )
+//                {
+//                    ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
+//                            + CommonGUI.stateBarDetailMessage
+//                            + " : " + fileSizeString + "Kb ( 100% ) " );
+//                }
+//
+//                connection.disconnect();
+//
+//
+//                // 若真實下載檔案大小比預估來得小，則視設定值決定要重新嘗試幾次
+//                int realFileGotSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
+//                if ( realFileGotSize + 1 < fileGotSize && retryTimes > 0 )
+//                {
+//                    String messageString = realFileGotSize + " < " + fileGotSize
+//                            + " -> 新下載" + outputFileName + "（" + retryTimes
+//                            + "/" + SetUp.getRetryTimes() + "） 倒數:";
+//
+//                    Common.sleep( 2000, messageString ); // 每次暫停兩秒再重新連線
+//
+//                    downloadFile( webSite, outputDirectory, outputFileName,
+//                                  needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
+//
+//
+//                }
+//
+//                if ( fileSize < 1024 && Flag.timeoutFlag )
+//                {
+//                    new File( outputDirectory + outputFileName ).delete();
+//                    Common.debugPrintln( "刪除不完整檔案：" + outputFileName );
+//
+//                    ComicDownGUI.stateBar.setText( "下載逾時，跳過" + outputFileName );
+//
+//                }
+//
+//                timer.cancel(); // 連線結束同時也關掉計時器
+//
+//                Flag.timeoutFlag = false; // 歸回初始值
+//
+//                Common.debugPrintln( webSite + " downloads successful!" ); // for debug
+//
+//            }
+//            catch ( Exception e )
+//            {
+//                Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+//
+//                if ( ( retryTimes + 1 ) > 0 )
+//                { // 即使retryTimes設零，也會重傳一次
+//                    Flag.downloadErrorFlag = false;
+//                    downloadFile( webSite, outputDirectory, outputFileName,
+//                                  needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
+//                }
+//                Flag.downloadErrorFlag = true;
+//            }
+//
+//            CommonGUI.stateBarDetailMessage = null;
+//        }
         
-        if ( CommonGUI.stateBarDetailMessage == null )
-        {
-            CommonGUI.stateBarMainMessage = "下載網頁進行分析 : ";
-            CommonGUI.stateBarDetailMessage = outputFileName + " ";
-        }
-
-        if ( Run.isAlive || forceDownload )
-        { // 當允許下載或強制下載時才執行連線程序
-            try
-            {
-
-                if ( isGUI ) ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
-                
-                trustHTTPS();
-
-                // google圖片下載時因為有些連線很久沒回應，所以要設置計時器，預防連線時間過長
-                Timer timer = new Timer();
-                if ( SetUp.getTimeoutTimer() > 0 )
-                {
-                    // 預設(getTimeoutTimer()*1000)秒會timeout
-                    timer.schedule( new TimeoutTask(), SetUp.getTimeoutTimer() * 1000 );
-                }
-
-                URL url = new URL( webSite );
-                HttpURLConnection connection = ( HttpURLConnection ) url.openConnection();
-
-                // 偽裝成瀏覽器
-                //connection.setRequestProperty( "User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows 2000)" );
-                connection.setRequestProperty( "User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11" );
-                //connection.setRequestProperty( "User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-TW; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8" );
-
-                // connection.setRequestMethod( "GET" ); // 默认是GET 
-                //connection.setRequestProperty( "User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows 2000)" );
-                //connection.setRequestProperty("User-Agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; InfoPath.1; CIBA)");
-                //connection.setFollowRedirects( true );
-                //connection.setDoOutput( true ); // 需要向服务器写数据
-                connection.setDoInput( true ); //
-
-                // dm5加這一行無法下載...
-                //connection.setUseCaches( false ); // // Post 请求不能使用缓存 
-                connection.setAllowUserInteraction( false );
-
-                //connection.setInstanceFollowRedirects( false ); // 不轉址
-
-
-                if ( referURL != null && !referURL.equals( "" ) )
-                {
-                    //Common.debugPrintln( "設置Referer=" + referURL );
-                    connection.setRequestProperty( "Referer", "referURL" );
-                }
-
-                // 设定传送的内容类型是可序列化的java对象   
-                // (如果不设此项,在传送序列化对象时,当WEB服务默认的不是这种类型时可能抛java.io.EOFException)
-                connection.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded" );
-                //connection.setRequestProperty( "Accept-Language", "zh-cn" );
-                connection.setRequestProperty( "Accept-Language", "en-US,en;q=0.8,zh;q=0.4" );//fix for dm5
-                // connection.setRequestProperty("Content-Length", ""+data.length());
-                connection.setRequestProperty( "Cache-Control", "no-cache" );
-                connection.setRequestProperty( "Pragma", "no-cache" );
-                //connection.setRequestProperty( "Host", "biz.finance.sina.com.cn" );
-                connection.setRequestProperty( "Accept", "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2" );
-                connection.setRequestProperty( "Connection", "keep-alive" );
-
-                connection.setConnectTimeout( 10000 ); // 與主機連接時間不能超過十秒
-                connection.setReadTimeout(SetUp.getTimeoutTimer()*1000);
-
-                if ( needCookie )
-                {
-                    connection.setRequestMethod( "GET" );
-                    connection.setDoOutput( true );
-                    connection.setRequestProperty( "Cookie", cookieString );
-                }
-
-                int responseCode = 0;
-
-                // 快速模式不下載青蛙圖！（其檔案大小就是10771......）
-                if ( (fastMode && connection.getResponseCode() != 200)
-                        || (fastMode && connection.getContentLength() == 10771) )
-                {
-                    return;
-                }
-
-                if (webSite.indexOf("https:") < 0)
-                    tryConnect( connection );
-
-
-                int fileSize = connection.getContentLength() / 1000;
-
-                if ( Common.isPicFileName( outputFileName )
-                        && (fileSize == 21 || fileSize == 22) )
-                { // 連到99系列的盜連圖
-                    Common.debugPrintln( "似乎連到盜連圖，停一秒後重新連線......" );
-
-                    Common.sleep( 1000, "重新下載倒數:" ); // 每次暫停一秒再重新連線
-
-                    if (webSite.indexOf("https:") < 0)
-                        tryConnect( connection );
-                }
-                // 內部伺服器發生錯誤，讀取getErrorStream() 
-                if (webSite.indexOf("https:") < 0)
-                {
-                    if ( connection.getResponseCode() == 500 )
-                    {
-                    }
-                    else if (connection.getResponseCode() == 301)
-                    {
-                        // get redirect url from "location" header field
-                        String newUrl = connection.getHeaderField("Location");
- 
-                        // get the cookie if need, for login
-                        String cookies = connection.getHeaderField("Set-Cookie");
-
-                        // open the new connnection again
-                        connection = (HttpURLConnection) new URL(newUrl).openConnection();
-                        connection.setRequestProperty("Cookie", cookies);
-                        connection.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
-                        connection.addRequestProperty("User-Agent", "Mozilla");
-                        connection.addRequestProperty("Referer", "google.com");
-
-                        Common.debugPrintln("Redirect to URL : " + newUrl);
-                    }
-                    else if ( connection.getResponseCode() != 200 )
-                    {
-                        //Common.debugPrintln( "第二次失敗，不再重試!" );
-                        String errorMessage = "錯誤回傳碼(responseCode): " + connection.getResponseCode();
-                        Common.errorReport( errorMessage + " : " + webSite );
-                        ComicDownGUI.stateBar.setText( errorMessage + " ----> 無法下載" + webSite );
-                        return;
-                    }
-                }
-                
-                
-
-                Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
-
-                //OutputStream os = response.getOutputStream();
-                OutputStream os = new FileOutputStream( outputDirectory + outputFileName );
-                InputStream is = null;
-
-                if ( webSite.indexOf("https:") < 0 && connection.getResponseCode() == 500 )
-                {
-                    is = connection.getErrorStream(); // xindm
-                }
-                else if ( gzipEncode && fileSize < 17 ) // 178漫畫小於17kb就認定為已經壓縮過的
-                {
-                    try
-                    {
-                        is = new GZIPInputStream( connection.getInputStream() ); // ex. 178.com
-                    }
-                    catch ( IOException ex )
-                    {
-                        is = connection.getInputStream(); // 其他漫畫網
-                    }
-                }
-                else
-                {
-                    is = connection.getInputStream(); // 其他漫畫網
-                }
-                Common.debugPrint( "(" + fileSize + " k) " );
-                String fileSizeString = fileSize > 0 ? "" + fileSize : " ? ";
-
-                byte[] r = new byte[ 1024 ];
-                int len = 0;
-
-                while ( (len = is.read( r )) > 0 && (Run.isAlive || forceDownload) )
-                {
-                    // 快速模式下，檔案小於1mb且連線超時 -> 切斷連線
-                    if ( fileSize > 1024 || !Flag.timeoutFlag ) // 預防卡住的機制
-                    {
-                        os.write( r, 0, len );
-                    }
-                    else
-                    {
-                        break;
-                    }
-
-                    fileGotSize += (len / 1000);
-
-                    if ( Common.withGUI() )
-                    {
-                        int percent = 100;
-                        String downloadText = "";
-                        if ( fileSize > 0 )
-                        {
-                            percent = (fileGotSize * 100) / fileSize;
-                            downloadText = fileSizeString + "Kb ( " + percent + "% ) ";
-                        }
-                        else
-                        {
-                            downloadText = fileSizeString + " Kb ( " + fileGotSize + "Kb ) ";
-                        }
-
-                        ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
-                                + CommonGUI.stateBarDetailMessage
-                                + " : " + downloadText );
-                    }
-                }
-
-                is.close();
-                os.flush();
-                os.close();
-
-                if ( isGUI )
-                {
-                    ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
-                            + CommonGUI.stateBarDetailMessage
-                            + " : " + fileSizeString + "Kb ( 100% ) " );
-                }
-
-                connection.disconnect();
-
-
-                // 若真實下載檔案大小比預估來得小，則視設定值決定要重新嘗試幾次
-                int realFileGotSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
-                if ( realFileGotSize + 1 < fileGotSize && retryTimes > 0 )
-                {
-                    String messageString = realFileGotSize + " < " + fileGotSize
-                            + " -> 新下載" + outputFileName + "（" + retryTimes
-                            + "/" + SetUp.getRetryTimes() + "） 倒數:";
-
-                    Common.sleep( 2000, messageString ); // 每次暫停兩秒再重新連線
-
-                    downloadFile( webSite, outputDirectory, outputFileName,
-                                  needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
-
-
-                }
-
-                if ( fileSize < 1024 && Flag.timeoutFlag )
-                {
-                    new File( outputDirectory + outputFileName ).delete();
-                    Common.debugPrintln( "刪除不完整檔案：" + outputFileName );
-
-                    ComicDownGUI.stateBar.setText( "下載逾時，跳過" + outputFileName );
-
-                }
-
-                timer.cancel(); // 連線結束同時也關掉計時器
-
-                Flag.timeoutFlag = false; // 歸回初始值
-
-                Common.debugPrintln( webSite + " downloads successful!" ); // for debug
-
-            }
-            catch ( Exception e )
-            {
-                Common.hadleErrorMessage( e, "無法正確下載" + webSite );
-
-                if ( ( retryTimes + 1 ) > 0 )
-                { // 即使retryTimes設零，也會重傳一次
-                    Flag.downloadErrorFlag = false;
-                    downloadFile( webSite, outputDirectory, outputFileName,
-                                  needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
-                }
-                Flag.downloadErrorFlag = true;
-            }
-
-            CommonGUI.stateBarDetailMessage = null;
+        newDownloadLogic:{
+          new Downloader(webSite, outputDirectory,outputFileName,
+                            needCookie,  cookieString,  referURL,  fastMode,  retryTimes,
+                                      gzipEncode,  forceDownload);
         }
     }
 
@@ -3500,7 +3512,303 @@ public class Common
     {
         return "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0";
     }
+
+    private interface RBCWrapperDelegate {
+        // The RBCWrapperDelegate receives rbcProgressCallback() messages
+        // from the read loop.  It is passed the progress as a percentage
+        // if known, or -1.0 to indicate indeterminate progress.
+        // 
+        // This callback hangs the read loop so a smart implementation will
+        // spend the least amount of time possible here before returning.
+        // 
+        // One possible implementation is to push the progress message
+        // atomically onto a queue managed by a secondary thread then
+        // wake that thread up.  The queue manager thread then updates
+        // the user interface progress bar.  This lets the read loop
+        // continue as fast as possible.
+        public void rbcProgressCallback( RBCWrapper rbc, double progress );
+    }
+
+    private static final class Downloader implements RBCWrapperDelegate {
+        public Downloader( String webSite, String outputDirectory, String outputFileName,
+                                     boolean needCookie, String cookieString, String referURL, boolean fastMode, int retryTimes,
+                                     boolean gzipEncode, boolean forceDownload) {
+            FileOutputStream        fos;
+            ReadableByteChannel     rbc;
+            URL                     url;
+        
+            String localPath = outputDirectory+outputFileName;
+            String remoteURL = webSite;                        
+            
+            boolean isGUI = Common.withGUI();
+
+            if ( CommonGUI.stateBarDetailMessage == null )
+            {
+                CommonGUI.stateBarMainMessage = "下載網頁進行分析 : ";
+                CommonGUI.stateBarDetailMessage = outputFileName + " ";
+            }
+
+            if ( Run.isAlive || forceDownload )
+            { // 當允許下載或強制下載時才執行連線程序
+                Timer timer = new Timer();
+                if ( SetUp.getTimeoutTimer() > 0 )
+                {
+                   // 預設(getTimeoutTimer()*1000)秒會timeout
+                   timer.schedule( new TimeoutTask(), SetUp.getTimeoutTimer() * 1000 );
+                }
+
+                try
+                {
+                    if ( isGUI ) ComicDownGUI.stateBar.setText( webSite + " 連線中..." );
+
+                    trustHTTPS();
+
+               
+                    url = new URL( webSite );
+                    HttpURLConnection connection = ( HttpURLConnection ) url.openConnection();
+
+                    // 偽裝成瀏覽器
+                    connection.setRequestProperty( "User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11" );
+
+                    //connection.setFollowRedirects( true );
+                    connection.setDoOutput( true ); // 需要向服务器写数据
+
+                    // dm5加這一行無法下載...
+                    //connection.setUseCaches( false ); // // Post 请求不能使用缓存 
+                    connection.setAllowUserInteraction( false );
+
+                    //connection.setInstanceFollowRedirects( false ); // 不轉址
+
+
+                    if ( referURL != null && !referURL.equals( "" ) )
+                    {
+                        //Common.debugPrintln( "設置Referer=" + referURL );
+                        connection.setRequestProperty( "Referer", "referURL" );
+                    }
+
+                    // 设定传送的内容类型是可序列化的java对象   
+                    // (如果不设此项,在传送序列化对象时,当WEB服务默认的不是这种类型时可能抛java.io.EOFException)
+                    connection.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded" );
+                    //connection.setRequestProperty( "Accept-Language", "zh-cn" );
+                    connection.setRequestProperty( "Accept-Language", "en-US,en;q=0.8,zh;q=0.4" );//fix for dm5
+                    // connection.setRequestProperty("Content-Length", ""+data.length());
+                    connection.setRequestProperty( "Cache-Control", "no-cache" );
+                    connection.setRequestProperty( "Pragma", "no-cache" );
+                    //connection.setRequestProperty( "Host", "biz.finance.sina.com.cn" );
+                    connection.setRequestProperty( "Accept", "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2" );
+                    connection.setRequestProperty( "Connection", "keep-alive" );
+
+                    connection.setConnectTimeout( 10000 ); // 與主機連接時間不能超過十秒
+                    connection.setReadTimeout(SetUp.getTimeoutTimer()*1000);
+
+                    if ( needCookie )
+                    {
+                        connection.setRequestMethod( "GET" );
+                        connection.setDoOutput( true );
+                        connection.setRequestProperty( "Cookie", cookieString );
+                    }
+
+                    int responseCode = 0;
+                    // 快速模式不下載青蛙圖！（其檔案大小就是10771......）
+                    if ( (fastMode && connection.getResponseCode() != 200)
+                            || (fastMode && connection.getContentLength() == 10771) )
+                    {
+                        return;
+                    }
+
+                    if (webSite.indexOf("https:") < 0)
+                        tryConnect( connection );
+
+
+                    int fileSize = connection.getContentLength() / 1000;
+
+                    if ( Common.isPicFileName( outputFileName )
+                            && (fileSize == 21 || fileSize == 22) )
+                    { // 連到99系列的盜連圖
+                        Common.debugPrintln( "似乎連到盜連圖，停一秒後重新連線......" );
+
+                        Common.sleep( 1000, "重新下載倒數:" ); // 每次暫停一秒再重新連線
+
+                        if (webSite.indexOf("https:") < 0)
+                            tryConnect( connection );
+                    }
+                    // 內部伺服器發生錯誤，讀取getErrorStream() 
+                    if (webSite.indexOf("https:") < 0)
+                    {
+                        if ( connection.getResponseCode() == 500 )
+                        {
+                        }
+                        else if (connection.getResponseCode() == 301)
+                        {
+                            // get redirect url from "location" header field
+                            String newUrl = connection.getHeaderField("Location");
+
+                            // get the cookie if need, for login
+                            String cookies = connection.getHeaderField("Set-Cookie");
+
+                            // open the new connnection again
+                            connection = (HttpURLConnection) new URL(newUrl).openConnection();
+                            connection.setRequestProperty("Cookie", cookies);
+                            connection.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+                            connection.addRequestProperty("User-Agent", "Mozilla");
+                            connection.addRequestProperty("Referer", "google.com");
+
+                            Common.debugPrintln("Redirect to URL : " + newUrl);
+                        }
+                        else if ( connection.getResponseCode() != 200 )
+                        {
+                            //Common.debugPrintln( "第二次失敗，不再重試!" );
+                            String errorMessage = "錯誤回傳碼(responseCode): " + connection.getResponseCode();
+                            Common.errorReport( errorMessage + " : " + webSite );
+                            ComicDownGUI.stateBar.setText( errorMessage + " ----> 無法下載" + webSite );
+                            return;
+                        }
+                    }
+
+
+
+                    Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
+
+                    FileOutputStream os = new FileOutputStream( outputDirectory + outputFileName );               
+
+                    if ( webSite.indexOf("https:") < 0 && connection.getResponseCode() == 500 )
+                    {
+                        rbc = new RBCWrapper( Channels.newChannel( connection.getErrorStream() ), connection.getContentLengthLong(), this );// xindm
+                    }
+                    else if ( gzipEncode && fileSize < 17 ) // 178漫畫小於17kb就認定為已經壓縮過的
+                    {
+                        try
+                        {
+                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream()) ), connection.getContentLengthLong(), this ); // ex. 178.com
+                        }
+                        catch ( IOException ex )
+                        {
+                           rbc = new RBCWrapper( Channels.newChannel( connection.getInputStream()), connection.getContentLengthLong(), this ); // 其他漫畫網
+                        }
+                    }
+                    else
+                    {
+                        rbc = new RBCWrapper( Channels.newChannel( connection.getInputStream()), connection.getContentLengthLong(), this );// 其他漫畫網
+                    }
+
+                    os.getChannel().transferFrom( rbc, 0, Long.MAX_VALUE );
+                   
+                    rbc.close();
+                    os.flush();
+                    os.close();
+                    if ( isGUI )
+                    {
+                        ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
+                                + CommonGUI.stateBarDetailMessage
+                                + " : " + fileSize + "Kb ( 100% ) " );
+                    }
+
+                    connection.disconnect();
+
+
+                    // 若真實下載檔案大小比預估來得小，則視設定值決定要重新嘗試幾次
+                    int realFileGotSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
+                    if ( realFileGotSize + 1 < fileSize && retryTimes > 0 )
+                    {
+                        String messageString = realFileGotSize + " < " + fileSize
+                                + " -> 新下載" + outputFileName + "（" + retryTimes
+                                + "/" + SetUp.getRetryTimes() + "） 倒數:";
+
+                        Common.sleep( 2000, messageString ); // 每次暫停兩秒再重新連線
+
+                        downloadFile( webSite, outputDirectory, outputFileName,
+                                      needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
+
+
+                    }
+
+                    timer.cancel(); // 連線結束同時也關掉計時器
+
+                    Flag.timeoutFlag = false; // 歸回初始值
+
+                    Common.debugPrintln( webSite + " downloads successful!" ); // for debug
+
+                }
+                catch ( Exception e )
+                {
+                    new File( outputDirectory + outputFileName ).delete();
+                    Common.debugPrintln( "刪除不完整檔案：" + outputFileName );
+                    if (Flag.timeoutFlag){
+                        ComicDownGUI.stateBar.setText( "下載逾時，跳過" + outputFileName );
+                        timer.cancel();
+                        Flag.timeoutFlag = false; // 歸回初始值
+                    }
+                    Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+
+                    if ( ( retryTimes + 1 ) > 0 )
+                    { // 即使retryTimes設零，也會重傳一次
+                        Flag.downloadErrorFlag = false;
+                        downloadFile( webSite, outputDirectory, outputFileName,
+                                      needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
+                    }
+                    Flag.downloadErrorFlag = true;
+                }
+
+                CommonGUI.stateBarDetailMessage = null;
+            }
+            
+        }
+
+        public void rbcProgressCallback( RBCWrapper rbc, double progress ) {
+            
+            String downloadText = "";
+            if ( Common.withGUI() )
+            {
+                downloadText = rbc.getReadSoFar() + "Kb ( " + progress + "% ) ";
+            }
+            else
+            {
+                downloadText =  rbc.getReadSoFar() + " Kb ( " + rbc.getExpectedSize() + "Kb ) ";
+            
+            }
+            if (Common.withGUI()){
+                ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
+                    + CommonGUI.stateBarDetailMessage
+                    + " : " + downloadText );
+            }else{
+                System.out.println( String.format( "download progress %d bytes received, %.02f%%", rbc.getReadSoFar(), progress ) );
+            }
+        }
+    }
+
+    private static final class RBCWrapper implements ReadableByteChannel {
+        private RBCWrapperDelegate              delegate;
+        private long                            expectedSize;
+        private ReadableByteChannel             rbc;
+        private long                            readSoFar;
+
+        RBCWrapper( ReadableByteChannel rbc, long expectedSize, RBCWrapperDelegate delegate ) {
+            this.delegate = delegate;
+            this.expectedSize = expectedSize;
+            this.rbc = rbc;
+        }
+
+        public void close() throws IOException { rbc.close(); }
+        public long getReadSoFar() { return readSoFar; }
+        public boolean isOpen() { return rbc.isOpen(); }
+        public long getExpectedSize(){return this.expectedSize;}
+        
+        public int read( ByteBuffer bb ) throws IOException {
+            int                     n;
+            double                  progress;
+            if (Flag.timeoutFlag) throw new IOException("Timeout");
+            
+            if ( ( n = rbc.read( bb ) ) > 0 ) {
+                readSoFar += n;
+                progress = expectedSize > 0 ? (double) readSoFar / (double) expectedSize * 100.0 : -1.0;
+                delegate.rbcProgressCallback( this, progress );
+            }
+
+            return n;
+        }
+    }
 }
+
 
 class TimeoutTask extends TimerTask
 {
