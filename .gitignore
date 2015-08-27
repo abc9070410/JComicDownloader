@@ -19,3 +19,6 @@
 /recordList.dat
 /ErrorRecord
 output
+
+#bak file
+/src/test/java/jcomicdownloader/*.bak
