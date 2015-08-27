@@ -41,14 +41,7 @@ public class TestGetCidAndKey {
     public static Collection<Object[]> getParameters() {
         return Arrays.asList(
             new Object[][] {               
-                //  {0,"http://www.comicvip.com/html/9718.html","jcomicdownloader.module.ParseEC"}
-                // ,{1,"http://manhua.dmzj.com/ganwumeixiaomai/","jcomicdownloader.module.Parse178"}
-                // ,{2,"http://comic.sfacg.com/HTML/GWMXM/","jcomicdownloader.module.ParseSF"}
-                // ,{3,"http://comic.kukudm.com/comiclist/1842/index.htm","jcomicdownloader.module.ParseKUKU"}
-                // ,{4,"http://comic.ck101.com/comic/18181","jcomicdownloader.module.ParseCK"}
-                // ,{5,"http://www.tuku.cc/comic/11977/","jcomicdownloader.module.ParseTUKU"} 
-                // ,
-                {6,"http:///tel.dm5.com/m216410/","jcomicdownloader.module.ParseDM5"}
+                {0,"http:///tel.dm5.com/m216410/","jcomicdownloader.module.ParseDM5"}
             }
         );
     }
@@ -77,7 +70,7 @@ public class TestGetCidAndKey {
         }
     }
     
-    @org.junit.Ignore    
+@org.junit.Ignore    
     @org.junit.Test 
     public void test000Run() {
         ((ParseDM5) s).getCidAndKey("http://tel.dm5.com/m216410/chapterfun.ashx?cid=216410&page=1&key=&language=1&gtk=6", url);

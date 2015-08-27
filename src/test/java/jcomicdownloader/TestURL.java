@@ -41,13 +41,13 @@ public class TestURL {
     public static Collection<Object[]> getParameters() {
         return Arrays.asList(
             new Object[][] {               
-                //  {0,"http://www.comicvip.com/html/9718.html","jcomicdownloader.module.ParseEC"}
-                // ,{1,"http://manhua.dmzj.com/ganwumeixiaomai/","jcomicdownloader.module.Parse178"}
-                // ,{2,"http://comic.sfacg.com/HTML/GWMXM/","jcomicdownloader.module.ParseSF"}
-                // ,{3,"http://comic.kukudm.com/comiclist/1842/index.htm","jcomicdownloader.module.ParseKUKU"}
-                // ,{4,"http://comic.ck101.com/comic/18181","jcomicdownloader.module.ParseCK"}
-                // ,{5,"http://www.tuku.cc/comic/11977/","jcomicdownloader.module.ParseTUKU"} 
-                // ,
+                  {0,"http://www.comicvip.com/html/9718.html","jcomicdownloader.module.ParseEC"}
+                 ,{1,"http://manhua.dmzj.com/ganwumeixiaomai/","jcomicdownloader.module.Parse178"}
+                 ,{2,"http://comic.sfacg.com/HTML/GWMXM/","jcomicdownloader.module.ParseSF"}
+                 ,{3,"http://comic.kukudm.com/comiclist/1842/index.htm","jcomicdownloader.module.ParseKUKU"}
+                 ,{4,"http://comic.ck101.com/comic/18181","jcomicdownloader.module.ParseCK"}
+                 ,{5,"http://www.tuku.cc/comic/11977/","jcomicdownloader.module.ParseTUKU"} 
+                 ,
                 {6,"http://www.dm5.com/manhua-kissxdeath/","jcomicdownloader.module.ParseDM5"}
             }
         );
@@ -77,7 +77,7 @@ public class TestURL {
         }
     }
     
-    @org.junit.Ignore    
+@org.junit.Ignore    
     @org.junit.Test 
     public void test000Run() {
         RunModule r =new RunModule();
@@ -88,13 +88,13 @@ public class TestURL {
 //        }     
     }
     
-    @org.junit.Ignore 
+@org.junit.Ignore 
     @org.junit.Test 
     public void test001Url() {
         assertTrue(mod,s.canParserHandle(url));
     }
     
-    @org.junit.Ignore
+@org.junit.Ignore
     @org.junit.Test
     public void test002setParameters() {
         try{
@@ -105,14 +105,14 @@ public class TestURL {
         }
     }
     
-    @org.junit.Ignore   
+@org.junit.Ignore   
     @org.junit.Test
     public void test003getAllPageString() {    
         String allPageString = s.getAllPageString(url);
         assertNotNull(allPageString);
     }
     
-    @org.junit.Ignore    
+@org.junit.Ignore    
     @org.junit.Test
     public void test004getTitleOnMainPage() {
         String allPageString = s.getAllPageString(url); 

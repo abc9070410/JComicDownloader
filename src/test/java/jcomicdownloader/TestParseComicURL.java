@@ -73,7 +73,7 @@ public class TestParseComicURL {
         }
     }
     
-    @org.junit.Ignore    
+@org.junit.Ignore    
     @org.junit.Test 
     public void test000Run() {
         s.setParameters();
