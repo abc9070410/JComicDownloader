@@ -3610,9 +3610,10 @@ public class Common
                     }
 
                     int responseCode = 0;
+                    long contentLength = connection.getContentLengthLong();
                     // 快速模式不下載青蛙圖！（其檔案大小就是10771......）
                     if ( (fastMode && connection.getResponseCode() != 200)
-                            || (fastMode && connection.getContentLength() == 10771) )
+                            || (fastMode && contentLength == 10771) )
                     {
                         return;
                     }
@@ -3621,7 +3622,7 @@ public class Common
                         tryConnect( connection );
 
 
-                    int fileSize = connection.getContentLength() / 1000;
+                    long fileSize = contentLength / 1000;
 
                     if ( Common.isPicFileName( outputFileName )
                             && (fileSize == 21 || fileSize == 22) )
@@ -3666,30 +3667,28 @@ public class Common
                         }
                     }
 
-
-
                     Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
 
                     FileOutputStream os = new FileOutputStream( outputDirectory + outputFileName );               
 
                     if ( webSite.indexOf("https:") < 0 && connection.getResponseCode() == 500 )
                     {
-                        rbc = new RBCWrapper( Channels.newChannel( connection.getErrorStream() ), connection.getContentLengthLong(), this );// xindm
+                        rbc = new RBCWrapper( Channels.newChannel( connection.getErrorStream() ), contentLength, this );// xindm
                     }
                     else if ( gzipEncode && fileSize < 17 ) // 178漫畫小於17kb就認定為已經壓縮過的
                     {
                         try
                         {
-                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream()) ), connection.getContentLengthLong(), this ); // ex. 178.com
+                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream()) ), contentLength, this ); // ex. 178.com
                         }
                         catch ( IOException ex )
                         {
-                           rbc = new RBCWrapper( Channels.newChannel( connection.getInputStream()), connection.getContentLengthLong(), this ); // 其他漫畫網
+                           rbc = new RBCWrapper( Channels.newChannel( connection.getInputStream()), contentLength, this ); // 其他漫畫網
                         }
                     }
                     else
                     {
-                        rbc = new RBCWrapper( Channels.newChannel( connection.getInputStream()), connection.getContentLengthLong(), this );// 其他漫畫網
+                        rbc = new RBCWrapper( Channels.newChannel( connection.getInputStream()), contentLength, this );// 其他漫畫網
                     }
 
                     os.getChannel().transferFrom( rbc, 0, Long.MAX_VALUE );
@@ -3732,11 +3731,11 @@ public class Common
                 }
                 catch ( Exception e )
                 {
-                    new File( outputDirectory + outputFileName ).delete();
+                    new File( outputDirectory + outputFileName ).delete();                   
                     Common.debugPrintln( "刪除不完整檔案：" + outputFileName );
+                    timer.cancel();
                     if (Flag.timeoutFlag){
                         ComicDownGUI.stateBar.setText( "下載逾時，跳過" + outputFileName );
-                        timer.cancel();
                         Flag.timeoutFlag = false; // 歸回初始值
                     }
                     Common.hadleErrorMessage( e, "無法正確下載" + webSite );
