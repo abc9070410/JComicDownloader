@@ -312,11 +312,11 @@ public class Common
     public static void sleep( int delayMillisecond, String message )
     {
         int delaySecond = delayMillisecond / 1000;
-        String realMessage = " " + message + " " + delaySecond + " 秒";
+        String realMessage = " " + message + " " + delaySecond + " 秒\r";
 
         try
         {
-            Common.debugPrintln( realMessage );
+            Common.debugPrint( realMessage );
             ComicDownGUI.stateBar.setText( realMessage );
             Thread.currentThread().sleep( 1000 );
 
@@ -329,12 +329,15 @@ public class Common
         if ( --delaySecond > 0 ) // 以遞迴方式處理暫停
         {
             Common.sleep( delayMillisecond - 1000, message );
+        }else{
+            Common.debugPrintln("");        
         }
     }
 
     public static void slowDownloadFile( String webSite, String outputDirectory, String outputFileName,
                                          int delayMillisecond, boolean needCookie, String cookieString )
     {
+        Common.debugPrintln("");
         Common.sleep( delayMillisecond, "下載倒數:" );
 
         downloadFile( webSite, outputDirectory, outputFileName, needCookie, cookieString, "", false, SetUp.getRetryTimes(), false, false );
@@ -3765,7 +3768,7 @@ public class Common
             String downloadText = "";
             if ( isGUI )
             {
-                downloadText = rbc.getReadSoFar() + "Kb ( " + progress + "% ) ";
+                downloadText = rbc.getReadSoFar() + "Kb ( " + (int)progress + "% ) ";
             }
             else
             {
