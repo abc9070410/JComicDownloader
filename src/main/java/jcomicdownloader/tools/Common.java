@@ -3570,7 +3570,7 @@ public class Common
 
                     // 偽裝成瀏覽器
                     connection.setRequestProperty( "User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11" );
-
+                    connection.setRequestProperty( "Accept-Encoding","gzip, deflate");
                     //connection.setFollowRedirects( true );
                     connection.setDoOutput( true ); // 需要向服务器写数据
 
@@ -3610,7 +3610,7 @@ public class Common
                     }
 
                     int responseCode = 0;
-                    long contentLength = connection.getContentLengthLong();
+                    int contentLength = connection.getContentLength();
                     // 快速模式不下載青蛙圖！（其檔案大小就是10771......）
                     if ( (fastMode && connection.getResponseCode() != 200)
                             || (fastMode && contentLength == 10771) )
@@ -3622,7 +3622,7 @@ public class Common
                         tryConnect( connection );
 
 
-                    long fileSize = contentLength / 1000;
+                    int fileSize = contentLength / 1000;
 
                     if ( Common.isPicFileName( outputFileName )
                             && (fileSize == 21 || fileSize == 22) )
@@ -3668,18 +3668,24 @@ public class Common
                     }
 
                     Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
-
+                    
+                    String contentEncoding = connection.getContentEncoding();
+                    if (contentEncoding==null) contentEncoding="";
+                    
                     FileOutputStream os = new FileOutputStream( outputDirectory + outputFileName );               
-
+                    
+                    if (contentLength<=0) contentLength =1024;// we use contentLength as buffer parameter
+                    
                     if ( webSite.indexOf("https:") < 0 && connection.getResponseCode() == 500 )
                     {
                         rbc = new RBCWrapper( Channels.newChannel( connection.getErrorStream() ), contentLength, this );// xindm
                     }
-                    else if ( gzipEncode && fileSize < 17 ) // 178漫畫小於17kb就認定為已經壓縮過的
+                    else if ( (contentEncoding.equalsIgnoreCase("gzip")) || gzipEncode && fileSize < 17 ) // 178漫畫小於17kb就認定為已經壓縮過的
                     {
                         try
-                        {
-                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream()) ), contentLength, this ); // ex. 178.com
+                        {                 
+//                            Common.debugPrintln(connection.getHeaderFields().toString());
+                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream(),contentLength) ), contentLength, this ); // ex. 178.com
                         }
                         catch ( IOException ex )
                         {
@@ -3691,8 +3697,8 @@ public class Common
                         rbc = new RBCWrapper( Channels.newChannel( connection.getInputStream()), contentLength, this );// 其他漫畫網
                     }
 
-                    os.getChannel().transferFrom( rbc, 0, Long.MAX_VALUE );
-                   
+                    os.getChannel().transferFrom( rbc, 0, Integer.MAX_VALUE );
+                    System.out.println();
                     rbc.close();
                     os.flush();
                     os.close();
@@ -3771,10 +3777,7 @@ public class Common
                     + CommonGUI.stateBarDetailMessage
                     + " : " + downloadText );
             }               
-            System.out.print( String.format( "Download progress %d bytes received, %.02f%%\r", rbc.getReadSoFar(), progress ) );           
-            if (progress >=100){
-                System.out.println();
-            }
+            System.out.print( String.format( "Download progress %d bytes received, %.02f%%\r", rbc.getReadSoFar(), progress ) );                       
         }
     }
 
