@@ -3671,24 +3671,20 @@ public class Common
                     }
 
                     Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
-                    
-                    String contentEncoding = connection.getContentEncoding();
-                    if (contentEncoding==null) contentEncoding="";
-                    
+                                        
                     FileOutputStream os = new FileOutputStream( outputDirectory + outputFileName );               
-                    
-                    if (contentLength<=0) contentLength =1024;// we use contentLength as buffer parameter
-                    
+                                        
                     if ( webSite.indexOf("https:") < 0 && connection.getResponseCode() == 500 )
                     {
                         rbc = new RBCWrapper( Channels.newChannel( connection.getErrorStream() ), contentLength, this );// xindm
                     }
-                    else if ( (contentEncoding.equalsIgnoreCase("gzip")) || gzipEncode && fileSize < 17 ) // 178漫畫小於17kb就認定為已經壓縮過的
+                    else if ( ("gzip".equals(connection.getContentEncoding())) || (gzipEncode && fileSize < 17) ) // 178漫畫小於17kb就認定為已經壓縮過的
                     {
                         try
                         {                 
 //                            Common.debugPrintln(connection.getHeaderFields().toString());
-                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream(),contentLength) ), contentLength, this ); // ex. 178.com
+                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream(),512) ),-1,this); // ex. 178.com
+                            
                         }
                         catch ( IOException ex )
                         {
@@ -3701,6 +3697,7 @@ public class Common
                     }
 
                     os.getChannel().transferFrom( rbc, 0, Integer.MAX_VALUE );
+                   
                     System.out.println();
                     rbc.close();
                     os.flush();
@@ -3768,7 +3765,7 @@ public class Common
             String downloadText = "";
             if ( isGUI )
             {
-                downloadText = rbc.getReadSoFar() + "Kb ( " + (int)progress + "% ) ";
+                downloadText = String.format(rbc.getReadSoFar() + "Kb ( %.02f%% )",progress);
             }
             else
             {
@@ -3780,7 +3777,11 @@ public class Common
                     + CommonGUI.stateBarDetailMessage
                     + " : " + downloadText );
             }               
-            System.out.print( String.format( "Download progress %d bytes received, %.02f%%\r", rbc.getReadSoFar(), progress ) );                       
+            if (progress ==-1){
+                Common.debugPrint( String.format( "Download progress %d bytes received.\r", rbc.getReadSoFar() ) );                       
+            }else{
+                Common.debugPrint( String.format( "Download progress %d bytes received, %.02f%%\r", rbc.getReadSoFar(), progress ) ); 
+            }          
         }
     }
 
