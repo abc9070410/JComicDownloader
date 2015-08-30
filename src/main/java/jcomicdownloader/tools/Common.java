@@ -3683,8 +3683,9 @@ public class Common
                         try
                         {                 
 //                            Common.debugPrintln(connection.getHeaderFields().toString());
-                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream(),512) ),-1,this); // ex. 178.com
-                            
+//                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream(),512) ),-1,this); // ex. 178.com
+                            RBCWrapper  rbcw= new RBCWrapper( Channels.newChannel( connection.getInputStream() ),contentLength,this); // ex. 178.com
+                            rbc = Channels.newChannel(new GZIPInputStream(Channels.newInputStream(rbcw)));
                         }
                         catch ( IOException ex )
                         {
