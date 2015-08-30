@@ -3537,7 +3537,6 @@ public class Common
         public Downloader( String webSite, String outputDirectory, String outputFileName,
                                      boolean needCookie, String cookieString, String referURL, boolean fastMode, int retryTimes,
                                      boolean gzipEncode, boolean forceDownload) {
-            FileOutputStream        fos;
             ReadableByteChannel     rbc;
             URL                     url;
         
@@ -3612,10 +3611,10 @@ public class Common
                         connection.setRequestProperty( "Cookie", cookieString );
                     }
 
-                    int responseCode = 0;
+                    int responseCode = connection.getResponseCode();
                     int contentLength = connection.getContentLength();
                     // 快速模式不下載青蛙圖！（其檔案大小就是10771......）
-                    if ( (fastMode && connection.getResponseCode() != 200)
+                    if ( (fastMode && responseCode != 200)
                             || (fastMode && contentLength == 10771) )
                     {
                         return;
@@ -3637,13 +3636,14 @@ public class Common
                         if (webSite.indexOf("https:") < 0)
                             tryConnect( connection );
                     }
+                    responseCode=connection.getResponseCode();
                     // 內部伺服器發生錯誤，讀取getErrorStream() 
                     if (webSite.indexOf("https:") < 0)
                     {
-                        if ( connection.getResponseCode() == 500 )
+                        if ( responseCode == 500 )
                         {
                         }
-                        else if (connection.getResponseCode() == 301)
+                        else if (responseCode == 301)
                         {
                             // get redirect url from "location" header field
                             String newUrl = connection.getHeaderField("Location");
@@ -3660,7 +3660,7 @@ public class Common
 
                             Common.debugPrintln("Redirect to URL : " + newUrl);
                         }
-                        else if ( connection.getResponseCode() != 200 )
+                        else if ( responseCode != 200 )
                         {
                             //Common.debugPrintln( "第二次失敗，不再重試!" );
                             String errorMessage = "錯誤回傳碼(responseCode): " + connection.getResponseCode();
@@ -3672,20 +3672,23 @@ public class Common
 
                     Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
                                         
-                    FileOutputStream os = new FileOutputStream( outputDirectory + outputFileName );               
-                                        
-                    if ( webSite.indexOf("https:") < 0 && connection.getResponseCode() == 500 )
+                    File file = new File(outputDirectory + outputFileName) ;
+                    FileOutputStream os = new FileOutputStream(file);
+                    
+                    responseCode = connection.getResponseCode();
+                    String contentEncoding = connection.getContentEncoding();
+                    
+                    if ( webSite.indexOf("https:") < 0 && responseCode == 500 )
                     {
                         rbc = new RBCWrapper( Channels.newChannel( connection.getErrorStream() ), contentLength, this );// xindm
                     }
-                    else if ( ("gzip".equals(connection.getContentEncoding())) || (gzipEncode && fileSize < 17) ) // 178漫畫小於17kb就認定為已經壓縮過的
+                    else if ( ("gzip".equals(contentEncoding)) || (gzipEncode && fileSize < 17) ) // 178漫畫小於17kb就認定為已經壓縮過的
                     {
                         try
                         {                 
-//                            Common.debugPrintln(connection.getHeaderFields().toString());
+                            Common.debugPrintln(connection.getHeaderFields().toString());
 //                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream(),512) ),-1,this); // ex. 178.com
-                            RBCWrapper  rbcw= new RBCWrapper( Channels.newChannel( connection.getInputStream() ),contentLength,this); // ex. 178.com
-                            rbc = Channels.newChannel(new GZIPInputStream(Channels.newInputStream(rbcw)));
+                            rbc = Channels.newChannel(new GZIPInputStream(Channels.newInputStream(new RBCWrapper( Channels.newChannel( connection.getInputStream() ),contentLength,this))));
                         }
                         catch ( IOException ex )
                         {
@@ -3696,13 +3699,14 @@ public class Common
                     {
                         rbc = new RBCWrapper( Channels.newChannel( connection.getInputStream()), contentLength, this );// 其他漫畫網
                     }
-
+                    
                     os.getChannel().transferFrom( rbc, 0, Integer.MAX_VALUE );
                    
-                    System.out.println();
+                    Common.debugPrintln("");
                     rbc.close();
                     os.flush();
                     os.close();
+                    
                     if ( isGUI )
                     {
                         ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
@@ -3712,9 +3716,12 @@ public class Common
 
                     connection.disconnect();
 
-
                     // 若真實下載檔案大小比預估來得小，則視設定值決定要重新嘗試幾次
-                    int realFileGotSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
+                    int realFileGotSize = ( int ) file.length() / 1000;
+                    
+                    file.deleteOnExit();
+                    file = null;
+                    
                     if ( realFileGotSize + 1 < fileSize && retryTimes > 0 )
                     {
                         String messageString = realFileGotSize + " < " + fileSize
@@ -3738,7 +3745,7 @@ public class Common
                 }
                 catch ( Exception e )
                 {
-                    new File( outputDirectory + outputFileName ).delete();                   
+                    new File( outputDirectory + outputFileName ).deleteOnExit();                   
                     Common.debugPrintln( "刪除不完整檔案：" + outputFileName );
                     timer.cancel();
                     if (Flag.timeoutFlag){
