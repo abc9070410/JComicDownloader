@@ -911,8 +911,8 @@ public class ParseDM5 extends ParseOnlineComicSite
         //use javascript agent for jdk 1.7 later
         javax.script.ScriptEngineManager sem = new javax.script.ScriptEngineManager();
         javax.script.ScriptEngine engine = sem.getEngineByName("js");
-//        String js =allPageString.substring(allPageString.indexOf("eval(")+5,allPageString.lastIndexOf(")")-1 );
-        String js =allPageString.substring(5,(allPageString.length()-2) );//remove "eval("  and  ")"
+        String js =allPageString.substring(allPageString.indexOf("eval(")+5,allPageString.indexOf(")\n") );
+//        String js =allPageString.substring(5,(allPageString.length()-36) );//remove "eval("  and  ")"
         String backURL="?";
         try {
             Object link= engine.eval("abced="+js+";eval(abced)[0]");
