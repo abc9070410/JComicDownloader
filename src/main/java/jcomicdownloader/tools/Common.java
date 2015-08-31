@@ -3672,8 +3672,11 @@ public class Common
 
                     Common.checkDirectory( outputDirectory ); // 檢查有無目標資料夾，若無則新建一個　
                                         
-                    File file = new File(outputDirectory + outputFileName) ;
-                    FileOutputStream os = new FileOutputStream(file);
+//                    File file = new File(outputDirectory + outputFileName) ;
+//                    FileOutputStream os = new FileOutputStream(file);
+                    RandomAccessFile file = new RandomAccessFile(outputDirectory + outputFileName,"rw");
+                    FileChannel channel = file.getChannel();
+                    channel.truncate(0);//clear file
                     
                     responseCode = connection.getResponseCode();
                     String contentEncoding = connection.getContentEncoding();
@@ -3686,7 +3689,7 @@ public class Common
                     {
                         try
                         {                 
-                            Common.debugPrintln(connection.getHeaderFields().toString());
+//                            Common.debugPrintln(connection.getHeaderFields().toString());
 //                            rbc = new RBCWrapper( Channels.newChannel(new GZIPInputStream ( connection.getInputStream(),512) ),-1,this); // ex. 178.com
                             rbc = Channels.newChannel(new GZIPInputStream(Channels.newInputStream(new RBCWrapper( Channels.newChannel( connection.getInputStream() ),contentLength,this))));
                         }
@@ -3700,12 +3703,15 @@ public class Common
                         rbc = new RBCWrapper( Channels.newChannel( connection.getInputStream()), contentLength, this );// 其他漫畫網
                     }
                     
-                    os.getChannel().transferFrom( rbc, 0, Integer.MAX_VALUE );
-                   
+                    channel.transferFrom( rbc, 0, Integer.MAX_VALUE );
+                    channel.force(true);
+                    int realFileGotSize = ( int ) channel.size() / 1000;
+
                     Common.debugPrintln("");
                     rbc.close();
-                    os.flush();
-                    os.close();
+//                    os.flush();
+//                    os.close();
+                    channel.close();
                     
                     if ( isGUI )
                     {
@@ -3717,11 +3723,8 @@ public class Common
                     connection.disconnect();
 
                     // 若真實下載檔案大小比預估來得小，則視設定值決定要重新嘗試幾次
-                    int realFileGotSize = ( int ) file.length() / 1000;
-                    
-                    file.deleteOnExit();
-                    file = null;
-                    
+//                    int realFileGotSize = ( int ) file.length() / 1000;
+                                        
                     if ( realFileGotSize + 1 < fileSize && retryTimes > 0 )
                     {
                         String messageString = realFileGotSize + " < " + fileSize
@@ -3745,7 +3748,6 @@ public class Common
                 }
                 catch ( Exception e )
                 {
-                    new File( outputDirectory + outputFileName ).deleteOnExit();                   
                     Common.debugPrintln( "刪除不完整檔案：" + outputFileName );
                     timer.cancel();
                     if (Flag.timeoutFlag){
@@ -3761,6 +3763,8 @@ public class Common
                                       needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
                     }
                     Flag.downloadErrorFlag = true;
+                }finally{           
+                    new File( outputDirectory + outputFileName ).deleteOnExit();                   
                 }
 
                 CommonGUI.stateBarDetailMessage = null;
