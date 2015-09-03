@@ -6,7 +6,9 @@
 package jcomicdownloader.module;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import jcomicdownloader.SetUp;
 import jcomicdownloader.enums.Site;
 import jcomicdownloader.tools.Common;
 import org.jsoup.Jsoup;
@@ -21,12 +23,11 @@ import org.jsoup.select.Elements;
  */
 public class ParseSixComic extends ParseEC {
     
-    
     public ParseSixComic(){
         super();
         enumName = "SIX_COMIC";
 	parserName=this.getClass().getName();
-        downloadBefore=true;
+        downloadBefore=false;
         siteID=Site.formString("SIX_COMIC");
         siteName = "SIX_COMIC";
         regexs= new String[]{"(?s).*6comic.com(?s).*"};
@@ -45,6 +46,7 @@ public class ParseSixComic extends ParseEC {
         return getTitleOnMainPage( mainPageUrlString, getAllPageString( mainPageUrlString ) );
     }
     
+    
     @Override
     public String getTitleOnMainPage( String urlString, String allPageString ) {
         Document nodes = Parser.parse(allPageString, urlString);
@@ -56,6 +58,15 @@ public class ParseSixComic extends ParseEC {
         return ret;
     }
     
+    @Override 
+    public void parseComicURL() { 
+        super.parseComicURL();
+        for (int i =0 ; i<comicURL.length;i++){
+            String x = comicURL[i];
+            comicURL[i] = x.replace(".8comic.com/", ".6comic.com:99/");
+        }
+    }
+    
     @Override
     public List<List<String>> getVolumeTitleAndUrlOnMainPage( String urlString, String allPageString ) {
         // combine volumeList and urlList into combinationList, return it.
@@ -63,49 +74,15 @@ public class ParseSixComic extends ParseEC {
         List<List<String>> combinationList = new ArrayList<List<String>>();
         List<String> urlList = new ArrayList<String>();
         List<String> volumeList = new ArrayList<String>();
-//
-//        int beginIndex = allPageString.indexOf( "comicview.js\"" );
-//        int endIndex = allPageString.indexOf( "id=\"tb_anime\"", beginIndex );
-//        String tempString = allPageString.substring( beginIndex, endIndex );
-//
-//        totalVolume = tempString.split( "onmouseover=" ).length - 1;
-//        Common.debugPrintln( "共有" + totalVolume + "集" );
-//
-//
-//        String idString = ""; // ex. 7853
-//        String volumeNoString = ""; // ex. 3
-//        String volumeTitle = "";
-//
-//        beginIndex = endIndex = 0;
-//        for ( int i = 0 ; i < totalVolume ; i++ ) {
-//            // 取得單集位址
-//            beginIndex = tempString.indexOf( "onmouseover=", beginIndex );
-//            beginIndex = tempString.indexOf( "'", beginIndex ) + 1;
-//            endIndex = tempString.indexOf( "'", beginIndex );
-//            idString = tempString.substring( beginIndex, endIndex );
-//
-//            beginIndex = tempString.indexOf( "'", endIndex + 1 ) + 1;
-//            endIndex = tempString.indexOf( "'", beginIndex );
-//            volumeNoString = tempString.substring( beginIndex, endIndex );
-//
-//            urlList.add( getSinglePageURL( idString, volumeNoString ) );
-//
-//
-//            // 取得單集名稱
-//            beginIndex = tempString.indexOf( ">", endIndex ) + 1;
-//            endIndex = tempString.indexOf( "<", beginIndex );
-//
-//            volumeTitle = getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
-//                    Common.getTraditionalChinese( tempString.substring( beginIndex, endIndex ).trim() ) ) );
-//            volumeList.add( getVolumeWithFormatNumber( volumeTitle ) );
-//
-//        }
+
         Document doc = Jsoup.parse(allPageString);
-        Elements ems =doc.getElementById("rp_ctl00_comiclist1_dl").getElementsByTag("a");
+        Elements ems = doc.getElementById("rp_ctl00_comiclist1_dl").getElementsByTag("a");       
+        String baseURL=urlString.split("/comic/")[0];
+        
         for( Element e : ems){
             volumeList.add(getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
                     Common.getTraditionalChinese(e.text()))));
-            urlList.add( urlString +e.attr("href"));
+            urlList.add( baseURL +e.attr("href"));         
         }
         combinationList.add( volumeList );
         combinationList.add( urlList );
@@ -122,6 +99,11 @@ public class ParseSixComic extends ParseEC {
         return baseMainURL + idString + ".html" + volumeString;
     }
 
+    @Override
+    public boolean isSingleVolumePage( String urlString ) {
+        return urlString.matches( "(?s).*/comic/readmanga_(?s).*" ); // ex. http://www.8comic.com/love/drawing-2245.html?ch=51
+    }
+    
     @Override
     public void printLogo() {
         System.out.println( " ____________________________________" );
