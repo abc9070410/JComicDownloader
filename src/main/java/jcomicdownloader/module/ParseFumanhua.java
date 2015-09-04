@@ -38,6 +38,7 @@ public class ParseFumanhua extends ParseOnlineComicSite {
     public ParseFumanhua() {
         enumName = "FUMANHUA";
 	parserName=this.getClass().getName();
+        regexs= new String[]{"(?s).*fumanhua.net(?s).*", "(?s).*fumanhua.com(?s).*" };
         downloadBefore=true;
 	siteID=Site.formString("FUMANHUA");
         siteName = "Fumanhua";
@@ -47,7 +48,7 @@ public class ParseFumanhua extends ParseOnlineComicSite {
         jsName = "index_fumanhua.js";
         radixNumber = 1591371; // default value, not always be useful!!
 
-        baseURL = "http://mh.fumanhua.com";
+        baseURL = "http://mh.fumanhua.net";
     }
 
     public ParseFumanhua( String webSite, String titleName ) {
@@ -63,11 +64,11 @@ public class ParseFumanhua extends ParseOnlineComicSite {
 
         //Common.downloadFile( webSite, SetUp.getTempDirectory(), indexName, false, "" );
         Common.simpleDownloadFile( webSite, SetUp.getTempDirectory(), indexName, webSite );
-        Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName );
+        //Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName );
 
         if ( getWholeTitle() == null || getWholeTitle().equals( "" ) ) {
             // 因為正常解析不需要用到單集頁面，所以給此兩行放進來
-            String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
+            String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
 
             int beginIndex = allPageString.indexOf( "href='/comic" );
             beginIndex = allPageString.indexOf( "〉", beginIndex ) + 1;
@@ -90,81 +91,106 @@ public class ParseFumanhua extends ParseOnlineComicSite {
         String tempString = "";
 
         Common.debugPrint( "開始解析這一集有幾頁 : " );
-        String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
+        String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
+        
+        
+        
+        beginIndex = allPageString.indexOf( "qTcms_S_m_murl_e" );
+        
+        if (beginIndex > 0)
+        {
+            beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
+            endIndex = allPageString.indexOf( "\"", beginIndex );
 
-        totalPage = allPageString.split( "</option>" ).length - 1;
-        Common.debugPrintln( "共 " + totalPage + " 頁" );
-        comicURL = new String[totalPage];
+            String qTcms_S_m_murl_e = allPageString.substring( beginIndex, endIndex );
+            String qTcms_S_m_murl = base64_decode( qTcms_S_m_murl_e );
+            
+            Common.debugPrintln("qTcms_S_m_murl:" + qTcms_S_m_murl);
+            
+            comicURL = qTcms_S_m_murl.split( "\\$qingtiandy\\$" );
+            totalPage = comicURL.length;
+            Common.debugPrintln( "共 " + totalPage + " 頁" );
+            //System.exit(0);
+        }
+        else
+        {
         
-        // 設定伺服器位址
-        String serverURL1 = "http://pic2.fumanhua.com";
-        String serverURL2 = "http://img2.fumanhua.com";
-        String serverURL3 = "http://img3.fumanhua.com";
-        String serverURL = "";
+            totalPage = allPageString.split( "</option>" ).length - 1;
+            Common.debugPrintln( "共 " + totalPage + " 頁" );
+            comicURL = new String[totalPage];
+            
+            // 設定伺服器位址
+            String serverURL1 = "http://pic2.fumanhua.com";
+            String serverURL2 = "http://img2.fumanhua.com";
+            String serverURL3 = "http://img3.fumanhua.com";
+            String serverURL = "";
 
-        // 開始第一張圖片位址
-        beginIndex = allPageString.indexOf( "var imgurl" );
-        beginIndex = allPageString.indexOf( "'", beginIndex ) + 1;
-        endIndex = allPageString.indexOf( "'", beginIndex );
-        String firestPicBackURL = allPageString.substring( beginIndex, endIndex );
-        
-        String firstPicURL = "";
-        String firstPicURL1 = serverURL1 + firestPicBackURL;
-        String firstPicURL2 = serverURL2 + firestPicBackURL;
-        String firstPicURL3 = serverURL3 + firestPicBackURL;
-        
-        // 測試三組伺服器，順序：1 -> 2 -> 3
-        if ( Common.urlIsOK( firstPicURL1 ) ) {
-            firstPicURL = firstPicURL1;
-            Common.debugPrintln( "使用伺服器位址：" + serverURL1 );
-        }
-        else if ( Common.urlIsOK( firstPicURL2 ) ) {
-            firstPicURL = firstPicURL2;
-            Common.debugPrintln( "使用伺服器位址：" + serverURL2 );
-        }
-        else if ( Common.urlIsOK( firstPicURL3 ) ) {
-            firstPicURL = firstPicURL3;
-            Common.debugPrintln( "使用伺服器位址：" + serverURL3 );
-        }
-        
-        Common.debugPrintln( "第一張圖片位址：" + firstPicURL );
-        
-        // 取得圖片副檔名
-        beginIndex = firstPicURL.lastIndexOf( "." ) + 1;
-        String extension = firstPicURL.substring( beginIndex, firstPicURL.length() );
-        Common.debugPrintln( "圖片副檔名：" + extension );
-        
-        // 取得圖片檔名（不包含副檔名）
-        endIndex = beginIndex - 1;
-        beginIndex = firstPicURL.lastIndexOf( "/" ) + 1;
-        String picName = firstPicURL.substring( beginIndex, endIndex );
-        Common.debugPrintln( "圖片檔名：" + picName );
-        
-        String zeroString = "";
-        for ( int i = 0; i < picName.length(); i ++ ) {
-            zeroString += "0";
-        }
-        Common.debugPrintln( "零格式：" + zeroString );
-        
-        NumberFormat formatter = new DecimalFormat( zeroString ); // 此站預設三個零，之後若有變數再說
+            // 開始第一張圖片位址
+            beginIndex = allPageString.indexOf( "var imgurl" );
+            beginIndex = allPageString.indexOf( "'", beginIndex ) + 1;
+            endIndex = allPageString.indexOf( "'", beginIndex );
+            String firestPicBackURL = allPageString.substring( beginIndex, endIndex );
+            
+            String firstPicURL = "";
+            String firstPicURL1 = serverURL1 + firestPicBackURL;
+            String firstPicURL2 = serverURL2 + firestPicBackURL;
+            String firstPicURL3 = serverURL3 + firestPicBackURL;
+            
+            // 測試三組伺服器，順序：1 -> 2 -> 3
+            if ( Common.urlIsOK( firstPicURL1 ) ) {
+                firstPicURL = firstPicURL1;
+                Common.debugPrintln( "使用伺服器位址：" + serverURL1 );
+            }
+            else if ( Common.urlIsOK( firstPicURL2 ) ) {
+                firstPicURL = firstPicURL2;
+                Common.debugPrintln( "使用伺服器位址：" + serverURL2 );
+            }
+            else if ( Common.urlIsOK( firstPicURL3 ) ) {
+                firstPicURL = firstPicURL3;
+                Common.debugPrintln( "使用伺服器位址：" + serverURL3 );
+            }
+            
+            Common.debugPrintln( "第一張圖片位址：" + firstPicURL );
+            
+            // 取得圖片副檔名
+            beginIndex = firstPicURL.lastIndexOf( "." ) + 1;
+            String extension = firstPicURL.substring( beginIndex, firstPicURL.length() );
+            Common.debugPrintln( "圖片副檔名：" + extension );
+            
+            // 取得圖片檔名（不包含副檔名）
+            endIndex = beginIndex - 1;
+            beginIndex = firstPicURL.lastIndexOf( "/" ) + 1;
+            String picName = firstPicURL.substring( beginIndex, endIndex );
+            Common.debugPrintln( "圖片檔名：" + picName );
+            
+            String zeroString = "";
+            for ( int i = 0; i < picName.length(); i ++ ) {
+                zeroString += "0";
+            }
+            Common.debugPrintln( "零格式：" + zeroString );
+            
+            NumberFormat formatter = new DecimalFormat( zeroString ); // 此站預設三個零，之後若有變數再說
 
+            int p = 0; // 目前頁數
+            String picURL = firstPicURL; // 每張圖片位址
+            for ( int i = 1 ; i <= totalPage; i++ ) {
+                String nowFileName = formatter.format( i ) + "." + extension;
+                String nextFileName = formatter.format( i + 1 ) + "." + extension;
+
+                comicURL[p] = picURL; // 存入每一頁的網頁網址
+                //Common.debugPrintln( p + " " + comicURL[p - 1] ); // debug
+                
+                p ++;
+
+                picURL = picURL.replaceAll( nowFileName, nextFileName ); // 換下一張圖片
+            }
+        }
+        
         String cookie = "Hm_lvt_a0d6e70519c7610ccd1d37c3ebb0434b=1341308909421; Hm_lpvt_a0d6e70519c7610ccd1d37c3ebb0434b=1341308909421";
         
-        int p = 0; // 目前頁數
-        String picURL = firstPicURL; // 每張圖片位址
-        for ( int i = 1 ; i <= totalPage && Run.isAlive; i++ ) {
-            String nowFileName = formatter.format( i ) + "." + extension;
-            String nextFileName = formatter.format( i + 1 ) + "." + extension;
-
-            comicURL[p] = picURL; // 存入每一頁的網頁網址
-            //Common.debugPrintln( p + " " + comicURL[p - 1] ); // debug
-            
-            singlePageDownload( getTitle(), getWholeTitle(), comicURL[p], null,
+        for ( int i = 0 ; i < totalPage && Run.isAlive; i++ ) {
+            singlePageDownload( getTitle(), getWholeTitle(), comicURL[i], null,
                 totalPage, i, 0, true, cookie, webSite, true );
-            
-            p ++;
-
-            picURL = picURL.replaceAll( nowFileName, nextFileName ); // 換下一張圖片
         }
         //System.exit( 0 ); // debug
     }
@@ -239,6 +265,9 @@ public class ParseFumanhua extends ParseOnlineComicSite {
         String tempString = allPageString.substring( beginIndex, endIndex );
 
         int volumeCount = tempString.split( " href=" ).length - 1;
+        
+        endIndex = urlString.indexOf(".net/") + 5;
+        String base = urlString.substring(0, endIndex);
 
         String volumeTitle = "";
         beginIndex = endIndex = 0;
@@ -248,7 +277,8 @@ public class ParseFumanhua extends ParseOnlineComicSite {
             beginIndex = tempString.indexOf( " href=", beginIndex );
             beginIndex = tempString.indexOf( "\"", beginIndex ) + 1;
             endIndex = tempString.indexOf( "\"", beginIndex );
-            urlList.add( baseURL + tempString.substring( beginIndex, endIndex ) );
+            String volumeUrl = base + tempString.substring( beginIndex, endIndex );
+            urlList.add( volumeUrl );
 
             // 取得單集名稱
             beginIndex = tempString.indexOf( ">", beginIndex ) + 1;
@@ -256,6 +286,8 @@ public class ParseFumanhua extends ParseOnlineComicSite {
             volumeTitle = tempString.substring( beginIndex, endIndex );
             volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
                     Common.getTraditionalChinese( volumeTitle.trim() ) ) ) );
+                    
+            Common.debugPrintln(volumeTitle + " : " + volumeUrl );
         }
 
         totalVolume = volumeCount;
