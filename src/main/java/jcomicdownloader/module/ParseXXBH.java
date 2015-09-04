@@ -45,7 +45,7 @@ public class ParseXXBH extends ParseOnlineComicSite
     {
         enumName = "XXBH";
 	parserName=this.getClass().getName();
-        regexs= new String[]{"(?s).*xxbh.net(?s).*" };
+        regexs= new String[]{"(?s).*xxbh.net(?s).*|(?s).*77mh.com(?s).*" };
         downloadBefore=true;
         siteID=Site.formString("XXBH");
         siteName = "xxbh";
@@ -55,7 +55,7 @@ public class ParseXXBH extends ParseOnlineComicSite
         jsName = "index_xxbh.js";
         radixNumber = 1591371; // default value, not always be useful!!
 
-        baseURL = "http://xxbh.net";
+        baseURL = "http://www.77mh.com"; //"http://xxbh.net";
     }
 
     public ParseXXBH( String webSite, String titleName )
@@ -117,7 +117,7 @@ public class ParseXXBH extends ParseOnlineComicSite
          endIndex = allPageString.indexOf( "\"", beginIndex );
          String jsURL2 = allPageString.substring( beginIndex, endIndex );
          */
-        
+
         // 取得v3_cont_v130404.js
         beginIndex = allPageString.indexOf( "_cont_" );
         beginIndex = allPageString.lastIndexOf( "http:", beginIndex );
@@ -128,10 +128,11 @@ public class ParseXXBH extends ParseOnlineComicSite
         
         allJSPageString = getAllPageString( tempURL );
         
+       
         // 從v3_cont_v130404.js中取得記載伺服器位址的js, ex. http://img_v1.dm08.com/img_v1/fdc_130404.js
         beginIndex = allJSPageString.indexOf( "/fdc_" );
         beginIndex = allJSPageString.lastIndexOf( "http:", beginIndex );
-        endIndex = allJSPageString.indexOf( "'", beginIndex );
+        endIndex = allJSPageString.indexOf( "\"", beginIndex );
         String jsURL2 = allJSPageString.substring( beginIndex, endIndex );
         
         Common.debugPrintln( "第2個js位址: " + jsURL2 );
@@ -156,7 +157,7 @@ public class ParseXXBH extends ParseOnlineComicSite
         //System.exit( 0 );
 
         //Common.debugPrint( "開始解析這一集有幾頁 : " );
-
+        
         // 首先要下載js檔
         beginIndex = allPageString.indexOf( "/coojs/" );
         beginIndex = allPageString.lastIndexOf( "\"", beginIndex ) + 1;
@@ -336,16 +337,17 @@ public String getDecodeJS( String data )
         //String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_xxbh_encode_", "html" );
 
         Common.downloadFile( urlString, SetUp.getTempDirectory(), indexName, false, "" );
-        Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName, Encoding.GB2312 );
+        //Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName, Encoding.GB2312 );
 
-        return Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
+        return Common.getFileString( SetUp.getTempDirectory(), indexName );
     }
 
     @Override
     public boolean isSingleVolumePage( String urlString )
     {
         // ex. http://comic.xxbh.net/201205/223578.html
-        if ( Common.getAmountOfString( urlString, "/" ) > 4 )
+        //     http://www.77mh.com/201509/319390.html
+        if ( Common.getAmountOfString( urlString, "/" ) > 3 )
         {
             return true;
         }
@@ -383,10 +385,8 @@ public String getDecodeJS( String data )
     @Override
     public String getTitleOnMainPage( String urlString, String allPageString )
     {
-        int beginIndex = allPageString.indexOf( "class=\"l21\"" );
-        beginIndex = allPageString.indexOf( "alt=", beginIndex );
-        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
-        int endIndex = allPageString.indexOf( "\"", beginIndex );
+        int beginIndex = allPageString.indexOf( "<h1>" ) + 4;
+        int endIndex = allPageString.indexOf( "</h1>", beginIndex );
         String title = allPageString.substring( beginIndex, endIndex ).trim();
 
         return Common.getStringRemovedIllegalChar( Common.getTraditionalChinese( title ) );
@@ -401,8 +401,8 @@ public String getDecodeJS( String data )
         List<String> urlList = new ArrayList<String>();
         List<String> volumeList = new ArrayList<String>();
 
-        int beginIndex = allPageString.indexOf( "class=\"b-d-div\"" );
-        int endIndex = allPageString.indexOf( "</div>", beginIndex );
+        int beginIndex = allPageString.indexOf( "ar_rlos_bor ar_list_col" );
+        int endIndex = allPageString.indexOf( "class=\"ass_list\"", beginIndex );
 
         String tempString = allPageString.substring( beginIndex, endIndex );
 
@@ -417,8 +417,8 @@ public String getDecodeJS( String data )
         {
             // 取得單集位址
             beginIndex = tempString.indexOf( " href=", beginIndex );
-            beginIndex = tempString.indexOf( "\"", beginIndex ) + 1;
-            endIndex = tempString.indexOf( "\"", beginIndex );
+            beginIndex = tempString.indexOf( "'", beginIndex ) + 1;
+            endIndex = tempString.indexOf( "'", beginIndex );
             volumeURL = tempString.substring( beginIndex, endIndex );
 
             if ( !volumeURL.matches( ".*/s/.*" ) && volumeURL.matches( "/(?s).*" ) )
