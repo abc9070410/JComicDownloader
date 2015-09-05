@@ -1487,7 +1487,7 @@ public class ParseDM5 extends ParseOnlineComicSite
 //        }
         try{
             org.jsoup.nodes.Document doc = org.jsoup.Jsoup.connect(urlString.replaceFirst("[.]com[/]manhua-", ".com/rss-")).cookie("Cookie", "isAdult=1").parser(org.jsoup.parser.Parser.xmlParser()).get();
-            this.title = NewEncoding.StoT(doc.getElementsByTag("title").get(0).text());
+            this.title = Common.getStringRemovedIllegalChar(NewEncoding.StoT(doc.getElementsByTag("title").get(0).text()));
             for  (org.jsoup.nodes.Element e : doc.getElementsByTag("item")){
                 volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
                         NewEncoding.StoT(e.getElementsByTag("title").get(0).text().trim()))));
