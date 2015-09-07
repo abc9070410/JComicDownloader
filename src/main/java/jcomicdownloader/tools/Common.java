@@ -3755,7 +3755,7 @@ public class Common
                         Flag.timeoutFlag = false; // 歸回初始值
                     }
                     Common.hadleErrorMessage( e, "無法正確下載" + webSite );
-
+                    new File( outputDirectory + outputFileName ).delete();                   
                     if ( ( retryTimes + 1 ) > 0 )
                     { // 即使retryTimes設零，也會重傳一次
                         Flag.downloadErrorFlag = false;
@@ -3763,8 +3763,6 @@ public class Common
                                       needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
                     }
                     Flag.downloadErrorFlag = true;
-                }finally{           
-                    new File( outputDirectory + outputFileName ).deleteOnExit();                   
                 }
 
                 CommonGUI.stateBarDetailMessage = null;
