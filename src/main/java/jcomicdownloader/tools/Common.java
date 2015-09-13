@@ -3176,12 +3176,16 @@ public class Common
             dir += "target" + Common.getSlash();
         }
         
-        String fileDir = dir + "lib" + Common.getSlash(); // 存於lib資料夾內
+        final String fileDir = dir + "lib" + Common.getSlash(); // 存於lib資料夾內
 
         Run.isAlive = true;
         for ( int i = 0; i < fileURL.length; i++ )
         {
-            Common.downloadFile( fileURL[i], fileDir, fileName[i], false, "" );
+            if (!Common.existJAR(fileName[i]))
+            {
+                Common.downloadFile( fileURL[i], fileDir, fileName[i], false, "" );
+                //Common.simpleDownloadFile(fileURL[i], fileDir, fileName[i]);
+            }
         }
 
         Run.isAlive = backupValue; // 還原原值
@@ -3191,11 +3195,22 @@ public class Common
 
             public void run()
             {
-                CommonGUI.showMessageDialog( ComicDownGUI.mainFrame,
-                                             fileName[0] + "下載完畢，請注意，程式即將重新啟動! ",
+                Boolean needRestart = true;
+                String message = fileName[0] + "下載完畢，請注意，程式即將重新啟動! "; 
+                if (!Common.existJAR( fileName[0] ))
+                {
+                    message = " 下載失敗，在資料夾中找不到 : " + fileDir + fileName[0]; 
+                    needRestart = false;
+                }
+              
+                CommonGUI.showMessageDialog( ComicDownGUI.mainFrame, message,
                                              "提醒訊息", JOptionPane.INFORMATION_MESSAGE );
                 //Common.restartApplication(); // 重新開啟程式
-                Common.restart();
+                
+                if (needRestart)
+                {
+                    Common.restart();
+                }
             }
         } );
         downThread.start();
@@ -3434,7 +3449,8 @@ public class Common
     public static boolean existJAR( String jarFileName )
     {
         if ( new File( Common.getNowAbsolutePath() + jarFileName ).exists()
-                || new File( Common.getNowAbsolutePath() + "lib" + Common.getSlash() + jarFileName ).exists() )
+                || new File( Common.getNowAbsolutePath() + "lib" + Common.getSlash() + jarFileName ).exists()
+                || new File( Common.getNowAbsolutePath() + "target" + Common.getSlash() + "lib" + Common.getSlash() + jarFileName ).exists() )
         {
             return true;
         }
@@ -3785,8 +3801,9 @@ public class Common
             if (isGUI){
                 ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
                     + CommonGUI.stateBarDetailMessage
-                    + " : " + downloadText );
-            }               
+                    + " : " + downloadText );     
+            }
+            
             if (progress ==-1){
                 Common.debugPrint( String.format( "Download progress %d bytes received.\r", rbc.getReadSoFar() ) );                       
             }else{

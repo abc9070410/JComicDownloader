@@ -3050,8 +3050,29 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                     return;
                 }
             }
+            
+            try {
+                Class.forName("com.owlike.genson.Genson",false,this.getClass().getClassLoader());
+            } catch(ClassNotFoundException e) {
+                final String jarFileName = "genson-1.3.jar";
+                
+                new Thread(new Runnable() {
+                    public void run() {
+                        CommonGUI.showMessageDialog( ComicDownGUI.mainFrame, "缺少必要程式庫[" + jarFileName + "]，進行下載",
+                                         "提醒訊息", JOptionPane.INFORMATION_MESSAGE );
+                                         
+                                         }
+                }).start();
+                
+                new Thread(new Runnable() {
+                    public void run() {
+                        Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
+                    }
+                }).start();
+                return;
+            }
+            
             new Thread(new Runnable() {
-
                 public void run() {
                     SwingUtilities.invokeLater(new Runnable() {
 
