@@ -302,7 +302,7 @@ public class ParseEH extends ParseOnlineComicSite {
             beginIndex = allPageString.indexOf( "<title>" );
             beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
 //            if ( siteID == Site.EH ) {
-                endIndex = allPageString.indexOf( "E-Hentai", beginIndex ) - 3;
+                endIndex = allPageString.indexOf( "Hentai", beginIndex ) - 5;
 //            } else if ( siteID == Site.EX ) {
 //                endIndex = allPageString.indexOf( "ExHentai", beginIndex ) - 3;
 //            }
