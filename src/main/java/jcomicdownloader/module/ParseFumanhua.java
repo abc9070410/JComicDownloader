@@ -165,7 +165,10 @@ public class ParseFumanhua extends ParseOnlineComicSite {
             
             String zeroString = "";
             for ( int i = 0; i < picName.length(); i ++ ) {
-                zeroString += "0";
+                if (picName.substring(i, i+1).matches("\\d+"))
+                {
+                    zeroString += "0";
+                }
             }
             Common.debugPrintln( "零格式：" + zeroString );
             
@@ -178,7 +181,7 @@ public class ParseFumanhua extends ParseOnlineComicSite {
                 String nextFileName = formatter.format( i + 1 ) + "." + extension;
 
                 comicURL[p] = picURL; // 存入每一頁的網頁網址
-                //Common.debugPrintln( p + " " + comicURL[p - 1] ); // debug
+                Common.debugPrintln( p + " " + comicURL[p] ); // debug
                 
                 p ++;
 
