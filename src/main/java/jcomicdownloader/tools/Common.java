@@ -957,6 +957,34 @@ public class Common
     }
 
     // -----------------------------------
+    /**
+     * Computes the CRC checksum for the given file. 
+     * 
+     * @param file The file to compute checksum for. 
+     * @return A CRC32 checksum. 
+     * @throws IOException If an I/O error occurs. 
+     */ 
+    private static long computeCrc(File file) throws IOException { 
+        CRC32 crc = new CRC32(); 
+        InputStream in = new FileInputStream(file); 
+ 
+        try { 
+ 
+            byte[] buf = new byte[8192]; 
+            int n = in.read(buf); 
+            while (n != -1) { 
+                crc.update(buf, 0, n); 
+                n = in.read(buf); 
+            } 
+ 
+        } finally { 
+            in.close(); 
+        } 
+ 
+        return crc.getValue(); 
+    } 
+    
+    
     public static void compress( File source, File destination )
     { //  compress to zip
         try
@@ -989,9 +1017,13 @@ public class Common
         if ( source.isFile() )
         {
             ZipEntry zipEntry = new ZipEntry( source.getName() );//filename );
+            zipEntry.setMethod(ZipEntry.STORED);
+            zipEntry.setSize(source.length());
+            zipEntry.setCompressedSize(source.length());
+            zipEntry.setCrc(computeCrc(source));
             zos.putNextEntry( zipEntry );
             FileInputStream fis = new FileInputStream( source );
-            byte[] buffer = new byte[ 1024 ];
+            byte[] buffer = new byte[ 4096 ];
             for ( int length; (length = fis.read( buffer )) > 0; )
             {
                 zos.write( buffer, 0, length );
