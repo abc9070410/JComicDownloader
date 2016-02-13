@@ -97,8 +97,40 @@ public class Common
     public static String mainIcon = "main_icon.png";
     public static String playAudioPic = "play.png";
     public static String NULL = "NULL";
+    public static List<String> downloadFailList = new ArrayList<>();
     protected static int defaultDownloadTimeout=60000; //下載timeout60秒
-
+    
+    public static boolean isDownloadFail(int expectFileSize, int gotFileSize)
+    {
+        return (expectFileSize > 20) && (expectFileSize - gotFileSize > 1);
+    }
+    
+    public static void setDownloadFail(String fileName, int expectFileSize, int gotFileSize)
+    {
+        /*
+        int index = 0;
+        String[] fileNameToken = fileName.split("\.");
+        
+        if (fileNameToken.length == 2)
+        {
+            index = Integer.parseInt(fileNameToken[0]);
+        }
+        */        
+        Common.debugPrintln(fileName + 
+            "下載失敗, 預期 " + expectFileSize + 
+            " KB , 但只下載了 " + gotFileSize + " KB");
+        downloadFailList.add(fileName);
+    }
+    
+    public static List<String> getDownloadFailList()
+    {
+        return downloadFailList;
+    }
+    
+    public static void cleanDownloadFail()
+    {
+        downloadFailList = new ArrayList<String>();
+    }
 
     public static String getZero()
     {
@@ -2520,7 +2552,7 @@ public class Common
         boolean fastMode = false;
 
         int fileGotSize = 0;
-
+        int fileSize = 0;
 
         if ( CommonGUI.stateBarDetailMessage == null )
         {
@@ -2605,7 +2637,7 @@ public class Common
 
                 is = connection.getInputStream();
 
-                int fileSize = connection.getContentLength() / 1000;
+                fileSize = connection.getContentLength() / 1000;
                 Common.debugPrint( "(" + fileSize + " k) " );
                 String fileSizeString = fileSize > 0 ? "" + fileSize : " ? ";
 
@@ -2650,9 +2682,6 @@ public class Common
                 os.flush();
                 os.close();
 
-
-
-
                 if ( Common.withGUI() )
                 {
                     ComicDownGUI.stateBar.setText( CommonGUI.stateBarMainMessage
@@ -2674,8 +2703,6 @@ public class Common
 
                     downloadFile( webSite, outputDirectory, outputFileName,
                                   needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, false );
-
-
                 }
 
                 if ( fileSize < 1024 && Flag.timeoutFlag )
@@ -2691,12 +2718,18 @@ public class Common
 
                 Flag.timeoutFlag = false; // 歸回初始值
 
-                Common.debugPrintln( webSite + " downloads successful!" ); // for debug
+                Common.debugPrintln( webSite + " downloads successful! 2" ); // for debug
 
             }
             catch ( Exception e )
             {
                 Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+            }
+            
+            int realFileStoredSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
+            if (Common.isDownloadFail(fileSize, realFileStoredSize))
+            {
+                Common.setDownloadFail(outputFileName, fileSize, realFileStoredSize);
             }
 
             CommonGUI.stateBarDetailMessage = null;
@@ -2750,6 +2783,7 @@ public class Common
                                           String outputDirectory, String outputFileName, String cookieString, String referString )
     {
         int responseCode = 0;
+        int fileSize = 0;
         try
         {
             URL url = new URL( webSite );
@@ -2785,7 +2819,7 @@ public class Common
 
             //tryConnect( connection );
 
-            int fileSize = connection.getContentLength() / 1000;
+            fileSize = connection.getContentLength() / 1000;
 
             responseCode = connection.getResponseCode();
             if ( responseCode != 200 )
@@ -2864,7 +2898,7 @@ public class Common
 
             Flag.timeoutFlag = false; // 歸回初始值
 
-            Common.debugPrintln( webSite + " downloads successful!" ); // for debug
+            Common.debugPrintln( webSite + " downloads successful! 3" ); // for debug
 
         }
         catch ( MalformedURLException e )
@@ -2876,14 +2910,23 @@ public class Common
             // TODO Auto-generated catch block
             Common.hadleErrorMessage( e, "無法正確下載" + webSite );
         }
-
+        
+        int realFileStoredSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
+            
+        if (Common.isDownloadFail(fileSize, realFileStoredSize))
+        {
+            Common.setDownloadFail(outputFileName, fileSize, realFileStoredSize);
+        }
 
         return responseCode;
     }
+    
     public static int simpleDownloadFile( String webSite,
             String outputDirectory, String outputFileName, List<List<String>> requestProperty)
     {
         int responseCode = 0;
+        int fileSize = 0;
+        
         try
         {
             URL url = new URL( webSite );
@@ -2919,7 +2962,7 @@ public class Common
             
             //tryConnect( connection );
             
-            int fileSize = connection.getContentLength() / 1000;
+            fileSize = connection.getContentLength() / 1000;
             
             responseCode = connection.getResponseCode();
             if ( responseCode != 200 )
@@ -2998,7 +3041,7 @@ public class Common
             
             Flag.timeoutFlag = false; // 歸回初始值
             
-            Common.debugPrintln( webSite + " downloads successful!" ); // for debug
+            Common.debugPrintln( webSite + " downloads successful! 4" ); // for debug
             
         }
         catch ( MalformedURLException e )
@@ -3010,9 +3053,17 @@ public class Common
             // TODO Auto-generated catch block
             Common.hadleErrorMessage( e, "無法正確下載" + webSite );
         }
+        
+        int realFileStoredSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
+
+        if (Common.isDownloadFail(fileSize, realFileStoredSize))
+        {
+            Common.setDownloadFail(outputFileName, fileSize, realFileStoredSize);
+        }
+        
         return responseCode;
     }
-
+    
 
     // 從java.awt.Color[r=255,g=175,b=175]轉為Color
     public static Color getColor( String colorString )
@@ -3598,6 +3649,8 @@ public class Common
                 CommonGUI.stateBarMainMessage = "下載網頁進行分析 : ";
                 CommonGUI.stateBarDetailMessage = outputFileName + " ";
             }
+            
+            int fileSize = 0;
 
             if ( Run.isAlive || forceDownload )
             { // 當允許下載或強制下載時才執行連線程序
@@ -3672,7 +3725,7 @@ public class Common
                         tryConnect( connection );
 
 
-                    int fileSize = contentLength / 1000;
+                    fileSize = contentLength / 1000;
 
                     if ( Common.isPicFileName( outputFileName )
                             && (fileSize == 21 || fileSize == 22) )
@@ -3772,7 +3825,7 @@ public class Common
 
                     // 若真實下載檔案大小比預估來得小，則視設定值決定要重新嘗試幾次
 //                    int realFileGotSize = ( int ) file.length() / 1000;
-                                        
+
                     if ( realFileGotSize + 1 < fileSize && retryTimes > 0 )
                     {
                         String messageString = realFileGotSize + " < " + fileSize
@@ -3783,15 +3836,13 @@ public class Common
 
                         downloadFile( webSite, outputDirectory, outputFileName,
                                       needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
-
-
                     }
 
                     timer.cancel(); // 連線結束同時也關掉計時器
 
                     Flag.timeoutFlag = false; // 歸回初始值
 
-                    Common.debugPrintln( webSite + " downloads successful!" ); // for debug
+                    Common.debugPrintln( webSite + " downloads successful! 1" ); // for debug
 
                 }
                 catch ( Exception e )
@@ -3811,6 +3862,12 @@ public class Common
                                       needCookie, cookieString, referURL, fastMode, retryTimes - 1, gzipEncode, forceDownload );
                     }
                     Flag.downloadErrorFlag = true;
+                }
+                
+                int realFileStoredSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
+                if (Common.isDownloadFail(fileSize, realFileStoredSize))
+                {
+                    Common.setDownloadFail(outputFileName, fileSize, realFileStoredSize);
                 }
 
                 CommonGUI.stateBarDetailMessage = null;

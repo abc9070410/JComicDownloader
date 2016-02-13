@@ -134,7 +134,7 @@ public class RunModule {
         Common.debugPrintln( "開始處理單一集數" );
         if ( Run.isAlive ) {
             Flag.downloadingFlag = true;
-
+            
             parse.setURL( urlString );
             parse.setTitle( titleString );
 
@@ -179,34 +179,11 @@ public class RunModule {
                 Flag.downloadErrorFlag = true;
             }
 
-
-            String[] urls = parse.getComicURL();
-            String[] refers = parse.getRefers();
-
-            if ( SetUp.getOutputUrlFile() ) {
-                Common.debugPrintln( "允許輸出圖片位址" );
-                Common.outputUrlFile( urls, parse.getDownloadDirectory() );  // output url file
-            }
-
-            if ( !isDownloadBefore( parse.getSiteID() ) && SetUp.getDownloadPicFile() ) {
-                System.out.println( "Download Directory : " + parse.getDownloadDirectory() );
-                System.out.println( "\nReady to download ...\n" );
-
-                // 如果已經有同檔名壓縮檔存在，就假設已經下載完畢而不下載。
-                if ( !existZipFile( parse.getDownloadDirectory() ) ) {
-                    Common.debugPrintln( "開始下載整集：" );
-
-                    Common.downloadManyFile( urls, parse.getRefers(), parse.getDownloadDirectory(),
-                        SetUp.getPicFrontName(), "jpg" );
-
-                    // 下載過程中若發生錯誤，重新嘗試下載。
-                    retry( urls, parse.getDownloadDirectory(), 1 );
-
-                }
-            }
-
+            handleDownload(parse);
+            
             if ( new File( parse.getDownloadDirectory() ).getAbsoluteFile().exists() ) // 存在下載圖檔資料夾
             {
+                handleDownloadFail(parse);
                 followingWork( parse );
             }
             else {
@@ -229,6 +206,81 @@ public class RunModule {
 
             Flag.downloadingFlag = false;
         }
+    }
+    
+    public void handleDownload(ParseOnlineComicSite parse)
+    {
+        Common.cleanDownloadFail();
+        
+        String[] urls = parse.getComicURL();
+        String[] refers = parse.getRefers();
+
+        if ( SetUp.getOutputUrlFile() ) {
+            Common.debugPrintln( "允許輸出圖片位址" );
+            Common.outputUrlFile( urls, parse.getDownloadDirectory() );  // output url file
+        }
+
+        if ( !isDownloadBefore( parse.getSiteID() ) && SetUp.getDownloadPicFile() ) {
+            System.out.println( "Download Directory : " + parse.getDownloadDirectory() );
+            System.out.println( "\nReady to download ...\n" );
+
+            // 如果已經有同檔名壓縮檔存在，就假設已經下載完畢而不下載。
+            if ( !existZipFile( parse.getDownloadDirectory() ) ) {
+                Common.debugPrintln( "開始下載整集：" );
+
+                Common.downloadManyFile( urls, parse.getRefers(), parse.getDownloadDirectory(),
+                    SetUp.getPicFrontName(), "jpg" );
+
+                // 下載過程中若發生錯誤，重新嘗試下載。
+                retry( urls, parse.getDownloadDirectory(), 1 );
+
+            }
+        }
+    }
+    
+    public void handleDownloadFail(ParseOnlineComicSite parse)
+    {
+        List<String> downloadFailList = Common.getDownloadFailList();
+        int failFileCount = downloadFailList.size();
+        
+        if (failFileCount == 0)
+        {
+            Common.debugPrintln("沒有下載失敗，不需要重新下載");
+            return;
+        }
+        
+        Common.debugPrintln("\n有" + failFileCount + "張圖片下載失敗，開始下載失敗的作業流程: ");
+        
+        for (int i = 0; i < failFileCount; i++)
+        {
+            Common.debugPrintln("刪除失敗檔案: " + parse.getDownloadDirectory() + downloadFailList.get(i));
+            Common.deleteFile(parse.getDownloadDirectory(), downloadFailList.get(i));
+        }
+        
+        Common.debugPrintln("重新下載之前下載失敗的圖片:");
+        
+        handleDownload(parse);
+        outputDownloadFail(parse);
+    }
+    
+    public void outputDownloadFail(ParseOnlineComicSite parse)
+    {
+        List<String> downloadFailList = Common.getDownloadFailList();
+        int failFileCount = downloadFailList.size();
+        String outputText = "";
+        
+        if (failFileCount == 0)
+        {
+            Common.debugPrintln("沒有下載失敗，不需要輸出下載失敗紀錄");
+            return;
+        }
+        
+        for (int i = 0; i < failFileCount; i++)
+        {
+            outputText += "\n第 " + i + " 張失敗圖片 : " + downloadFailList.get(i);
+        }
+        
+        Common.outputFile( outputText, parse.getDownloadDirectory(), "Fail.txt" );
     }
 
     // 下載過程中若發生錯誤，重新嘗試下載。
