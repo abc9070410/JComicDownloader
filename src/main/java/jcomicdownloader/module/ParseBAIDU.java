@@ -138,44 +138,41 @@ public class ParseBAIDU extends ParseOnlineComicSite {
                     continue;
                 }
             }
-            /*
-            String[] tokens = allPageString.split( "\"" );
-            for ( int j = 0 ; j < tokens.length ; j++ ) {
-                if ( tokens[j].matches( "BDE_Image" ) ) {
-                    //while ( !tokens[j].matches( "(?s).*src=\\s*" ) ) {
-                    //    j++;
-                    //}
-                    
-                    if ( tokens[j+2].matches( "(?s).*http://(?s).*" )) {
-                        tempComicURL += tokens[j + 2] + "####";
-                    }
-                    else if ( tokens[j-2].matches( "(?s).*http://(?s).*" )) {
-                        tempComicURL += tokens[j - 2] + "####";
-                    }
-                }
-            }
             
-            String[] comicURL = tempComicURL.split( "####" );
-            */
             String[] temps = allPageString.split("\"BDE_Image\"");
-            String[] comicURL = new String[temps.length-1];
+            String[] comicURL2 = new String[temps.length-1];
             String basePicURL = "http://imgsrc.baidu.com/forum/pic/item";
+            int picCount = 0;
+            
+            Common.debugPrintln("預估的圖片數量 : " + temps.length);
             
             for (i = 1; i < temps.length; i ++)
             {
+                if (temps[i].length() > 163)
+                {
+                    //Common.debugPrintln(i + " 原始碼: " + temps[i].substring(0, 163));
+                }
                 beginIndex = temps[i].indexOf("http://imgsrc.baidu.com/");
                 endIndex = temps[i].indexOf("\"", beginIndex);
                 beginIndex = temps[i].lastIndexOf("/", endIndex);
-                comicURL[i-1] = basePicURL + temps[i].substring(beginIndex, endIndex);
-                Common.debugPrintln("解析到的第" + i + "張圖:" + comicURL[i-1]);
+                
+                if (beginIndex > endIndex || beginIndex < 0)
+                {
+                    continue;
+                }
+                comicURL2[picCount] = basePicURL + temps[i].substring(beginIndex, endIndex);
+                Common.debugPrintln("解析到的第" + i + "張圖:" + comicURL2[picCount]);
+                
+                picCount++;
             }
             
-            //System.exit(0);
-            /*
-
-            */
-
+            Common.debugPrintln("實際的圖片數量 : " + picCount);
+            String[] comicURL = new String[picCount];
             
+            for (i = 0; i < picCount; i++)
+            {
+                comicURL[i] = comicURL2[i];
+            }
             
             // get the orginial image
             String originalBaseURL = "http://imgsrc.baidu.com/forum/pic/item/";
@@ -261,14 +258,20 @@ public class ParseBAIDU extends ParseOnlineComicSite {
         int beginIndex = 0;
         int endIndex = 0;
 
+        boolean titleFound = false;
         String title = "";
         if ( urlString.matches( "(?s).*\\d{7,}(?s).*" ) ) {
             beginIndex = allPageString.indexOf( "<h1 " ) + 1;
             beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
             endIndex = allPageString.indexOf( "<", beginIndex );
             title = allPageString.substring( beginIndex, endIndex ).trim();
-            System.out.println( "XXXX" );
-        } else {
+            
+            if (beginIndex != endIndex) {
+                titleFound = true;
+            }
+        }
+            
+        if (!titleFound) {
             beginIndex = allPageString.indexOf( "<title>" ) + 7;
             endIndex = allPageString.indexOf( "_", beginIndex );
             title = allPageString.substring( beginIndex, endIndex ).trim();
