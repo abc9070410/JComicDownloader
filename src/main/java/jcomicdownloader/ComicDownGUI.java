@@ -3107,7 +3107,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         if (event.getSource() == button[ButtonEnum.EXIT]
                 || event.getSource() == trayExitItem) { // button of Exit
             int choice = CommonGUI.showConfirmDialog(this, "請問是否要關閉JComicDownloader？",
-                    "exit JComicDownloader ?",
+                    "Exit JComicDownloader ?",
                     "提醒訊息", JOptionPane.YES_NO_OPTION);
 
             if (choice == JOptionPane.YES_OPTION) {
