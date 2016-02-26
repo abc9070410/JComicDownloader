@@ -3090,7 +3090,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         }
         if (event.getSource() == button[ButtonEnum.CLEAR]) { // button of CLEAR
             int choice = CommonGUI.showConfirmDialog(this, "請問是否要將目前內容全部清空？",
-                    "clean all items ?",
+                    "Do you want to clear all items in this list?",
                     "提醒訊息", JOptionPane.YES_NO_OPTION);
 
             if (choice == JOptionPane.YES_OPTION) {
@@ -3107,7 +3107,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         if (event.getSource() == button[ButtonEnum.EXIT]
                 || event.getSource() == trayExitItem) { // button of Exit
             int choice = CommonGUI.showConfirmDialog(this, "請問是否要關閉JComicDownloader？",
-                    "Exit JComicDownloader ?",
+                    "Are you sure to close JComicDownloader?",
                     "提醒訊息", JOptionPane.YES_NO_OPTION);
 
             if (choice == JOptionPane.YES_OPTION) {
@@ -3384,6 +3384,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     }
 
     private void testWiki() {
+        // hkgsherlock: ↓ You sure this is ok? :o)
         File a = new File("C:\\Users\\Chien-Yu\\Documents\\JAVA\\JComicDownloader\\Github\\down\\Category：21st_century American singers _ Wikipedia, the free encyclopedia");
 
         String[] filenames;
