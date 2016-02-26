@@ -36,7 +36,7 @@ public class ParseEC extends ParseOnlineComicSite {
     public ParseEC() {
         enumName = "EIGHT_COMIC";
 	parserName=this.getClass().getName();
-        regexs= new String[]{"(?s).*\\.8comic.com(?s).*","(?s).*comicvip.com(?s).*"};
+        regexs= new String[]{"(?s).*\\.8comic.com(?s).*","(?s).*\\.comicvip.com(?s).*","(?s).*\\.comicbus.com(?s).*"};
         siteID=Site.formString("EIGHT_COMIC");
         siteName = "8comic";
         indexWrongEncodingFileName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_8comic_wrong_encode_parse_", "html" );
@@ -174,6 +174,8 @@ public class ParseEC extends ParseOnlineComicSite {
         totalVolume = linksToEpisodes.size();
         Common.debugPrintln( "共有" + totalVolume + "集" );
 
+        // TODO: alert to user when totalVolume == 0
+
         for (Element ele : linksToEpisodes) {
             ele.attributes();
             String strJsEnterPageArgs = ele.attr("onclick");
@@ -217,34 +219,35 @@ public class ParseEC extends ParseOnlineComicSite {
         String ret = "";
 
         switch (Integer.parseInt( catidString )) {
-            case 4:
-            case 6:
-            case 12:
-            case 22:
-
-            case 1:
-            case 17:
-            case 19:
-            case 21:
-
-            case 2:
-            case 5:
-            case 7:
-            case 9:
-                ret += "http://comicvip.com/show/cool-";
-                break;
-            case 10:
-            case 11:
-            case 13:
-            case 14:
-
             case 3:
             case 8:
             case 15:
             case 16:
             case 18:
             case 20:
-                ret += "http://comicvip.com/show/best-manga-";
+
+            case 4:
+            case 6:
+            case 12:
+            case 22:
+                ret += "http://www.comicbus.com/online/Domain-";
+                break;
+            case 1:
+            case 17:
+            case 19:
+            case 21:
+                ret += "http://www.comicbus.com/online/finance-";
+                break;
+            case 2:
+            case 5:
+            case 7:
+            case 9:
+
+            case 10:
+            case 11:
+            case 13:
+            case 14:
+                ret += "http://www.comicbus.com/online/insurance-";
                 break;
             default:
                 throw new IllegalArgumentException("The catid is not whithin the valid range.");
