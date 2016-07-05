@@ -122,12 +122,15 @@ public class ParseSF extends ParseOnlineComicSite {
         totalPage = tokens.length - 1;
         Common.debugPrintln( "共 " + totalPage + " 頁" );
         comicURL = new String[totalPage];
+        refers   = new String[totalPage];
         
         int p = 0; // 目前頁數
         for ( int i = 0 ; i < totalPage && Run.isAlive; i++ ) {
             beginIndex = tokens[i+1].indexOf( "\"" ) + 1;
             endIndex = tokens[i+1].indexOf( "\"", beginIndex );
-            comicURL[p++] = baseURL + tokens[i+1].substring( beginIndex, endIndex );
+            comicURL[p] = baseURL + tokens[i+1].substring( beginIndex, endIndex );
+            refers[p] = webSite;
+            p++;
             //Common.debugPrintln( p + " " + comicURL[p-1]  ); // debug
         }
 

@@ -159,6 +159,12 @@ public class Common
     public static void errorReport( String errorString )
     {
         Common.debugPrintln( "ERROR: " + errorString );
+        
+        if (errorString.indexOf("錯誤回傳碼") == 0)
+        {
+            Flag.downloadErrorFlag = true;
+        }
+        
         Run.isLegal = false;
         try
         {

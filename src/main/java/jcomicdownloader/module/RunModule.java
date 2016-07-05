@@ -232,7 +232,7 @@ public class RunModule {
                     SetUp.getPicFrontName(), "jpg" );
 
                 // 下載過程中若發生錯誤，重新嘗試下載。
-                retry( urls, parse.getDownloadDirectory(), 1 );
+                retry( urls, parse.getRefers(), parse.getDownloadDirectory(), 1 );
 
             }
         }
@@ -284,11 +284,17 @@ public class RunModule {
     }
 
     // 下載過程中若發生錯誤，重新嘗試下載。
-    public static void retry( String[] urls, String downloadDirectory, int retryTimes ) {
+    public static void retry( String[] urls, String[] refers, String downloadDirectory, int retryTimes ) {
         for ( int i = 0; i < retryTimes; i++ ) {
             if ( Flag.downloadErrorFlag ) {
                 Flag.downloadErrorFlag = false;
                 Common.debugPrintln( "由於下載過程中發生錯誤，重新檢查一次" );
+                
+                // with Refer
+                Common.downloadManyFile( urls, refers, downloadDirectory,
+                    SetUp.getPicFrontName(), "jpg" );
+                    
+                // without Refer
                 Common.downloadManyFile( urls, downloadDirectory,
                     SetUp.getPicFrontName(), "jpg" );
             }

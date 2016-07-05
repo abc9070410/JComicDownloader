@@ -217,7 +217,8 @@ public class ParseEC extends ParseOnlineComicSite {
     public String getSinglePageURL( String idString, String volumeNoString, String catidString ) {
 
         String ret = "";
-
+        
+        // should be updated from http://www.comicbus.com/js/comicview.js
         switch (Integer.parseInt( catidString )) {
             case 3:
             case 8:
@@ -225,7 +226,8 @@ public class ParseEC extends ParseOnlineComicSite {
             case 16:
             case 18:
             case 20:
-
+                ret += "http://www.comicbus.com/online/finance-";
+                break;
             case 4:
             case 6:
             case 12:
