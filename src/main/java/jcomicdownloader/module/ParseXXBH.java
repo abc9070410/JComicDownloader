@@ -119,7 +119,7 @@ public class ParseXXBH extends ParseOnlineComicSite
          */
 
         // 取得v3_cont_v130404.js
-        beginIndex = allPageString.indexOf( "_cont_" );
+        beginIndex = allPageString.indexOf( "/cont_" );
         beginIndex = allPageString.lastIndexOf( "http:", beginIndex );
         endIndex = allPageString.indexOf( "\"", beginIndex );
         String tempURL = allPageString.substring( beginIndex, endIndex );
