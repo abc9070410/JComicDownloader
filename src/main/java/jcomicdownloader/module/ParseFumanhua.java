@@ -120,9 +120,13 @@ public class ParseFumanhua extends ParseOnlineComicSite {
             comicURL = new String[totalPage];
             
             // 設定伺服器位址
-            String serverURL1 = "http://pic2.fumanhua.com";
-            String serverURL2 = "http://img2.fumanhua.com";
-            String serverURL3 = "http://img3.fumanhua.com";
+            String[] serverURLs = {
+                "http://pic.yufulian.com",
+                "http://pic2.fumanhua.com",
+                "http://img2.fumanhua.com",
+                "http://img3.fumanhua.com"
+                };
+
             String serverURL = "";
 
             // 開始第一張圖片位址
@@ -132,24 +136,18 @@ public class ParseFumanhua extends ParseOnlineComicSite {
             String firestPicBackURL = allPageString.substring( beginIndex, endIndex );
             
             String firstPicURL = "";
-            String firstPicURL1 = serverURL1 + firestPicBackURL;
-            String firstPicURL2 = serverURL2 + firestPicBackURL;
-            String firstPicURL3 = serverURL3 + firestPicBackURL;
-            
-            // 測試三組伺服器，順序：1 -> 2 -> 3
-            if ( Common.urlIsOK( firstPicURL1 ) ) {
-                firstPicURL = firstPicURL1;
-                Common.debugPrintln( "使用伺服器位址：" + serverURL1 );
+           
+            // 測試多組伺服器
+            for (int i = 0; i < serverURLs.length; i++)
+            {
+                firstPicURL = serverURLs[i] + firestPicBackURL;
+                
+                if ( Common.urlIsOK( firstPicURL ) ) {
+                    Common.debugPrintln( "使用伺服器位址：" + serverURLs[i] );
+                    break;
+                }
             }
-            else if ( Common.urlIsOK( firstPicURL2 ) ) {
-                firstPicURL = firstPicURL2;
-                Common.debugPrintln( "使用伺服器位址：" + serverURL2 );
-            }
-            else if ( Common.urlIsOK( firstPicURL3 ) ) {
-                firstPicURL = firstPicURL3;
-                Common.debugPrintln( "使用伺服器位址：" + serverURL3 );
-            }
-            
+                
             Common.debugPrintln( "第一張圖片位址：" + firstPicURL );
             
             // 取得圖片副檔名
