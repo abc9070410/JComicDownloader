@@ -147,7 +147,7 @@ public class ParseFumanhua extends ParseOnlineComicSite {
                     break;
                 }
             }
-                
+
             Common.debugPrintln( "第一張圖片位址：" + firstPicURL );
             
             // 取得圖片副檔名
@@ -160,6 +160,8 @@ public class ParseFumanhua extends ParseOnlineComicSite {
             beginIndex = firstPicURL.lastIndexOf( "/" ) + 1;
             String picName = firstPicURL.substring( beginIndex, endIndex );
             Common.debugPrintln( "圖片檔名：" + picName );
+            
+            int firstPageNo = Integer.parseInt(picName);
             
             String zeroString = "";
             for ( int i = 0; i < picName.length(); i ++ ) {
@@ -174,6 +176,7 @@ public class ParseFumanhua extends ParseOnlineComicSite {
 
             int p = 0; // 目前頁數
             String picURL = firstPicURL; // 每張圖片位址
+            for ( int i = firstPageNo ; i < totalPage + firstPageNo; i++ ) {
                 String nowFileName = formatter.format( i ) + "." + extension;
                 String nextFileName = formatter.format( i + 1 ) + "." + extension;
 
