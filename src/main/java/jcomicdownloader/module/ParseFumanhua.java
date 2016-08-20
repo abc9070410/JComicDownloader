@@ -174,7 +174,6 @@ public class ParseFumanhua extends ParseOnlineComicSite {
 
             int p = 0; // 目前頁數
             String picURL = firstPicURL; // 每張圖片位址
-            for ( int i = 1 ; i <= totalPage; i++ ) {
                 String nowFileName = formatter.format( i ) + "." + extension;
                 String nextFileName = formatter.format( i + 1 ) + "." + extension;
 
