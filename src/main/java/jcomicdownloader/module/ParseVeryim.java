@@ -33,7 +33,7 @@ public class ParseVeryim extends ParseOnlineComicSite {
      @author user
      */
     public ParseVeryim() {
-        regexs= new String[]{"(?s).*veryim.com(?s).*" };
+        regexs= new String[]{"(?s).*veryim.com(?s).*", "(?s).*veryim.net(?s).*" };
         enumName = "VERYIM";
 	parserName=this.getClass().getName();
         downloadBefore=true;
@@ -45,7 +45,7 @@ public class ParseVeryim extends ParseOnlineComicSite {
         jsName = "index_veryim.js";
         radixNumber = 1591371; // default value, not always be useful!!
 
-        baseURL = "http://www.veryim.com";
+        baseURL = "http://www.veryim.net";
     }
 
     public ParseVeryim( String webSite, String titleName ) {
@@ -76,6 +76,110 @@ public class ParseVeryim extends ParseOnlineComicSite {
         Common.debugPrintln( "作品名稱(title) : " + getTitle() );
         Common.debugPrintln( "章節名稱(wholeTitle) : " + getWholeTitle() );
     }
+    
+    private int getCharIndex(char c)
+    {
+        int index = -1;
+        
+        if (c >= '0' && c <= '9')
+        {
+            index = Integer.parseInt("" + c);
+        }
+        else if (c >= 'a' && c <= 'z')
+        {
+            index = 10 + (c - 'a');
+        }
+        else if (c >= 'A' && c <= 'Z')
+        {
+            index = 10 + 26 + (c - 'A');
+        }
+        
+        return index;
+    }
+    
+    private int getEncodeIndex(char c, char nextC)
+    {
+        int cIndex = getCharIndex(c);
+        int nextCIndex = getCharIndex(nextC);
+        
+        if (cIndex >= 0 && nextCIndex >= 0)
+        {
+            return (10 + 26 + 26) * cIndex + nextCIndex;
+        }
+        
+        return cIndex;
+    }
+    
+    private String[] getComicUrls(String allPageString)
+    {
+        // return p}('8 i=\'h\';8 g=\'["2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/k.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/m.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/l.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/n.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/f.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/a.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/9.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/c.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/e.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/d.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/b.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/j.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/v.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/z.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/x.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/B.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/o.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/C.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/D.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/A.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/w.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/q.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/p.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/r.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/s.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/u.3","2:\\/\\/1.5.0:4\\/\\/y\\/7\\/6\\/t.3"]\';',40,40,'net|imgn1|http|jpg|8090|veryim|ch_33|yxobjn4sdx|var|0007|0006|0011|0008|0010|0009|0005|imageData|27|total|0012|0001|0003|0002|0004|0017|0023|0022|0024|0025|0027|0026|0013|0021|0015||0014|0020|0016|0018|0019'.split('|')))
+        
+        int beginIndex = 0;
+        int endIndex = 0;
+        
+        beginIndex = allPageString.indexOf( "return p" );
+        beginIndex = allPageString.indexOf( "[\"", beginIndex ) + 2;
+        endIndex = allPageString.indexOf( "\"]", beginIndex );
+        
+        String[] encodeUrls = allPageString.substring(beginIndex, endIndex).split("\",\"");
+        String[] decodeUrls = new String[encodeUrls.length];
+        
+        beginIndex = allPageString.indexOf( ",'", endIndex) + 2;
+        endIndex = allPageString.indexOf( "'.split", beginIndex );
+        
+        String[] tokens = allPageString.substring(beginIndex, endIndex).split("\\|");
+        
+        for (int i = 0; i < encodeUrls.length; i++)
+        {
+            String encode = encodeUrls[i].replaceAll("\\\\", "");
+            String decode = "";
+
+            for (int j = 0; j < encode.length(); j++)
+            {
+                char c = encode.charAt(j);
+                char nextC = '$';
+                
+                if (j + 1 < encode.length())
+                {
+                    nextC = encode.charAt(j + 1);
+                }
+                
+                int index = getEncodeIndex(c, nextC);
+                
+                //Common.debugPrintln(c + "_" + nextC + "_" + index);
+                
+                if (index >= 0)
+                {
+                    if (index > tokens.length || tokens[index].matches(""))
+                    {
+                        decode += c;
+                    }
+                    else
+                    {
+                        decode += tokens[index];
+                    }
+                }
+                else
+                {
+                    decode += c;
+                }
+               
+                if (index >= (10 + 26 + 26))
+                {
+                    j++;
+                }
+            }
+            
+            Common.debugPrintln(i + " encode:" + encode);
+            Common.debugPrintln(i + " decode:" + decode);
+            
+            decodeUrls[i] = decode;
+        }
+        
+        //System.exit(0);
+        
+        return decodeUrls;
+    }
 
     @Override
     public void parseComicURL() { // parse URL and save all URLs in comicURL  //
@@ -91,14 +195,29 @@ public class ParseVeryim extends ParseOnlineComicSite {
 
         Common.debugPrint( "開始解析這一集有幾頁 : " );
 
+        
+        comicURL = getComicUrls(allPageString);
+        
+        totalPage = comicURL.length;
+        
+        for (int i = 0; i < totalPage; i++)
+        {
+            singlePageDownloadUsingSimple( getTitle(), getWholeTitle(),
+                comicURL[i], totalPage, i + 1, webSite );
+        }
+        
+        //System.exit(0);
+        
+        /*
+        
         // 解析有幾頁
-        beginIndex = allPageString.indexOf( "this.totalPage" );
-        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
-        endIndex = allPageString.indexOf( "\"", beginIndex );
-        tempString = allPageString.substring( beginIndex, endIndex );
+        beginIndex = allPageString.indexOf( "var totalPage" );
+        beginIndex = allPageString.indexOf( "=", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( ";", beginIndex );
+        tempString = allPageString.substring( beginIndex, endIndex ).trim();
         totalPage = Integer.parseInt( tempString );
         Common.debugPrintln( "共 " + totalPage + " 頁" );
-        comicURL = new String[totalPage];
+        //comicURL = new String[totalPage];
 
         
         Common.debugPrintln( "開始解析中間部份的位址" );
@@ -167,6 +286,7 @@ public class ParseVeryim extends ParseOnlineComicSite {
             //Common.debugPrintln( ( ++ p ) + " " + comicURL[p - 1] ); // debug
         }
         //System.exit( 0 ); // debug
+        */
     }
 
     @Override
@@ -204,7 +324,7 @@ public class ParseVeryim extends ParseOnlineComicSite {
 
     @Override
     public String getTitleOnMainPage( String urlString, String allPageString ) {
-        int beginIndex = allPageString.indexOf( "<h1>" );
+        int beginIndex = allPageString.indexOf( "<title>" );
         beginIndex = allPageString.indexOf( ">", beginIndex ) + 1;
         int endIndex = allPageString.indexOf( " - ", beginIndex );
         String title = allPageString.substring( beginIndex, endIndex ).trim();
@@ -220,13 +340,15 @@ public class ParseVeryim extends ParseOnlineComicSite {
         List<String> urlList = new ArrayList<String>();
         List<String> volumeList = new ArrayList<String>();
 
-        int beginIndex = allPageString.indexOf( "id=\"chapters\"" );
-        int endIndex = allPageString.indexOf( "</ul>", beginIndex );
+        int beginIndex = allPageString.indexOf( "class=\"chapters\"" );
+        int endIndex = allPageString.indexOf( "class=\"related\"", beginIndex );
         
+        /*
         if ( allPageString.indexOf( "class=\"ex\"" ) > 0 ) {
             endIndex = allPageString.indexOf( "class=\"ex\"", beginIndex );
             endIndex = allPageString.indexOf( "</ul>", endIndex );
         }
+        */
 
         String tempString = allPageString.substring( beginIndex, endIndex );
 
@@ -235,13 +357,15 @@ public class ParseVeryim extends ParseOnlineComicSite {
         Common.debugPrintln( "共有" + totalVolume + "集" );
 
         String volumeTitle = "";
+        String volumeUrl = "";
         beginIndex = endIndex = 0;
         for ( int i = 0; i < volumeCount; i++ ) {
             // 取得單集位址
             beginIndex = tempString.indexOf( " href=", beginIndex );
             beginIndex = tempString.indexOf( "\"", beginIndex ) + 1;
             endIndex = tempString.indexOf( "\"", beginIndex );
-            urlList.add( tempString.substring( beginIndex, endIndex ) );
+            volumeUrl = baseURL + tempString.substring( beginIndex, endIndex );
+            urlList.add( volumeUrl );
             // 取得單集名稱
             beginIndex = tempString.indexOf( ">", beginIndex ) + 1;
             endIndex = tempString.indexOf( "</a>", beginIndex );
@@ -249,7 +373,11 @@ public class ParseVeryim extends ParseOnlineComicSite {
             volumeTitle = volumeTitle.replaceAll( "<.*>", "" );
             volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
                 Common.getTraditionalChinese( volumeTitle.trim() ) ) ) );
+                
+            Common.debugPrintln("title:" + volumeTitle + " : " + volumeUrl);
         }
+        
+        //System.exit(0);
 
         combinationList.add( volumeList );
         combinationList.add( urlList );
