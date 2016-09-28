@@ -146,22 +146,22 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             
             Common.debugPrintln("預估的圖片數量 : " + temps.length);
             
-            for (i = 1; i < temps.length; i ++)
+            for (int j = 1; j < temps.length; j ++)
             {
-                if (temps[i].length() > 163)
+                if (temps[j].length() > 163)
                 {
                     //Common.debugPrintln(i + " 原始碼: " + temps[i].substring(0, 163));
                 }
-                beginIndex = temps[i].indexOf("http://imgsrc.baidu.com/");
-                endIndex = temps[i].indexOf("\"", beginIndex);
-                beginIndex = temps[i].lastIndexOf("/", endIndex);
+                beginIndex = temps[j].indexOf("http://imgsrc.baidu.com/");
+                endIndex = temps[j].indexOf("\"", beginIndex);
+                beginIndex = temps[j].lastIndexOf("/", endIndex);
                 
                 if (beginIndex > endIndex || beginIndex < 0)
                 {
                     continue;
                 }
-                comicURL2[picCount] = basePicURL + temps[i].substring(beginIndex, endIndex);
-                Common.debugPrintln("解析到的第" + i + "張圖:" + comicURL2[picCount]);
+                comicURL2[picCount] = basePicURL + temps[j].substring(beginIndex, endIndex);
+                Common.debugPrintln("解析到的第" + j + "張圖:" + comicURL2[picCount]);
                 
                 picCount++;
             }
@@ -169,9 +169,9 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             Common.debugPrintln("實際的圖片數量 : " + picCount);
             String[] comicURL = new String[picCount];
             
-            for (i = 0; i < picCount; i++)
+            for (int j = 0; j < picCount; j++)
             {
-                comicURL[i] = comicURL2[i];
+                comicURL[j] = comicURL2[j];
             }
             
             // get the orginial image

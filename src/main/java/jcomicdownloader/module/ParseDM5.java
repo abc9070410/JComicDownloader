@@ -1093,20 +1093,25 @@ public class ParseDM5 extends ParseOnlineComicSite
         return correspondingToken;
     }
 
-    // 取得0~15 (ex. a -> 10, f -> 15)
+    // 取得0~35 (ex. a -> 10, f -> 15 , z -> 35)
+    //     36~61(ex. A -> 36 , Z -> 61) 
     private int getIntegerFromHex( String hex )
     {
         int integer;
+        
         try
         {
             integer = Integer.parseInt( hex );
         }
         catch ( NumberFormatException ex )
         {
-            if ( hex.charAt( 0 ) - 'a' >= 0
-                    && hex.charAt( 0 ) - 'a' <= 23 )
+            if ( hex.charAt( 0 ) >= 'a' && hex.charAt( 0 ) <= 'z' )
             {
                 integer = 10 + (hex.charAt( 0 ) - 'a');
+            }
+            else if ( hex.charAt( 0 ) >= 'A' && hex.charAt( 0 ) <= 'Z' )
+            {
+                integer = 10 + 26 + (hex.charAt( 0 ) - 'A');
             }
             else
             {
