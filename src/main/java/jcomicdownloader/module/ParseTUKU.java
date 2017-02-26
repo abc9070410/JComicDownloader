@@ -65,9 +65,9 @@ public class ParseTUKU extends ParseOnlineComicSite {
 
             String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
 
-            int beginIndex = allPageString.indexOf( "</a>->" ) + 1;
-            beginIndex = allPageString.indexOf( "</a>->", beginIndex ) + 6;
-            int endIndex = allPageString.indexOf( "->", beginIndex );
+            int beginIndex = allPageString.indexOf( "<h1>" ) + 1;
+            beginIndex = allPageString.indexOf( "<h1>", beginIndex ) + 6;
+            int endIndex = allPageString.indexOf( "</h1>", beginIndex );
             String tempTitleString = allPageString.substring( beginIndex, endIndex ).replaceAll( "&nbsp;", "" );
 
             setWholeTitle( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
@@ -76,6 +76,19 @@ public class ParseTUKU extends ParseOnlineComicSite {
 
         Common.debugPrintln( "作品名稱(title) : " + getTitle() );
         Common.debugPrintln( "章節名稱(wholeTitle) : " + getWholeTitle() );
+    }
+
+    @Override
+    public String getWholeTitle(){
+        if (this.webSite == null){
+            return null;
+        }
+        Common.downloadFile( webSite, SetUp.getTempDirectory(), indexName, false, "" );
+        String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
+        int beginIndex = allPageString.indexOf( "id=\"titleValue\" value=\"" ) + 23;
+        int endIndex = allPageString.indexOf( "\"/>", beginIndex );
+        String tempTitleString = allPageString.substring( beginIndex, endIndex ).replaceAll( "&nbsp;", "" );
+        return this.title= this.wholeTitle = tempTitleString;
     }
 
     @Override
