@@ -42,10 +42,10 @@ public class ParseBAIDU extends ParseOnlineComicSite {
      */
     public ParseBAIDU() {
         enumName = "BAIDU";
-	      parserName=this.getClass().getName();
+	    parserName=this.getClass().getName();
         regexs= new String[]{"(?s).*baidu.com(?s).*"};
         downloadBefore=true;
-	      siteID=Site.formString("BAIDU");
+	    siteID=Site.formString("BAIDU");
         siteName = "Baidu";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_parse_", "html" );
@@ -141,9 +141,9 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             
             String[] temps = allPageString.split("\"BDE_Image\"");
             String[] comicURL2 = new String[temps.length-1];
-//201702            String basePicURL = "http://imgsrc.baidu.com/forum/pic/item";
-      	    String basePicURL = "https://imgsa.baidu.com/forum/pic/item";
-	          int picCount = 0;
+            //String basePicURL = "http://imgsrc.baidu.com/forum/pic/item";
+            //String basePicURL = "https://imgsa.baidu.com/forum/pic/item/";
+            int picCount = 0;
             
             Common.debugPrintln("預估的圖片數量 : " + temps.length);
             
@@ -153,17 +153,18 @@ public class ParseBAIDU extends ParseOnlineComicSite {
                 {
                     //Common.debugPrintln(i + " 原始碼: " + temps[i].substring(0, 163));
                 }
-
-//2017                beginIndex = temps[j].indexOf("http://imgsrc.baidu.com/");		    
+                //beginIndex = temps[j].indexOf("http://imgsrc.baidu.com/");
+                //https://imgsa.baidu.com/forum/w%3D580/sign=02ea7c453fd12f2ece05ae687fc3d5ff/cc640409c93d70cf42c1b79ff1dcd100bba12bc7.jpg
                 beginIndex = temps[j].indexOf("https://imgsa.baidu.com/");
                 endIndex = temps[j].indexOf("\"", beginIndex);
                 beginIndex = temps[j].lastIndexOf("/", endIndex);
-                
+                Common.debugPrintln("BeginIndex:"+beginIndex);
                 if (beginIndex > endIndex || beginIndex < 0)
                 {
                     continue;
                 }
-                comicURL2[picCount] = basePicURL + temps[j].substring(beginIndex, endIndex);
+                //comicURL2[picCount] = basePicURL + temps[j].substring(beginIndex, endIndex);
+                comicURL2[picCount] = temps[j].substring(beginIndex, endIndex);
                 Common.debugPrintln("解析到的第" + j + "張圖:" + comicURL2[picCount]);
                 
                 picCount++;
