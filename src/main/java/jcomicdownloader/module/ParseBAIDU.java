@@ -42,10 +42,10 @@ public class ParseBAIDU extends ParseOnlineComicSite {
      */
     public ParseBAIDU() {
         enumName = "BAIDU";
-	parserName=this.getClass().getName();
+	      parserName=this.getClass().getName();
         regexs= new String[]{"(?s).*baidu.com(?s).*"};
         downloadBefore=true;
-	siteID=Site.formString("BAIDU");
+	      siteID=Site.formString("BAIDU");
         siteName = "Baidu";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_parse_", "html" );
@@ -142,9 +142,8 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             String[] temps = allPageString.split("\"BDE_Image\"");
             String[] comicURL2 = new String[temps.length-1];
 //201702            String basePicURL = "http://imgsrc.baidu.com/forum/pic/item";
-	    String basePicURL = "https://imgsa.baidu.com/forum/pic/item";
-
-	    int picCount = 0;
+      	    String basePicURL = "https://imgsa.baidu.com/forum/pic/item";
+	          int picCount = 0;
             
             Common.debugPrintln("預估的圖片數量 : " + temps.length);
             
@@ -154,6 +153,7 @@ public class ParseBAIDU extends ParseOnlineComicSite {
                 {
                     //Common.debugPrintln(i + " 原始碼: " + temps[i].substring(0, 163));
                 }
+
 //2017                beginIndex = temps[j].indexOf("http://imgsrc.baidu.com/");		    
                 beginIndex = temps[j].indexOf("https://imgsa.baidu.com/");
                 endIndex = temps[j].indexOf("\"", beginIndex);
@@ -176,11 +176,10 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             {
                 comicURL[j] = comicURL2[j];
             }
-            
-            // get the orginial image
-            //String originalBaseURL = "http://imgsrc.baidu.com/forum/pic/item/";
-            String originalBaseURL = "https://imgsa.baidu.com/forum/pic/item/";
 
+            // get the orginial image
+            //String originalBaseURL = "https://imgsa.baidu.com/forum/pic/item/";
+            String originalBaseURL = "https://imgsa.baidu.com/forum/pic/item/";
             for ( int k = 0; k < comicURL.length; k ++ )
             {
                 String fileName = comicURL[k].split( "/" )[comicURL[k].split( "/" ).length - 1];

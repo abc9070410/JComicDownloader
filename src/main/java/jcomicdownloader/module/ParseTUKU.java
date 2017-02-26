@@ -57,25 +57,57 @@ public class ParseTUKU extends ParseOnlineComicSite {
     public void setParameters() {
         Common.debugPrintln( "開始解析各參數 :" );
         Common.debugPrintln( "開始解析title和wholeTitle :" );
-
-        if ( getWholeTitle() == null || getWholeTitle().equals( "" ) ) {
-            // 因為正常解析不需要用到單集頁面，所以給此兩行放進來
-            Common.downloadFile( webSite, SetUp.getTempDirectory(), indexName, false, "" );
-            Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName );
-
-            String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
-
-            int beginIndex = allPageString.indexOf( "</a>->" ) + 1;
-            beginIndex = allPageString.indexOf( "</a>->", beginIndex ) + 6;
-            int endIndex = allPageString.indexOf( "->", beginIndex );
-            String tempTitleString = allPageString.substring( beginIndex, endIndex ).replaceAll( "&nbsp;", "" );
-
-            setWholeTitle( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
-                Common.getTraditionalChinese( tempTitleString.trim() ) ) ) );
-        }
+//
+//        if ( getWholeTitle() == null || getWholeTitle().equals( "" ) ) {
+//            // 因為正常解析不需要用到單集頁面，所以給此兩行放進來
+//            Common.downloadFile( webSite, SetUp.getTempDirectory(), indexName, false, "" );
+//            Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName );
+//
+//            String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexEncodeName );
+//
+//            int beginIndex = allPageString.indexOf( "<h1>" ) + 1;
+//            beginIndex = allPageString.indexOf( "<h1>", beginIndex ) + 6;
+//            int endIndex = allPageString.indexOf( "</h1>", beginIndex );
+//            String tempTitleString = allPageString.substring( beginIndex, endIndex ).replaceAll( "&nbsp;", "" );
+//
+//            setWholeTitle( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
+//                Common.getTraditionalChinese( tempTitleString.trim() ) ) ) );
+//        }
 
         Common.debugPrintln( "作品名稱(title) : " + getTitle() );
         Common.debugPrintln( "章節名稱(wholeTitle) : " + getWholeTitle() );
+    }
+
+    @Override
+    public String getTitle(){
+        if (this.webSite == null){
+            return null;
+        }
+        if (this.title == null || this.title.equals("")) {
+            Common.downloadFile(webSite, SetUp.getTempDirectory(), indexName, false, "");
+            String allPageString = Common.getFileString(SetUp.getTempDirectory(), indexName);
+            int beginIndex = allPageString.indexOf("id=\"titleValue\" value=\"") + 23;
+            int endIndex = allPageString.indexOf("\"/>", beginIndex);
+            String tempTitleString = allPageString.substring(beginIndex, endIndex).replaceAll("&nbsp;", "");
+            this.title= this.wholeTitle = tempTitleString;
+        }
+        return this.title;
+    }
+
+    @Override
+    public String getWholeTitle(){
+        if (this.webSite == null){
+            return null;
+        }
+        if (this.wholeTitle == null || this.wholeTitle.equals("")) {
+            Common.downloadFile(webSite, SetUp.getTempDirectory(), indexName, false, "");
+            String allPageString = Common.getFileString(SetUp.getTempDirectory(), indexName);
+            int beginIndex = allPageString.indexOf("id=\"titleValue\" value=\"") + 23;
+            int endIndex = allPageString.indexOf("\"/>", beginIndex);
+            String tempTitleString = allPageString.substring(beginIndex, endIndex).replaceAll("&nbsp;", "");
+            this.wholeTitle= this.title = tempTitleString;
+        }
+        return this.wholeTitle;
     }
 
     @Override
