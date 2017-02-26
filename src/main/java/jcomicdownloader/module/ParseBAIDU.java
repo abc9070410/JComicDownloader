@@ -175,7 +175,9 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             }
             
             // get the orginial image
-            String originalBaseURL = "http://imgsrc.baidu.com/forum/pic/item/";
+            //String originalBaseURL = "http://imgsrc.baidu.com/forum/pic/item/";
+            String originalBaseURL = "https://imgsa.baidu.com/forum/pic/item/";
+
             for ( int k = 0; k < comicURL.length; k ++ )
             {
                 String fileName = comicURL[k].split( "/" )[comicURL[k].split( "/" ).length - 1];
