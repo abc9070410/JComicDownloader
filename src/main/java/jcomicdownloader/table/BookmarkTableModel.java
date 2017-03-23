@@ -19,6 +19,9 @@ import java.util.*;
  * 定義書籤頁面的表格
  */
 public class BookmarkTableModel extends DefaultTableModel {
+    
+    Class[] types = { Integer.class, String.class, String.class,
+                    Date.class, String.class };
 
     public BookmarkTableModel(Vector columnNames, int rowCount) {
         super( columnNames, rowCount) ;

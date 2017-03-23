@@ -20,6 +20,8 @@ import java.util.*;
  */
 public class RecordTableModel extends DefaultTableModel {
 
+    Class[] types = { Integer.class, String.class, String.class,
+                    Date.class };
     public RecordTableModel(Vector columnNames, int rowCount) {
         super( columnNames, rowCount) ;
     }
