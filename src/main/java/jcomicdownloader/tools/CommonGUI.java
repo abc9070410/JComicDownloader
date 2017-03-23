@@ -14,11 +14,11 @@ package jcomicdownloader.tools;
 import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -213,9 +213,11 @@ public class CommonGUI
     public static Vector<Object> getBookmarkDataRow( int order, String title, String url )
     {
         Date date = new Date(); // 取得目前時間
-        DateFormat shortFormat = DateFormat.getDateTimeInstance(
-                DateFormat.SHORT, DateFormat.SHORT );
+       // DateFormat shortFormat = DateFormat.getDateTimeInstance(
+       //         DateFormat.SHORT, DateFormat.SHORT );
+        DateFormat shortFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        
         Vector<Object> row = new Vector<Object>();
 
         row.add( new Integer( order ) );
@@ -230,9 +232,10 @@ public class CommonGUI
     public static Vector<Object> getRecordDataRow( int order, String title, String url )
     {
         Date date = new Date(); // 取得目前時間
-        DateFormat shortFormat = DateFormat.getDateTimeInstance(
-                DateFormat.SHORT, DateFormat.SHORT );
-
+        //DateFormat shortFormat = DateFormat.getDateTimeInstance(
+        //        DateFormat.SHORT, DateFormat.SHORT );
+        DateFormat shortFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                
         Vector<Object> row = new Vector<Object>();
 
         row.add( new Integer( order ) );
