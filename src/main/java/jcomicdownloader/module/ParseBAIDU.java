@@ -281,7 +281,9 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             endIndex = allPageString.indexOf( "_", beginIndex );
             title = allPageString.substring( beginIndex, endIndex ).trim();
         }
-
+        if ((getWholeTitle() == null) ||( getWholeTitle().equals(""))) {
+            setWholeTitle(title);
+        }
         return Common.getStringRemovedIllegalChar( Common.getTraditionalChinese( "[百度]" + title ) );
     }
 

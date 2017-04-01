@@ -57,7 +57,7 @@ public class TestURL {
 //                    ,
 //                    {7,"https://tieba.baidu.com/p/4941848745","jcomicdownloader.module.ParseBAIDU"}
 //                        ,
-                        {8,"https://tieba.baidu.com/p/4978124556","jcomicdownloader.module.ParseBAIDU"}
+//                        {8,"https://tieba.baidu.com/p/4978124556","jcomicdownloader.module.ParseBAIDU"}
 
                 }
         );
