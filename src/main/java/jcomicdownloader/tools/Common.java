@@ -74,8 +74,8 @@ import jcomicdownloader.table.*;
 public class Common
 {
 
-    public static String recordDirectory = Common.getNowAbsolutePath();
-    public static String tempDirectory = Common.getNowAbsolutePath() + "temp" + getSlash();
+    public static String recordDirectory = Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash();
+    public static String tempDirectory = Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash() + "temp" + getSlash();
     public static String downloadDirectory = Common.getNowAbsolutePath() + "down" + getSlash();
     public static String tempVolumeFileName = "temp_volume.txt";
     public static String tempUrlFileName = "temp_url.txt";
@@ -3138,7 +3138,7 @@ public class Common
         String timeString = new Date().toString(); // 取得當前時間的字串
         timeString = Common.getStringRemovedIllegalChar( timeString ); // 拿掉不合法字元
         String outputFileName = "error_report_" + timeString + ".txt";
-        String outputPath = Common.getNowAbsolutePath() + "ErrorRecord" + Common.getSlash();
+        String outputPath = Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash() + "ErrorRecord" + Common.getSlash();
         String outputMessage = "錯誤提示：\n" + tipString;
 
         if ( ex != null )
@@ -3265,7 +3265,7 @@ public class Common
             dir += "target" + Common.getSlash();
         }
         
-        final String fileDir = dir + "lib" + Common.getSlash(); // 存於lib資料夾內
+        final String fileDir = dir + "JComicDownloader.settings" + getSlash() + "lib" + Common.getSlash(); // 存於lib資料夾內
 
         Run.isAlive = true;
         for ( int i = 0; i < fileURL.length; i++ )
@@ -3540,6 +3540,7 @@ public class Common
     {
         if ( new File( Common.getNowAbsolutePath() + jarFileName ).exists()
                 || new File( Common.getNowAbsolutePath() + "lib" + Common.getSlash() + jarFileName ).exists()
+                || new File( Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash() + "lib" + Common.getSlash() + jarFileName ).exists()
                 || new File( Common.getNowAbsolutePath() + "target" + Common.getSlash() + "lib" + Common.getSlash() + jarFileName ).exists() )
         {
             return true;
