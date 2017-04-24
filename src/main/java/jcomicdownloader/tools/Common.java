@@ -3337,7 +3337,7 @@ public class Common
          */
         Class AudioFile,AudioFileIO,Tag,FieldKey,ID3v23Tag,Artwork,StandardArtwork;
 
-        String jarClassName = "jaudiotagger-21e1b39.jar";
+        String jarClassName = "jaudiotagger-2.2.3.jar";
         try{         
             Class.forName("org.jaudiotagger.audio.AudioFile",false,Common.class.getClassLoader());
             
@@ -3351,7 +3351,8 @@ public class Common
             
         }catch(ClassNotFoundException e){
              // 若jar檔不存在 就下載
-            String jarFileURL = "https://abc9070410.github.io/JComicDownloader/jaudiotagger-21e1b39.jar";
+//            String jarFileURL = "https://abc9070410.github.io/JComicDownloader/jaudiotagger-21e1b39.jar";
+            String jarFileURL = "https://bitbucket.org/ijabz/jaudiotagger/downloads/jaudiotagger-2.2.3.jar";
             Common.downloadJarFile( jarFileURL, jarClassName );
             
             AudioFile = CommonGUI.getOuterClass( "org.jaudiotagger.audio.AudioFile", jarClassName );
