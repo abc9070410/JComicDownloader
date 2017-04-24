@@ -15,19 +15,17 @@ ChangeLog:
 package jcomicdownloader.module;
 
 import java.io.File;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import jcomicdownloader.tools.*;
 import jcomicdownloader.enums.*;
 import java.util.*;
 import javax.swing.JOptionPane;
 import jcomicdownloader.ComicDownGUI;
 import jcomicdownloader.SetUp;
-import jcomicdownloader.encode.Zhcode;
+//import jcomicdownloader.encode.Zhcode;
 
 public class ParseBAIDU extends ParseOnlineComicSite {
 
-    private int radixNumber; // use to figure out the name of pic
+ //   private int radixNumber; // use to figure out the name of pic
     private String jsName;
     protected String indexName;
     protected String indexEncodeName;
@@ -51,7 +49,7 @@ public class ParseBAIDU extends ParseOnlineComicSite {
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_parse_", "html" );
 
         jsName = "index_baidu.js";
-        radixNumber = 1844271; // default value, not always be useful!!
+  //      radixNumber = 1844271; // default value, not always be useful!!
 
         baseURL = "http://tieba.baidu.com";
     }
@@ -77,7 +75,8 @@ public class ParseBAIDU extends ParseOnlineComicSite {
     }
 
     @Override
-    public void parseComicURL() { // parse URL and save all URLs in comicURL  //
+    public void parseComicURL() { 
+        // parse URL and save all URLs in comicURL  //
         // 先取得前面的下載伺服器網址
 
         String allPageString;
@@ -149,10 +148,10 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             
             for (int j = 1; j < temps.length; j ++)
             {
-                if (temps[j].length() > 163)
-                {
-                    //Common.debugPrintln(i + " 原始碼: " + temps[i].substring(0, 163));
-                }
+//                if (temps[j].length() > 163)
+//                {
+//                    //Common.debugPrintln(i + " 原始碼: " + temps[i].substring(0, 163));
+//                }
                 //beginIndex = temps[j].indexOf("http://imgsrc.baidu.com/");
                 //https://imgsa.baidu.com/forum/w%3D580/sign=02ea7c453fd12f2ece05ae687fc3d5ff/cc640409c93d70cf42c1b79ff1dcd100bba12bc7.jpg
                 beginIndex = temps[j].indexOf("https://imgsa.baidu.com/");
@@ -224,7 +223,7 @@ public class ParseBAIDU extends ParseOnlineComicSite {
     @Override
     public String getAllPageString( String urlString ) {
         String indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_", "html" );
-        String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_", "html" );
+//        String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_", "html" );
 
         Common.downloadFile( urlString, SetUp.getTempDirectory(), indexName, false, "" );
         //Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName, Zhcode.GBK );
@@ -234,11 +233,7 @@ public class ParseBAIDU extends ParseOnlineComicSite {
 
     private boolean existsTempFile() {
         System.out.println( SetUp.getTempDirectory() + indexName );
-        if ( new File( SetUp.getTempDirectory() + indexName ).exists() ) {
-            return true;
-        } else {
-            return false;
-        }
+        return new File( SetUp.getTempDirectory() + indexName ).exists();
     }
 
     @Override
