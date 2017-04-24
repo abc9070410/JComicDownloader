@@ -97,7 +97,7 @@ public class RunModule {
                 combinationList = parse.getVolumeTitleAndUrlOnMainPage( urlString, allPageString );
             }
             catch ( Exception ex ) {
-                Common.hadleErrorMessage( ex, "解析集數時發生錯誤" );
+                Common.handleErrorMessage( ex, "解析集數時發生錯誤" );
                 Flag.downloadErrorFlag = true;
                 JOptionPane.showMessageDialog( ComicDownGUI.mainFrame, "解析集數失敗！",
                     "提醒訊息", JOptionPane.INFORMATION_MESSAGE );
@@ -175,7 +175,7 @@ public class RunModule {
                 }
             }
             catch ( Exception ex ) {
-                Common.hadleErrorMessage( ex, "在解析下載網址或下載過程中發生錯誤" );
+                Common.handleErrorMessage( ex, "在解析下載網址或下載過程中發生錯誤" );
                 Flag.downloadErrorFlag = true;
             }
 

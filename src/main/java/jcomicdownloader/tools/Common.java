@@ -361,7 +361,7 @@ public class Common
         }
         catch ( InterruptedException ex )
         {
-            Common.hadleErrorMessage( ex, "進行「" + message + "」時發生錯誤" );
+            Common.handleErrorMessage( ex, "進行「" + message + "」時發生錯誤" );
         }
 
         if ( --delaySecond > 0 ) // 以遞迴方式處理暫停
@@ -404,7 +404,7 @@ public class Common
         }
         catch ( Exception ex )
         {
-            Common.hadleErrorMessage( ex, "無法正確設置connection" );
+            Common.handleErrorMessage( ex, "無法正確設置connection" );
         }
 
         String[] cookieStrings = tempCookieStrings;
@@ -460,7 +460,7 @@ public class Common
         }
         catch ( Exception ex )
         {
-            Common.hadleErrorMessage( ex, "無法正確設置connection" );
+            Common.handleErrorMessage( ex, "無法正確設置connection" );
         }
 
 
@@ -535,7 +535,7 @@ public class Common
         }
         catch ( Exception ex )
         {
-            Common.hadleErrorMessage( ex, "無法正確設置connection" );
+            Common.handleErrorMessage( ex, "無法正確設置connection" );
         }
 
 
@@ -551,7 +551,7 @@ public class Common
         }
         catch ( Exception ex )
         {
-            Common.hadleErrorMessage( ex, "無法正確設置connection" );
+            Common.handleErrorMessage( ex, "無法正確設置connection" );
         }
 
     }
@@ -837,7 +837,7 @@ public class Common
 //            }
 //            catch ( Exception e )
 //            {
-//                Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+//                Common.handleErrorMessage( e, "無法正確下載" + webSite );
 //
 //                if ( ( retryTimes + 1 ) > 0 )
 //                { // 即使retryTimes設零，也會重傳一次
@@ -887,7 +887,7 @@ public class Common
         }
         catch ( Exception e )
         {
-            Common.hadleErrorMessage( e, "無法正確設置connection" );
+            Common.handleErrorMessage( e, "無法正確設置connection" );
         }
         return isOK;
     }
@@ -1252,7 +1252,7 @@ public class Common
             }
             catch ( IOException e )
             {
-                Common.hadleErrorMessage( e, "無法讀入" + filePath + fileName );
+                Common.handleErrorMessage( e, "無法讀入" + filePath + fileName );
                 e.printStackTrace();
             }
         }
@@ -1803,7 +1803,7 @@ public class Common
             }
             catch ( Exception ex )
             {
-                Common.hadleErrorMessage( ex, "無法讀入下載清單" );
+                Common.handleErrorMessage( ex, "無法讀入下載清單" );
                 cleanDownTable();
                 new File( "downloadList.dat" ).delete();
             }
@@ -1855,7 +1855,7 @@ public class Common
             }
             catch ( Exception ex )
             {
-                Common.hadleErrorMessage( ex, "無法讀入書籤清單" );
+                Common.handleErrorMessage( ex, "無法讀入書籤清單" );
             }
 
             return tableModel;
@@ -1905,7 +1905,7 @@ public class Common
             }
             catch ( Exception ex )
             {
-                Common.hadleErrorMessage( ex, "無法讀入紀錄清單" );
+                Common.handleErrorMessage( ex, "無法讀入紀錄清單" );
             }
 
             return tableModel;
@@ -2091,7 +2091,7 @@ public class Common
             }
             catch ( UnsupportedEncodingException ex )
             {
-                Common.hadleErrorMessage( ex, "無法將網址轉為utf8編碼" );
+                Common.handleErrorMessage( ex, "無法將網址轉為utf8編碼" );
             }
 
 
@@ -2187,7 +2187,7 @@ public class Common
                 }
                 catch ( Exception e )
                 {
-                    Common.hadleErrorMessage( e, "無法播放" + audioFileString );
+                    Common.handleErrorMessage( e, "無法播放" + audioFileString );
                 }
             }
         } );
@@ -2235,7 +2235,7 @@ public class Common
         }
         catch ( Exception e )
         {
-            Common.hadleErrorMessage( e, "無法將中文網址轉為正確網址編碼" );
+            Common.handleErrorMessage( e, "無法將中文網址轉為正確網址編碼" );
         }
 
         url = url.replaceAll( "\\s", "%20" );
@@ -2257,7 +2257,7 @@ public class Common
         }
         catch ( IOException ex )
         {
-            Common.hadleErrorMessage( ex, "在非Windows系統下無法開啟檔案" );
+            Common.handleErrorMessage( ex, "在非Windows系統下無法開啟檔案" );
         }
     }
 
@@ -2339,7 +2339,7 @@ public class Common
         }
         catch ( IOException ex )
         {
-            Common.hadleErrorMessage( ex, "無法執行此命令：" + cmd + " " + path );
+            Common.handleErrorMessage( ex, "無法執行此命令：" + cmd + " " + path );
         }
     }
 
@@ -2396,12 +2396,12 @@ public class Common
                 }
                 catch ( InterruptedException e )
                 {
-                    Common.hadleErrorMessage( e, "無法等待腳本執行" );
+                    Common.handleErrorMessage( e, "無法等待腳本執行" );
                 }
             }
             catch ( IOException ex )
             {
-                Common.hadleErrorMessage( ex, "無法執行此命令：" + cmd + " " + path );
+                Common.handleErrorMessage( ex, "無法執行此命令：" + cmd + " " + path );
             }
         }
     }
@@ -2466,7 +2466,7 @@ public class Common
                 }
                 catch ( InterruptedException e )
                 {
-                    Common.hadleErrorMessage( e, "無法等待腳本執行" );
+                    Common.handleErrorMessage( e, "無法等待腳本執行" );
                 }
 
                 stdout.close();
@@ -2483,7 +2483,7 @@ public class Common
             }
             catch ( IOException ex1 )
             {
-                Common.hadleErrorMessage( ex1, "無法在[" + tempRunScriptDirectory + "]資料夾內執行此命令：" + cmd );
+                Common.handleErrorMessage( ex1, "無法在[" + tempRunScriptDirectory + "]資料夾內執行此命令：" + cmd );
             }
         }
         else
@@ -2543,7 +2543,7 @@ public class Common
         }
         catch ( IOException ex )
         {
-            Common.hadleErrorMessage( ex, "無法執行此命令：" + cmd );
+            Common.handleErrorMessage( ex, "無法執行此命令：" + cmd );
         }
     }
 
@@ -2729,7 +2729,7 @@ public class Common
             }
             catch ( Exception e )
             {
-                Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+                Common.handleErrorMessage( e, "無法正確下載" + webSite );
             }
             
             int realFileStoredSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
@@ -2909,12 +2909,12 @@ public class Common
         }
         catch ( MalformedURLException e )
         {
-            Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+            Common.handleErrorMessage( e, "無法正確下載" + webSite );
         }
         catch ( IOException e )
         {
             // TODO Auto-generated catch block
-            Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+            Common.handleErrorMessage( e, "無法正確下載" + webSite );
         }
         
         int realFileStoredSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
@@ -3052,12 +3052,12 @@ public class Common
         }
         catch ( MalformedURLException e )
         {
-            Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+            Common.handleErrorMessage( e, "無法正確下載" + webSite );
         }
         catch ( IOException e )
         {
             // TODO Auto-generated catch block
-            Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+            Common.handleErrorMessage( e, "無法正確下載" + webSite );
         }
         
         int realFileStoredSize = ( int ) new File( outputDirectory + outputFileName ).length() / 1000;
@@ -3119,7 +3119,7 @@ public class Common
     }
 
     // 處理錯誤訊息的步驟
-    public static void hadleErrorMessage( Exception ex, String tipString )
+    public static void handleErrorMessage( Exception ex, String tipString )
     {
         tipString += "！\n\n";
         System.err.println( tipString );
@@ -3859,7 +3859,7 @@ public class Common
                         ComicDownGUI.stateBar.setText( "下載逾時，跳過" + outputFileName );
                         Flag.timeoutFlag = false; // 歸回初始值
                     }
-                    Common.hadleErrorMessage( e, "無法正確下載" + webSite );
+                    Common.handleErrorMessage( e, "無法正確下載" + webSite );
                     new File( outputDirectory + outputFileName ).delete();                   
                     if ( ( retryTimes + 1 ) > 0 )
                     { // 即使retryTimes設零，也會重傳一次

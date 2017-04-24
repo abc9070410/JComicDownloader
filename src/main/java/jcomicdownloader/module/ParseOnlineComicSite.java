@@ -438,7 +438,7 @@ abstract public class ParseOnlineComicSite {
         }
         catch ( Exception ex ) {
             formatVolume = volume;
-            Common.hadleErrorMessage( ex, "集數名稱的數字規格化處理發生錯誤" );
+            Common.handleErrorMessage( ex, "集數名稱的數字規格化處理發生錯誤" );
         }
 
         return formatVolume;

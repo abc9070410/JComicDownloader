@@ -777,7 +777,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
             CommonGUI.setLookAndFeelByClassName(skinClassName);
         } catch (Exception ex) {
-            Common.hadleErrorMessage(ex, "無法使用" + skinClassName + "介面 !!");
+            Common.handleErrorMessage(ex, "無法使用" + skinClassName + "介面 !!");
 
             // 若無法配置指定的skin，就用預設的
             CommonGUI.setLookAndFeelByClassName(defaultSkinClassName);
@@ -1452,7 +1452,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
             try {
                 tray.add(this.trayIcon);
             } catch (AWTException ex) {
-                Common.hadleErrorMessage(ex, "無法加入系統工具列圖示");
+                Common.handleErrorMessage(ex, "無法加入系統工具列圖示");
             }
         } else {
             setState(Frame.ICONIFIED); // 若系統沒有支援縮進系統框，就只好縮小到下方列。
@@ -1512,7 +1512,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         try {
             args = doc.getText(0, doc.getLength()).split("\\s+");
         } catch (BadLocationException ex) {
-            Common.hadleErrorMessage(ex, "無法取得documet的文字！");
+            Common.handleErrorMessage(ex, "無法取得documet的文字！");
         }
 
         //messageArea.append( webSite );
@@ -1523,7 +1523,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         try {
             args = doc.getText(0, doc.getLength()).split("\\s+");
         } catch (BadLocationException ex) {
-            Common.hadleErrorMessage(ex, "無法取得document的文字");
+            Common.handleErrorMessage(ex, "無法取得document的文字");
         }
     }
 
@@ -1532,7 +1532,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         try {
             args = doc.getText(0, doc.getLength()).split("\\s+");
         } catch (BadLocationException ex) {
-            Common.hadleErrorMessage(ex, "無法取得document的文字");
+            Common.handleErrorMessage(ex, "無法取得document的文字");
         }
     }
 
@@ -2445,7 +2445,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                             try {
                                 ComicDownGUI.mainFrame.wait();
                             } catch (InterruptedException ex) {
-                                Common.hadleErrorMessage(ex, "無法讓mainFrame等待（wait）");
+                                Common.handleErrorMessage(ex, "無法讓mainFrame等待（wait）");
                             }
                         }
                     }
@@ -2552,7 +2552,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                 try {
                     singleRun.join();
                 } catch (InterruptedException ex) {
-                    Common.hadleErrorMessage(ex, "無法加入singleRun.join()");
+                    Common.handleErrorMessage(ex, "無法加入singleRun.join()");
                 }
                 Flag.allowDownloadFlag = false;
             }
@@ -2737,7 +2737,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                             mainRun.join();
 
                         } catch (InterruptedException ex) {
-                            Common.hadleErrorMessage(ex, "無法加入mainRun.join()");
+                            Common.handleErrorMessage(ex, "無法加入mainRun.join()");
                         }
 
                         title = mainRun.getTitle();
@@ -3205,7 +3205,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                 try {
                     Thread.sleep(3000); // 先等三秒
                 } catch (InterruptedException ex) {
-                    Common.hadleErrorMessage(ex, "無法等待預定秒數");
+                    Common.handleErrorMessage(ex, "無法等待預定秒數");
                 }
 
                 String counterURL = "http://jcomicdownloader.googlecode.com/files/count.txt";
@@ -3268,7 +3268,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         try {
             table.setDefaultRenderer(Class.forName("java.lang.Object"), cellRender);
         } catch (ClassNotFoundException ex) {
-            Common.hadleErrorMessage(ex, "無法將table轉型");
+            Common.handleErrorMessage(ex, "無法將table轉型");
         }
     }
 
