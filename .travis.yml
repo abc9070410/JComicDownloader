@@ -26,8 +26,8 @@ install:
 deploy:
   - provider: releases
     api_key: '$GITHUB_API_KEY' #refer to travis environment varible setting
-#    file_glob: true
-#    file: "output/*.jar" #JComicDownload-v5.30.jar JComicDownload-v5.30-FULL.jar
+    file_glob: true
+    file: "output/*.jar" #JComicDownload-v5.30.jar JComicDownload-v5.30-FULL.jar
     skip_cleanup: true
     on:
       tags: true
