@@ -11,7 +11,8 @@ import jcomicdownloader.module.*;
 import jcomicdownloader.tools.Common;
 import org.junit.runner.*;
 import org.junit.runners.*;
-import org.junit.*;
+import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.rules.*;
 
 /**
@@ -21,6 +22,11 @@ import org.junit.rules.*;
 @RunWith(value=Parameterized.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestURL {
+    
+    private final String url, mod;
+    private ParseOnlineComicSite s;
+    
+    
     @Rule
     public TestRule watcher = new TestWatcher() {
         protected void starting(Description description) {
@@ -63,12 +69,10 @@ public class TestURL {
         );
     }
 
-    private final String url,mod;
-    private ParseOnlineComicSite s;
 
     public TestURL(Integer i,String url, String mod) {
         this.url = url;
-        this.mod = mod;;
+        this.mod = mod;
 
         noGuiTweak:{ //just a label
             Run.isAlive=true;// tweak for no download
