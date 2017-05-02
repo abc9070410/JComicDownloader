@@ -117,9 +117,9 @@ public class ParseXXBH extends ParseOnlineComicSite
          endIndex = allPageString.indexOf( "\"", beginIndex );
          String jsURL2 = allPageString.substring( beginIndex, endIndex );
          */
-
-        // 取得 http://cssen.177mh.com/img_v1/n17_co.js
-        beginIndex = allPageString.indexOf( "n17_co" );
+        /*
+        // 取得v3_cont_v130404.js
+        beginIndex = allPageString.indexOf( "/cont_" );
         beginIndex = allPageString.lastIndexOf( "http:", beginIndex );
         endIndex = allPageString.indexOf( "\"", beginIndex );
         String tempURL = allPageString.substring( beginIndex, endIndex );
@@ -134,6 +134,8 @@ public class ParseXXBH extends ParseOnlineComicSite
         beginIndex = allJSPageString.lastIndexOf( "http:", beginIndex );
         endIndex = allJSPageString.indexOf( "\"", beginIndex );
         String jsURL2 = allJSPageString.substring( beginIndex, endIndex );
+        */
+        String jsURL2 = "http://css.177mh.com/img_v1/fdc_160903a.js";
         
         Common.debugPrintln( "第2個js位址: " + jsURL2 );
 
@@ -160,7 +162,7 @@ public class ParseXXBH extends ParseOnlineComicSite
         
         // 首先要下載js檔
         beginIndex = allPageString.indexOf( "/coojs/" );
-        beginIndex = allPageString.lastIndexOf( "http:", beginIndex );
+        beginIndex = allPageString.lastIndexOf( "\"", beginIndex ) + 1;
         endIndex = allPageString.indexOf( "\"", beginIndex );
         String jsURL = allPageString.substring( beginIndex, endIndex );
 
@@ -204,7 +206,7 @@ public class ParseXXBH extends ParseOnlineComicSite
         for ( int p = 0; p < totalPage && Run.isAlive; p++ )
         {
 
-            comicURL[p] = frontPicURLs[serverId - 1] + backPicURLs[p];
+            comicURL[p] = frontPicURLs[serverId - 1] + backPicURLs[p].replace("\\", "");
 
             //使用最簡下載協定，加入refer始可下載
             referURL = webSite + "?page=" + (p + 1);
