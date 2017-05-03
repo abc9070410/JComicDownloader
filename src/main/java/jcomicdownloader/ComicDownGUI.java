@@ -605,8 +605,12 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         return date;
     }
 
-
-
+    private void initCookie()
+    {
+        java.net.CookieManager cm = new java.net.CookieManager();
+        java.net.CookieHandler.setDefault(cm);
+    }
+    
     public ComicDownGUI() {
         super(versionString);
 
@@ -614,6 +618,8 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
         minimizeEvent();
         inittrayIcon();
+        
+        initCookie();
 
         mainFrame = (this); // for change look and feel
 
