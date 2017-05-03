@@ -319,7 +319,7 @@ public class ChoiceFrame extends JFrame implements
         }
         catch ( ClassNotFoundException ex )
         {
-            Common.hadleErrorMessage( ex, "無法設置volumeTable上哪些集數要變色" );
+            Common.handleErrorMessage( ex, "無法設置volumeTable上哪些集數要變色" );
         }
     }
 

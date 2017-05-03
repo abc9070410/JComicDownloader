@@ -56,15 +56,10 @@ public class ParseSF extends ParseOnlineComicSite {
         
     }
     
-    private void checkJar()
-    {
-        try{
-            Class.forName("org.jsoup.Jsoup",false, this.getClass().getClassLoader());                    
-        }catch(ClassNotFoundException e){
-            String jarFileName = "jsoup-1.8.2.jar";
-            Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
-        }
-    }
+//    private void checkJar()
+//    {
+//        checkJsoupJar();
+//    }
     
     public ParseSF( String webSite, String titleName ) {
         this();

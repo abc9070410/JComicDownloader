@@ -365,7 +365,7 @@ public class ParseGooglePic extends ParseOnlineComicSite {
                         this.wait();
                     }
                     catch ( InterruptedException ex ) {
-                        Common.hadleErrorMessage( ex, "無法讓" + this.getClass() + "等待（wait）" );
+                        Common.handleErrorMessage( ex, "無法讓" + this.getClass() + "等待（wait）" );
                     }
                 }
                 */

@@ -217,7 +217,7 @@ public class ParseTianyaBook extends ParseEightNovel
         catch ( Exception ex )
         {
 
-            Common.hadleErrorMessage( ex, "處理下載文字檔發生問題" );
+            Common.handleErrorMessage( ex, "處理下載文字檔發生問題" );
             try
             {
                 throw new Exception();

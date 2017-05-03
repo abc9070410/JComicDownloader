@@ -186,8 +186,11 @@ abstract public class ParseOnlineComicSite {
         try{
             Class.forName("org.jsoup.Jsoup",false, this.getClass().getClassLoader());                    
         }catch(ClassNotFoundException e){
-            String jarFileName = "jsoup-1.8.2.jar";
-            Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
+            String jarFileName = "jsoup-1.10.2.jar";
+//            String downloadUrl = "https://abc9070410.github.io/JComicDownloader/" + jarFileName;
+            String downloadUrl = "https://jsoup.org/packages/"+ jarFileName;
+
+            Common.downloadJarFile( downloadUrl, jarFileName );
         }
     }
     public String fixSpecialCase( String url ) {
@@ -438,7 +441,7 @@ abstract public class ParseOnlineComicSite {
         }
         catch ( Exception ex ) {
             formatVolume = volume;
-            Common.hadleErrorMessage( ex, "集數名稱的數字規格化處理發生錯誤" );
+            Common.handleErrorMessage( ex, "集數名稱的數字規格化處理發生錯誤" );
         }
 
         return formatVolume;

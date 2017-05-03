@@ -136,7 +136,7 @@ public class CommonGUI
         }
         catch ( Exception ex )
         {
-            //Common.hadleErrorMessage( ex, "找不到此資源：" + resourceFolder + picName );
+            //Common.handleErrorMessage( ex, "找不到此資源：" + resourceFolder + picName );
             Common.errorReport( "找不到此資源：" + resourceFolder + picName );
         }
 
@@ -1295,7 +1295,7 @@ public class CommonGUI
             }
             catch ( InterruptedException ex )
             {
-                Common.hadleErrorMessage( ex, "無法讓Thread睡眠（sleep）" );
+                Common.handleErrorMessage( ex, "無法讓Thread睡眠（sleep）" );
             }
         }
 
@@ -1338,7 +1338,7 @@ public class CommonGUI
             }
             catch ( InterruptedException ex )
             {
-                Common.hadleErrorMessage( ex, "無法讓Thread睡眠（sleep）" );
+                Common.handleErrorMessage( ex, "無法讓Thread睡眠（sleep）" );
             }
         }
 
@@ -1373,7 +1373,7 @@ public class CommonGUI
                 Common.debugPrint( "." );
              }
              catch ( InterruptedException ex ) {
-                Common.hadleErrorMessage( ex, "無法讓Thread睡眠（sleep）" );
+                Common.handleErrorMessage( ex, "無法讓Thread睡眠（sleep）" );
              }
         }
         /*
@@ -1400,7 +1400,7 @@ public class CommonGUI
          Common.debugPrint( "." );
          }
          catch ( InterruptedException ex ) {
-         Common.hadleErrorMessage( ex, "無法讓Thread睡眠（sleep）" );
+         Common.handleErrorMessage( ex, "無法讓Thread睡眠（sleep）" );
          }
          }
          */

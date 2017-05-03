@@ -6,8 +6,13 @@
  Version  : v5.19.20140326
  Last Modified : 2014/3/26
  ----------------------------------------------------------------------------------------------------
- * 
+ *
  * ChangeLog:
+ 5.30:
+ 1. 將設檔放進 JComicDownloader.settings 的 folder 內方便管理。
+ 2. lib -> JComicDownloader.settings/lib
+ 3. ErrorRecord -> JComicDownloader.settings/ErrorRecord
+
  5.21:
  1. 讀取POM.properties的version。
 
@@ -42,7 +47,7 @@
  10. 修復ck101改變位址的問題。
  11. 修復xxbh位址解析錯誤的問題。
  12. 修復dm5沒有標題名稱時解析錯誤的問題。
- * 
+ *
  5.15:
  1. 修復178下載錯誤的問題。
  2. 修復7tianshi..com無法解析的問題。
@@ -95,7 +100,7 @@
  5.09:
  1. 新增對woyouxian.com的支援。
  2. 新增對shunong.com的支援。
- 3. 修復文字檔的第一小節標題位置錯誤的問題。 
+ 3. 修復文字檔的第一小節標題位置錯誤的問題。
  4. 修復jmymh解析位址錯誤的問題。
  5. 修復dmeden.net解析位址錯誤的問題。
  5.08:
@@ -103,21 +108,21 @@
  2. 修復冗餘設定檔檢查的問題。
  3. 修復dmeden.net解析位址錯誤的問題。
  4. 修復下載發生錯誤時無法正確通知的問題。
- 5.07: 
- 1. 新增對7wenku的支援。 
+ 5.07:
+ 1. 新增對7wenku的支援。
  2. 修復iask解析錯誤的問題。
  3. 修復veryim集數解析不全的問題。
  4. 修復在windows系統下執行腳本若有錯誤輸出時會阻塞的問題。
- 
+
  5.06:
  1. 修復8comic因網站改版而解析錯誤的問題。
  2. 修復改變紀錄順序後加入書籤錯亂的問題。
- 5.05: 
+ 5.05:
  1. 增加英文介面。
  2. 修復8novel少數下載不完全的問題。
  3. 修復dm5部分解析網址錯誤的問題。
  4. 加入辨識rar壓縮檔為已下載集數。
- 5.04: 
+ 5.04:
  1. 修正機制，讓書籤和紀錄也可以改變位置順序。
  2. 修改事件：滑鼠雙擊任務編號 -> 開啟網頁。
  3. 修復17kk下載錯誤的問題。
@@ -136,10 +141,10 @@
  6. 修復ck101因網站改版而解析錯誤的問題。
  7. 修復8comic因網站改版而解析錯誤的問題。
  8. 修復dm5無法下載的問題。
- 9. 修復bengou因網頁改版而解析失敗的問題。 
+ 9. 修復bengou因網頁改版而解析失敗的問題。
  5.01:  1. 增加隨設定改變表格字體的功能。
  2. 修復veryim無法下載的問題。
- 3. 修復dm5限制漫畫無法下載的問題。 
+ 3. 修復dm5限制漫畫無法下載的問題。
  4. 修復xxbh因網站改版而無法解析的問題。
  5. 修復dm.99manga.com因改版而解析錯誤的問題。
  6. 修復baidu因改版而解析錯誤的問題。
@@ -167,7 +172,7 @@
  3. 修復wenku8繁體頁面下載錯誤的問題。
  4. 修復xxbh因網站改版而無法解析的問題。
  *    5. 修復manmankancom因網站改版而無法解析的問題。
-       
+
  4.13: 1. 修復jmymh解析集數錯誤的問題。
  2. 修正wenku8的封面與插圖下載。
  3. 修正部份訊息視窗無法顯現的問題。
@@ -220,7 +225,7 @@
  *      4. 改進例外處理機制，發生錯誤時自動輸出錯誤相關訊息。
  4.04: 1. 新增對pixnet.net的支援。
  *       2. 增加輸出html格式的選項。（作用於文章下載模式）
- 4.03: 1. 新增對xxbh的支援。 
+ 4.03: 1. 新增對xxbh的支援。
  *       2. 新增對blogspot.com的支援（只支援基本範本）。
  *       3. 修復imanhua部份下載錯誤的問題。
  *       4. 更新對於html的tag和NCR（Numeric character reference）的替換機制，使輸出文字檔更趨自然。
@@ -271,8 +276,8 @@
  2. 修復對dmeden.net的支援。
  3. 修正加入任務不會馬上儲存的bug。
  3.08: 1. 修復對89890的支援。
- 2. 修復對MangaFox的支援。 
- 3. 修復對8comic的支援。 
+ 2. 修復對MangaFox的支援。
+ 3. 修復對8comic的支援。
  4. 取消對xindm的支援。
  5. 修正EH的標題命名選擇。
  3.07: 1. 新增對google一般搜尋的支援。
@@ -307,16 +312,16 @@
  4. 修復linux系統下無法開啟檔案總管(nautilus)的bug。
  5. 修復178檔名含有中文就會解析錯誤的bug。
  6. 修復部份漫畫無法正確下載缺少頁數的bug。
- * 
+ *
  * 2.16: 1. 改由NetBeans生成JAR檔。
  2. 增加標題重新命名的右鍵選單。
- * 　　 3. 修改暗色系界面的已下載和未下載的顏色標示。 
+ * 　　 3. 修改暗色系界面的已下載和未下載的顏色標示。
  4. 修改任務列刪除機制，使其下載中仍能刪除任務。
  5. 修復178少數檔名解析錯誤的bug。
  6. 修復在非下載時，第一列任務仍無法置頂或置底的bug。
  * 2.15: 1. 增加NimROD介面風格（共六種）。
  2. 修復mangaFox已刪除漫畫加入後會當掉的問題。
- * 
+ *
  * 2.14: 1. 修改任務列置換機制，使其在下載中仍能置頂或置底。
  2. 修改下載清單版面，將"下載順序"改為"編號"，這樣順序置換後會比較清楚。
  3. 修改紀錄儲存機制，即使取消"是否下載"的勾選，仍會儲存紀錄。
@@ -358,11 +363,11 @@
  4. 修復暫存資料夾路徑無法改變的bug。
  5. 修復部分集數名稱解析失敗的bug。（數字規格化改由前面開始找）
  * 2.04: 1. 增加選擇紀錄檔和暫存資料夾的選項。
- 2. 修改下拉式介面選單的渲染機制，使其可改變字型。 
+ 2. 修改下拉式介面選單的渲染機制，使其可改變字型。
  3. 修改集數名稱命名機制，將裡面的數字格式化（ex. 第3回 -> 第003回），以方便排序。
  4. 增加選擇字型時可以預覽字型的功能。
  5. 修復部份CC漫畫解析錯誤的bug。
- * 
+ *
  * 2.03: 1. 新增對www.iibq.com的支援。
  2. 增加可用外部程式開啟漫畫的選項。
  3. 增加逾時倒數時間設定的選項。
@@ -375,7 +380,7 @@
  2. 修復kuku網址轉碼部份發生錯誤的bug。
  3. 修復92wy部分集數無法讀取的bug。
  4. 修復mangaFox部份集數命名重疊的bug。
- * 
+ *
  * 2.01: 1. 在訊息視窗中加入支援列表的資訊。
  2. 在選項視窗中加入可以預設全選集數的選項。
  3. 修改下載機制，不下載青蛙圖（檔案大小10771 bytes）。
@@ -410,7 +415,7 @@
  2. 增加可選擇字型和字體大小的選項。
  3. 修改集數選擇視窗（choiceFrame）的關閉功能，允許按右上角的『X』來關閉。
  4. 修復若沒有下載成功仍會產生空壓縮檔的bug。
- 5. 修復official.html無法刪除的bug。 
+ 5. 修復official.html無法刪除的bug。
  * 1.13: 1. 新增對mangafox.com的支援。
  2. 修復jumpcn.com.cn因置換伺服器而解析錯誤的問題。
  * 1.12: 1. 增加對jumpcn.com的支援。
@@ -448,6 +453,8 @@ package jcomicdownloader;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -477,6 +484,8 @@ import jcomicdownloader.table.DownTableRender;
 import jcomicdownloader.table.DownloadTableModel;
 import jcomicdownloader.table.RecordTableModel;
 import jcomicdownloader.tools.*;
+import static java.nio.file.StandardCopyOption.*;
+import static jcomicdownloader.tools.Common.getSlash;
 
 /**
  * @author surveyorK
@@ -516,7 +525,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     private JMenuItem tableOpenDownloadFile;  // 開啟下載檔案
     private JMenuItem tableOpenDownloadDirectoryItem;  // 開啟下載資料夾
     private JMenuItem tableAddBookmarkFromDownloadItem;  // 加入到書籤
-    private JMenuItem tableRechoiceVolumeItem;  // 重新選擇集數 
+    private JMenuItem tableRechoiceVolumeItem;  // 重新選擇集數
     private JMenuItem tableRenameTitleItem;  // 重新命名標題
     private JMenuItem tableDeleteMissionItem;  // 刪除任務
     private JMenuItem tableDeleteSelectedMissionItem;  // 刪除所有反白任務
@@ -563,9 +572,9 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     private Run mainRun;
     private int nowDownloadMissionRow; // 目前正在進行下載的任務列的順序
     Dimension frameDimension;
-    public static final String defaultMajorVersion = "v5.21";//if cannot read pom, will use this as major version
+    public static final String defaultMajorVersion = "v5.30";//if cannot read pom, will use this as major version
     public static final String versionString = "JComicDownloader "+ getPOMVersion();
-    
+
     private static String getPOMVersion(){
         String version;
         try{
@@ -581,13 +590,13 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         }
         return version;
     }
-    
+
     private static String getCompileDateString(){
         String date="";
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         try{
             JarFile jf = new JarFile( Common.getNowAbsolutePath() + Common.getThisFileName());
-            ZipEntry manifest = jf.getEntry("META-INF/MANIFEST.MF");           
+            ZipEntry manifest = jf.getEntry("META-INF/MANIFEST.MF");
             date += sdf.format(manifest.getTime());
         }catch(Exception ex){
             Common.debugPrintln("Cannot read jar compiled time, using current time instead");
@@ -595,7 +604,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         }
         return date;
     }
-    
+
     private void initCookie()
     {
         java.net.CookieManager cm = new java.net.CookieManager();
@@ -604,6 +613,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     
     public ComicDownGUI() {
         super(versionString);
+
         Common.setHttpProxy(); // 設置代理伺服器
 
         minimizeEvent();
@@ -654,7 +664,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                             logFrame.setVisible(true);
                             Debug.commandDebugMode = false;
                         } else {
-                            // 由cmd輸出資訊 
+                            // 由cmd輸出資訊
                             logFrame.setVisible(false);
                             Debug.commandDebugMode = true;
                         }
@@ -664,7 +674,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
             }
         }).start();
 
-        //CommonGUI.newFrameStartInEDT( "jcomicdownloader.frame.LogFrame", 
+        //CommonGUI.newFrameStartInEDT( "jcomicdownloader.frame.LogFrame",
         //    SetUp.getOpenDebugMessageWindow() );
         //counter();  // 以code頁面記錄開啟次數（好玩測試看看）
         messageString = new StringBuffer("");
@@ -732,7 +742,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         setDefaultRenderer(recordTable, recordTableModel);
 
         // default skin: Windows uses Nimbus skin, Ubuntu uses GTK skin
-        //setSkin( ComicDownGUI.defaultSkinClassName  ); 
+        //setSkin( ComicDownGUI.defaultSkinClassName  );
         setSkin(SetUp.getSkinClassName());
 
         stateBar = new JLabel("請貼上網址                                       ");
@@ -777,13 +787,13 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
         try {
             if (skinClassName.matches(".*substance.api.skin.*")
-                    && !new File(Common.getNowAbsolutePath() + "lib/trident-6.3.jar").exists()) {
-                throw new Exception("資料夾內找不到lib/trident-6.3.jar，無法設置Substance介面");
+                    && !new File(Common.getNowAbsolutePath() + "JComicDownloader.settings/lib/trident-6.3.jar").exists()) {
+                throw new Exception("JComicDownloader.settings 資料夾內找不到 lib/trident-6.3.jar，無法設置Substance介面");
             }
 
             CommonGUI.setLookAndFeelByClassName(skinClassName);
         } catch (Exception ex) {
-            Common.hadleErrorMessage(ex, "無法使用" + skinClassName + "介面 !!");
+            Common.handleErrorMessage(ex, "無法使用" + skinClassName + "介面 !!");
 
             // 若無法配置指定的skin，就用預設的
             CommonGUI.setLookAndFeelByClassName(defaultSkinClassName);
@@ -877,7 +887,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         //JPanel downPanel = new CommonGUI().getCenterPanel( downScrollPane );
 
         setDownloadTableJPopupMenu(); // 設置右鍵彈出選單
-        //downScrollPane.setOpaque(false); 
+        //downScrollPane.setOpaque(false);
         textPanel.add(downScrollPane, BorderLayout.CENTER);
     }
 
@@ -1185,7 +1195,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                         null
                     };
 
-            //Implement table header tool tips. 
+            //Implement table header tool tips.
             protected JTableHeader createDefaultTableHeader() {
                 return new JTableHeader(columnModel) {
 
@@ -1220,7 +1230,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         cModel.getColumn(DownTableEnum.STATE).setPreferredWidth((int) (this.getWidth() * 0.3));
         cModel.getColumn(DownTableEnum.URL).setPreferredWidth((int) (this.getWidth() * 0.002));
 
-        //table.setOpaque(false); //無效 
+        //table.setOpaque(false); //無效
         // 若設定為透明，就用預定顏色字體。
         if (SetUp.getUsingBackgroundPicOfMainFrame()) {
             table.getTableHeader().setForeground(SetUp.getMainFrameTableDefaultColor());
@@ -1250,7 +1260,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                         CommonGUI.getToolTipString("此欄位滑鼠左鍵點兩下可自由編輯該列任務的注解")
                     };
 
-            //Implement table header tool tips. 
+            //Implement table header tool tips.
             protected JTableHeader createDefaultTableHeader() {
                 return new JTableHeader(columnModel) {
 
@@ -1311,7 +1321,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                         CommonGUI.getToolTipString("此欄位顯示該列漫畫在當初加入任務的系統時間，滑鼠左鍵點兩下以預設瀏覽程式開啟")
                     };
 
-            //Implement table header tool tips. 
+            //Implement table header tool tips.
             protected JTableHeader createDefaultTableHeader() {
                 return new JTableHeader(columnModel) {
 
@@ -1458,7 +1468,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
             try {
                 tray.add(this.trayIcon);
             } catch (AWTException ex) {
-                Common.hadleErrorMessage(ex, "無法加入系統工具列圖示");
+                Common.handleErrorMessage(ex, "無法加入系統工具列圖示");
             }
         } else {
             setState(Frame.ICONIFIED); // 若系統沒有支援縮進系統框，就只好縮小到下方列。
@@ -1518,7 +1528,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         try {
             args = doc.getText(0, doc.getLength()).split("\\s+");
         } catch (BadLocationException ex) {
-            Common.hadleErrorMessage(ex, "無法取得documet的文字！");
+            Common.handleErrorMessage(ex, "無法取得documet的文字！");
         }
 
         //messageArea.append( webSite );
@@ -1529,7 +1539,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         try {
             args = doc.getText(0, doc.getLength()).split("\\s+");
         } catch (BadLocationException ex) {
-            Common.hadleErrorMessage(ex, "無法取得document的文字");
+            Common.handleErrorMessage(ex, "無法取得document的文字");
         }
     }
 
@@ -1538,7 +1548,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         try {
             args = doc.getText(0, doc.getLength()).split("\\s+");
         } catch (BadLocationException ex) {
-            Common.hadleErrorMessage(ex, "無法取得document的文字");
+            Common.handleErrorMessage(ex, "無法取得document的文字");
         }
     }
 
@@ -1768,11 +1778,11 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     }
 
     private String getTableName(JTable targetTable) {
-        if (targetTable == downTable) {
+        if (targetTable.equals(downTable)) {
             return "任務";
-        } else if (targetTable == bookmarkTable) {
+        } else if (targetTable.equals(bookmarkTable)) {
             return "書籤";
-        } else if (targetTable == recordTable) {
+        } else if (targetTable.equals(recordTable)) {
             return "紀錄";
         } else {
             return "未知的表格";
@@ -2451,7 +2461,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                             try {
                                 ComicDownGUI.mainFrame.wait();
                             } catch (InterruptedException ex) {
-                                Common.hadleErrorMessage(ex, "無法讓mainFrame等待（wait）");
+                                Common.handleErrorMessage(ex, "無法讓mainFrame等待（wait）");
                             }
                         }
                     }
@@ -2558,7 +2568,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                 try {
                     singleRun.join();
                 } catch (InterruptedException ex) {
-                    Common.hadleErrorMessage(ex, "無法加入singleRun.join()");
+                    Common.handleErrorMessage(ex, "無法加入singleRun.join()");
                 }
                 Flag.allowDownloadFlag = false;
             }
@@ -2743,7 +2753,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                             mainRun.join();
 
                         } catch (InterruptedException ex) {
-                            Common.hadleErrorMessage(ex, "無法加入mainRun.join()");
+                            Common.handleErrorMessage(ex, "無法加入mainRun.join()");
                         }
 
                         title = mainRun.getTitle();
@@ -2896,7 +2906,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                 }
             }
         } else if (event.getSource() == tableSelectedMoveToFloorItem) {
-            // 所有反白任務置底 
+            // 所有反白任務置底
             for (int i = downTable.getRowCount() - 1; i >= 0; i--) {
                 if (downTable.isRowSelected(i)) {
                     moveMissionDown(downTable, i, true);
@@ -3056,28 +3066,29 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                     return;
                 }
             }
-            
+
             try {
                 Class.forName("com.owlike.genson.Genson",false,this.getClass().getClassLoader());
             } catch(ClassNotFoundException e) {
-                final String jarFileName = "genson-1.3.jar";
-                
+                final String jarFileName = "genson-1.4.jar";
+
                 new Thread(new Runnable() {
                     public void run() {
                         CommonGUI.showMessageDialog( ComicDownGUI.mainFrame, "缺少必要程式庫[" + jarFileName + "]，進行下載",
                                          "提醒訊息", JOptionPane.INFORMATION_MESSAGE );
-                                         
+
                                          }
                 }).start();
-                
+
                 new Thread(new Runnable() {
                     public void run() {
-                        Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
+                        Common.downloadJarFile("http://repo1.maven.org/maven2/com/owlike/genson/1.4/genson-1.4.jar", jarFileName);
+//                        Common.downloadJarFile( "https://abc9070410.github.io/JComicDownloader/" + jarFileName, jarFileName );
                     }
                 }).start();
                 return;
             }
-            
+
             new Thread(new Runnable() {
                 public void run() {
                     SwingUtilities.invokeLater(new Runnable() {
@@ -3211,7 +3222,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
                 try {
                     Thread.sleep(3000); // 先等三秒
                 } catch (InterruptedException ex) {
-                    Common.hadleErrorMessage(ex, "無法等待預定秒數");
+                    Common.handleErrorMessage(ex, "無法等待預定秒數");
                 }
 
                 String counterURL = "http://jcomicdownloader.googlecode.com/files/count.txt";
@@ -3225,7 +3236,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     }
 
     private JButton getButton(String string, String enString, String toolTip, String picName, int keyID) {
-        string = Common.getStringUsingDefaultLanguage(string, enString); // 使用預設語言 
+        string = Common.getStringUsingDefaultLanguage(string, enString); // 使用預設語言
         JButton button = new JButton(string, new CommonGUI().getImageIcon(picName));
         CommonGUI.setToolTip(button, toolTip + "  快捷鍵: Alt + " + KeyEvent.getKeyText(keyID));
 
@@ -3242,7 +3253,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     }
 
     private JMenuItem getMenuItem(String text, String enText, Icon icon) {
-        text = Common.getStringUsingDefaultLanguage(text, enText); // 使用預設語言 
+        text = Common.getStringUsingDefaultLanguage(text, enText); // 使用預設語言
 
         JMenuItem menuItem = new JMenuItem(text, icon);
         menuItem.addActionListener(this);
@@ -3274,7 +3285,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         try {
             table.setDefaultRenderer(Class.forName("java.lang.Object"), cellRender);
         } catch (ClassNotFoundException ex) {
-            Common.hadleErrorMessage(ex, "無法將table轉型");
+            Common.handleErrorMessage(ex, "無法將table轉型");
         }
     }
 

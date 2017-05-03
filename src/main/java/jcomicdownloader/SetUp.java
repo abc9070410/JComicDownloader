@@ -18,10 +18,13 @@ import java.awt.Font;
 import jcomicdownloader.tools.*;
 
 import java.io.*;
+import java.nio.file.Files;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.Locale;
 import jcomicdownloader.enums.FileFormatEnum;
 import jcomicdownloader.enums.LanguageEnum;
 import jcomicdownloader.frame.OptionFrame;
+import static jcomicdownloader.tools.Common.getSlash;
 
 /**
  預設值的設置，讀寫設定檔
@@ -256,6 +259,54 @@ public class SetUp
         coverSelectAmountIndex = 1; // 要從幾張圖裡面挑選適合的小說封面圖
         
         outputErrorRecord = true; // 預設會輸出錯誤紀錄檔
+        
+        // migration logic from 5.21 to 5.30
+        File dir = new File( Common.getNowAbsolutePath() + "JComicDownloader.settings");
+        if (!dir.exists()){
+            File f;
+            Common.debugPrintln("Setting files will be placed in ./JComicDownloader.settings/ after this version. ");
+            dir.mkdir();
+
+            f = new File(Common.getNowAbsolutePath() + "set.ini");
+            f.renameTo(new File(Common.getNowAbsolutePath()+ "JComicDownloader.settings" + getSlash() + "set.ini"));
+
+            f = new File(Common.getNowAbsolutePath() + "downloadList.dat");
+            f.renameTo(new File(Common.getNowAbsolutePath()+ "JComicDownloader.settings" + getSlash() + "downloadList.dat"));
+            
+            f = new File(Common.getNowAbsolutePath() + "bookmarkList.dat");
+            f.renameTo(new File(Common.getNowAbsolutePath()+ "JComicDownloader.settings" + getSlash() + "bookmarkList.dat"));
+            
+            f = new File(Common.getNowAbsolutePath() + "recordList.dat");
+            f.renameTo(new File(Common.getNowAbsolutePath()+ "JComicDownloader.settings" + getSlash() + "recordList.dat"));
+
+            try {
+                Files.move( new File(Common.getNowAbsolutePath() + "temp").toPath(),
+                            new File(Common.getNowAbsolutePath() + "JComicDownloader.settings"+ getSlash() + "temp").toPath() ,
+                            REPLACE_EXISTING);
+            } catch (IOException ioex) {
+                Common.debugPrintln("Cannot move " + Common.getNowAbsolutePath() + "temp .");
+            }
+            
+            try {
+            Files.move( new File(Common.getNowAbsolutePath() + "lib").toPath(),
+                            new File(Common.getNowAbsolutePath() + "JComicDownloader.settings"+ getSlash() + "lib").toPath() ,
+                            REPLACE_EXISTING);
+            } catch (IOException ioex) {
+                Common.debugPrintln("Cannot move " + Common.getNowAbsolutePath() + "lib .");
+            }
+            try {
+                Files.move( new File(Common.getNowAbsolutePath() + "ErrorRecord").toPath(),
+                            new File(Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash() + "ErrorRecord").toPath() ,
+                            REPLACE_EXISTING);
+            } catch (IOException ioex) {
+                Common.debugPrintln("Cannot move " + Common.getNowAbsolutePath() + "ErrorRecord .");
+            }
+
+            dir = new File( Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash() +"lib");
+            if (!dir.exists()){
+                dir.mkdir();
+            }
+        }
     }
 
     // 將目前的設定寫入到設定檔(set.ini)
@@ -396,7 +447,7 @@ public class SetUp
                 + "\noutputErrorRecord = " + outputErrorRecord
                 + "\n";
 
-        Common.outputFile( setString, Common.getNowAbsolutePath(), Common.setFileName );
+        Common.outputFile( setString, Common.getNowAbsolutePath()  + "JComicDownloader.settings" + getSlash(), Common.setFileName );
     }
 
     // 印出目前設定值，除錯用
@@ -491,8 +542,8 @@ public class SetUp
     // 讀入設定檔並依讀入資料來更新目前設定
     public void readSetFile()
     {
-        Common.debugPrintln( "SET路徑：" + Common.getNowAbsolutePath() + Common.setFileName );
-        if ( !new File( Common.getNowAbsolutePath() + Common.setFileName ).exists() )
+        Common.debugPrintln( "SET路徑：" + Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash() + Common.setFileName );
+        if ( !new File( Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash() + Common.setFileName ).exists() )
         {
             Common.debugPrintln( "找不到set.ini，故自動產生" );
             writeSetFile();
@@ -1342,13 +1393,13 @@ public class SetUp
 
     public static String getRecordFileDirectory()
     {
-        return Common.getNowAbsolutePath();
+        return Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash();
     }
 
     public static String getTempDirectory()
     {
         // 回傳 本身目錄/temp/
-        return Common.getNowAbsolutePath() + "temp" + Common.getSlash();
+        return Common.getNowAbsolutePath() + "JComicDownloader.settings" + getSlash() + "temp" + Common.getSlash();
     }
 
     // 設置版面
