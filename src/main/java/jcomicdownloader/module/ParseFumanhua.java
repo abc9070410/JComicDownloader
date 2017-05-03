@@ -121,10 +121,9 @@ public class ParseFumanhua extends ParseOnlineComicSite {
             
             // 設定伺服器位址
             String[] serverURLs = {
-                "http://pic.yufulian.com",
-                "http://pic2.fumanhua.com",
-                "http://img2.fumanhua.com",
-                "http://img3.fumanhua.com"
+                "http://pic.tebcn.com",
+                "http://pic2.fumanhua.net",
+                "http://pic.fumanhua.net"
                 };
 
             String serverURL = "";
