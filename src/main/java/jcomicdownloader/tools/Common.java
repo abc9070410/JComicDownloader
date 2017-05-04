@@ -1058,15 +1058,20 @@ public class Common
             zipEntry.setMethod(ZipEntry.STORED);
             zipEntry.setSize(source.length());
             zipEntry.setCompressedSize(source.length());
-            zipEntry.setCrc(computeCrc(source));
-            zos.putNextEntry( zipEntry );
+//            zipEntry.setCrc(computeCrc(source));
+           
             FileInputStream fis = new FileInputStream( source );
+            CheckedInputStream checksum = new CheckedInputStream(fis, new CRC32());
+
             byte[] buffer = new byte[ 4096 ];
-            for ( int length; (length = fis.read( buffer )) > 0; )
+            for ( int length; (length = checksum.read( buffer )) > 0; )
             {
                 zos.write( buffer, 0, length );
             }
             fis.close();
+            zipEntry.setCrc(checksum.getChecksum().getValue());
+            checksum.close();
+            zos.putNextEntry( zipEntry );
             zos.closeEntry();
         }
         else if ( source.isDirectory() )
