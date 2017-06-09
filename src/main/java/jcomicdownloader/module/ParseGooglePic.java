@@ -82,6 +82,88 @@ public class ParseGooglePic extends ParseOnlineComicSite {
         Common.debugPrintln( "作品名稱(title) : " + getTitle() );
         Common.debugPrintln( "章節名稱(wholeTitle) : " + getWholeTitle() );
     }
+    
+    private void downloadGooglePicURL(String allPageString)
+    {
+        int beginIndex = 0, endIndex = 0;
+        
+        String[] picUrls = new String[1000];
+        
+        beginIndex = allPageString.indexOf("\"/search?q=") + 11;
+        endIndex = allPageString.indexOf("&", beginIndex);
+        
+        String q = allPageString.substring(beginIndex, endIndex);
+        
+        beginIndex = allPageString.indexOf("sei=") + 4;
+        endIndex = allPageString.indexOf("\"", beginIndex);
+        
+        String ei = allPageString.substring(beginIndex, endIndex);
+     
+        beginIndex = allPageString.indexOf("yp\" data-ved=\"") + 14;
+        endIndex = allPageString.indexOf("\"", beginIndex);
+        
+        String ved = allPageString.substring(beginIndex, endIndex);
+    
+        String requestUrl = "https://www.google.com.tw/search?async=_id:rg_s,_pms:s&ei=" + ei + "&tbs=isz:lt,islt:xga&yv=2&q=" + q + "&asearch=ichunk&tbm=isch&ved=" + ved + "&ijn=";
+        
+        Common.debugPrintln("requestURL:" + requestUrl);
+        
+        endIndex = beginIndex = 0;
+        
+        int p = 0;
+        int beginP = 0;
+        
+        for (int i = 0; i < 10; i++)
+        {
+            allPageString = getNewAllPageString( requestUrl + i );
+            
+            if (allPageString.length() < 200)
+            {
+                Common.debugPrintln("已經沒有頁面了");
+                break;
+            }
+            
+            beginP = p;
+        
+            while (p < 1000)
+            {
+                endIndex = allPageString.indexOf(".jpg", endIndex);
+                beginIndex = allPageString.lastIndexOf("http", endIndex);
+            
+                if (beginIndex > 0 && endIndex > beginIndex)
+                {
+                    picUrls[p] = allPageString.substring(beginIndex, endIndex).replaceAll("\\\\", "") + ".jpg";
+                    Common.debugPrintln(p + " pic url:" + picUrls[p]);
+                    
+                    p++;
+                    endIndex++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            
+            for (int j = beginP; j < p; j++)
+            {
+                downloadSingleGooglePic(picUrls[j], j + 1, p);
+            }
+        }
+
+    }
+    
+    private void downloadSingleGooglePic(String picUrl, int p, int totalPage)
+    {
+        int endIndex = picUrl.lastIndexOf( "/" ) + 1;
+        String referUrl = picUrl.substring(0, endIndex);
+        
+        if ( !Common.existPicFile( getDownloadDirectory(), p ) ||
+             !Common.existPicFile( getDownloadDirectory(), p + 1 ) )
+        {
+            //referUrl = "";
+            singlePageDownloadUsingSimple( getTitle(), getWholeTitle(), picUrl, totalPage, p, referUrl );
+        }
+    }
 
     @Override
     public void parseComicURL() { // parse URL and save all URLs in comicURL  //
@@ -93,7 +175,8 @@ public class ParseGooglePic extends ParseOnlineComicSite {
 
         allPageString = getNewAllPageString( webSite );
 
-        if ( allPageString.split( "imgurl=" ).length > 10 ) {
+        if ( allPageString.split( "imgurl=" ).length > 10 ||
+             webSite.indexOf( "tbm=isch" ) > 0) {
             googleEnum = GoogleEnum.PIC;
             Common.debugPrintln( "此為圖片搜尋頁面" );
         }
@@ -115,7 +198,7 @@ public class ParseGooglePic extends ParseOnlineComicSite {
             beginIndex = allPageString.lastIndexOf( "text-decoration:underline" );
             beginIndex = allPageString.lastIndexOf( "href=\"", beginIndex ) + 6;
             endIndex = allPageString.indexOf( "\"", beginIndex );
-
+// 
             String tempURL = baseGoogleURL + allPageString.substring( beginIndex, endIndex );
             tempURL = tempURL.replaceAll( "amp;", "" );
             endIndex = tempURL.lastIndexOf( "&start=" );
@@ -150,9 +233,12 @@ public class ParseGooglePic extends ParseOnlineComicSite {
         Common.debugPrintln( "共 " + totalPage + " 頁" );
         comicURL = new String[totalPage];
 
-       
+        downloadGooglePicURL(allPageString);
+        
+        
 
-        //System.exit(0);
+        /*
+        System.exit(0);
 
         boolean useOriginalFileName = false; // 取流水號檔名還是原始檔名
         int i = 0; // 每一個搜尋頁一百張圖片
@@ -249,6 +335,7 @@ public class ParseGooglePic extends ParseOnlineComicSite {
             Common.debugPrintln( "目前進度第" + i + "頁: " + webSite + baseNo );
             allPageString = getNewAllPageString( webSite + baseNo );
         }
+        */
 
         //System.exit(0); // debug
     }
@@ -278,7 +365,7 @@ public class ParseGooglePic extends ParseOnlineComicSite {
                         this.wait();
                     }
                     catch ( InterruptedException ex ) {
-                        Common.hadleErrorMessage( ex, "無法讓" + this.getClass() + "等待（wait）" );
+                        Common.handleErrorMessage( ex, "無法讓" + this.getClass() + "等待（wait）" );
                     }
                 }
                 */

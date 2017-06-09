@@ -136,7 +136,9 @@ public class ParseCK extends ParseOnlineComicSite
                     break;
                 }
                 
-                String nextPageURL = "http://comic101.com" + tempURL;
+                String nextPageURL = baseURL + tempURL;
+                
+                Common.debugPrintln( p + " next page url:" + nextPageURL);
 
                 Common.downloadFile( nextPageURL, SetUp.getTempDirectory(), indexName, false, "" );
                 allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );

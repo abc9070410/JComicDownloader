@@ -15,19 +15,17 @@ ChangeLog:
 package jcomicdownloader.module;
 
 import java.io.File;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import jcomicdownloader.tools.*;
 import jcomicdownloader.enums.*;
 import java.util.*;
 import javax.swing.JOptionPane;
 import jcomicdownloader.ComicDownGUI;
 import jcomicdownloader.SetUp;
-import jcomicdownloader.encode.Zhcode;
+//import jcomicdownloader.encode.Zhcode;
 
 public class ParseBAIDU extends ParseOnlineComicSite {
 
-    private int radixNumber; // use to figure out the name of pic
+ //   private int radixNumber; // use to figure out the name of pic
     private String jsName;
     protected String indexName;
     protected String indexEncodeName;
@@ -42,16 +40,16 @@ public class ParseBAIDU extends ParseOnlineComicSite {
      */
     public ParseBAIDU() {
         enumName = "BAIDU";
-	parserName=this.getClass().getName();
+	    parserName=this.getClass().getName();
         regexs= new String[]{"(?s).*baidu.com(?s).*"};
         downloadBefore=true;
-	siteID=Site.formString("BAIDU");
+	    siteID=Site.formString("BAIDU");
         siteName = "Baidu";
         indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_parse_", "html" );
         indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_parse_", "html" );
 
         jsName = "index_baidu.js";
-        radixNumber = 1844271; // default value, not always be useful!!
+  //      radixNumber = 1844271; // default value, not always be useful!!
 
         baseURL = "http://tieba.baidu.com";
     }
@@ -77,7 +75,8 @@ public class ParseBAIDU extends ParseOnlineComicSite {
     }
 
     @Override
-    public void parseComicURL() { // parse URL and save all URLs in comicURL  //
+    public void parseComicURL() { 
+        // parse URL and save all URLs in comicURL  //
         // 先取得前面的下載伺服器網址
 
         String allPageString;
@@ -141,27 +140,31 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             
             String[] temps = allPageString.split("\"BDE_Image\"");
             String[] comicURL2 = new String[temps.length-1];
-            String basePicURL = "http://imgsrc.baidu.com/forum/pic/item";
+            //String basePicURL = "http://imgsrc.baidu.com/forum/pic/item";
+            //String basePicURL = "https://imgsa.baidu.com/forum/pic/item/";
             int picCount = 0;
             
             Common.debugPrintln("預估的圖片數量 : " + temps.length);
             
-            for (i = 1; i < temps.length; i ++)
+            for (int j = 1; j < temps.length; j ++)
             {
-                if (temps[i].length() > 163)
-                {
-                    //Common.debugPrintln(i + " 原始碼: " + temps[i].substring(0, 163));
-                }
-                beginIndex = temps[i].indexOf("http://imgsrc.baidu.com/");
-                endIndex = temps[i].indexOf("\"", beginIndex);
-                beginIndex = temps[i].lastIndexOf("/", endIndex);
-                
+//                if (temps[j].length() > 163)
+//                {
+//                    //Common.debugPrintln(i + " 原始碼: " + temps[i].substring(0, 163));
+//                }
+                //beginIndex = temps[j].indexOf("http://imgsrc.baidu.com/");
+                //https://imgsa.baidu.com/forum/w%3D580/sign=02ea7c453fd12f2ece05ae687fc3d5ff/cc640409c93d70cf42c1b79ff1dcd100bba12bc7.jpg
+                beginIndex = temps[j].indexOf("https://imgsa.baidu.com/");
+                endIndex = temps[j].indexOf("\"", beginIndex);
+                beginIndex = temps[j].lastIndexOf("/", endIndex);
+                Common.debugPrintln("BeginIndex:"+beginIndex);
                 if (beginIndex > endIndex || beginIndex < 0)
                 {
                     continue;
                 }
-                comicURL2[picCount] = basePicURL + temps[i].substring(beginIndex, endIndex);
-                Common.debugPrintln("解析到的第" + i + "張圖:" + comicURL2[picCount]);
+                //comicURL2[picCount] = basePicURL + temps[j].substring(beginIndex, endIndex);
+                comicURL2[picCount] = temps[j].substring(beginIndex, endIndex);
+                Common.debugPrintln("解析到的第" + j + "張圖:" + comicURL2[picCount]);
                 
                 picCount++;
             }
@@ -169,13 +172,14 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             Common.debugPrintln("實際的圖片數量 : " + picCount);
             String[] comicURL = new String[picCount];
             
-            for (i = 0; i < picCount; i++)
+            for (int j = 0; j < picCount; j++)
             {
-                comicURL[i] = comicURL2[i];
+                comicURL[j] = comicURL2[j];
             }
-            
+
             // get the orginial image
-            String originalBaseURL = "http://imgsrc.baidu.com/forum/pic/item/";
+            //String originalBaseURL = "https://imgsa.baidu.com/forum/pic/item/";
+            String originalBaseURL = "https://imgsa.baidu.com/forum/pic/item/";
             for ( int k = 0; k < comicURL.length; k ++ )
             {
                 String fileName = comicURL[k].split( "/" )[comicURL[k].split( "/" ).length - 1];
@@ -219,7 +223,7 @@ public class ParseBAIDU extends ParseOnlineComicSite {
     @Override
     public String getAllPageString( String urlString ) {
         String indexName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_", "html" );
-        String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_", "html" );
+//        String indexEncodeName = Common.getStoredFileName( SetUp.getTempDirectory(), "index_baidu_encode_", "html" );
 
         Common.downloadFile( urlString, SetUp.getTempDirectory(), indexName, false, "" );
         //Common.newEncodeFile( SetUp.getTempDirectory(), indexName, indexEncodeName, Zhcode.GBK );
@@ -229,11 +233,7 @@ public class ParseBAIDU extends ParseOnlineComicSite {
 
     private boolean existsTempFile() {
         System.out.println( SetUp.getTempDirectory() + indexName );
-        if ( new File( SetUp.getTempDirectory() + indexName ).exists() ) {
-            return true;
-        } else {
-            return false;
-        }
+        return new File( SetUp.getTempDirectory() + indexName ).exists();
     }
 
     @Override
@@ -276,7 +276,9 @@ public class ParseBAIDU extends ParseOnlineComicSite {
             endIndex = allPageString.indexOf( "_", beginIndex );
             title = allPageString.substring( beginIndex, endIndex ).trim();
         }
-
+        if ((getWholeTitle() == null) ||( getWholeTitle().equals(""))) {
+            setWholeTitle(title);
+        }
         return Common.getStringRemovedIllegalChar( Common.getTraditionalChinese( "[百度]" + title ) );
     }
 

@@ -226,19 +226,19 @@ public class ParseEC extends ParseOnlineComicSite {
             case 16:
             case 18:
             case 20:
-                ret += "http://www.comicbus.com/online/finance-";
+                ret += "http://www.comicbus.com/online/comic-";
                 break;
             case 4:
             case 6:
             case 12:
             case 22:
-                ret += "http://www.comicbus.com/online/Domain-";
+                ret += "http://www.comicbus.com/online/comic-";
                 break;
             case 1:
             case 17:
             case 19:
             case 21:
-                ret += "http://www.comicbus.com/online/finance-";
+                ret += "http://www.comicbus.com/online/comic-";
                 break;
             case 2:
             case 5:
@@ -249,7 +249,7 @@ public class ParseEC extends ParseOnlineComicSite {
             case 11:
             case 13:
             case 14:
-                ret += "http://www.comicbus.com/online/insurance-";
+                ret += "http://www.comicbus.com/online/comic-";
                 break;
             default:
                 throw new IllegalArgumentException("The catid is not whithin the valid range.");
@@ -410,6 +410,6 @@ class NView_Java {
     }
 
     private void si(String c) {
-        this.urlResult = "http://img" + ss(c, 4, 2) + ".8comic.com/" + ss(c, 6, 1) + "/" + ti + "/" + ss(c, 0, 4) + "/" + nn(p) + "_" + ss(c, mm(p) + 10, 3, f) + ".jpg";
+        this.urlResult = "http://img" + ss(c, 4, 2) + ".6comic.com:99/" + ss(c, 6, 1) + "/" + ti + "/" + ss(c, 0, 4) + "/" + nn(p) + "_" + ss(c, mm(p) + 10, 3, f) + ".jpg";
     }
 }

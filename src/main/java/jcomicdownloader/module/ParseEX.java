@@ -44,7 +44,7 @@ public class ParseEX extends ParseEH {
                 + ";ipb_pass_hash=" + SetUp.getEhMemberPasswordHash();
         Common.debugPrintln( "使用的cookie: " + cookieString );
 
-        baseSiteURL = "http://exhentai.org";
+        baseSiteURL = "https://exhentai.org";
         collectionMainTitle = "EX-Hentai_Collection";
     }
 

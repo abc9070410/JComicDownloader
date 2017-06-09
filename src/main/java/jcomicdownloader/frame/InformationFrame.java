@@ -313,7 +313,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
             String strBrowserDownloadUrl = (String)me.get("browser_download_url");
             String strContentType = (String)me.get("content_type");
 
-            if (strBrowserDownloadUrl.matches("^https://github\\.com/.+\\.jar$") && strContentType.equals("application/octet-stream")) {
+            if (strBrowserDownloadUrl.matches("^https://github\\.com/.+\\.jar$") && (strContentType.equals("application/octet-stream") || strContentType.equals("application/java-archive")) ) {
                 this.strUrlDownloadLatestExecutable = strBrowserDownloadUrl;
                 return;
             }
@@ -530,7 +530,7 @@ public class InformationFrame extends JFrame implements ActionListener, MouseLis
                                 }
                                 catch ( InterruptedException ex )
                                 {
-                                    Common.hadleErrorMessage( ex, "無法讓informationFrame等待（wait）" );
+                                    Common.handleErrorMessage( ex, "無法讓informationFrame等待（wait）" );
                                 }
                             }
                             Common.debugPrintln( "OK" );
