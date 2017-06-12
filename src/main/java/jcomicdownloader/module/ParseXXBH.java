@@ -197,16 +197,42 @@ public class ParseXXBH extends ParseOnlineComicSite
         beginIndex = decodeJS.indexOf( " img_s" );
         beginIndex = decodeJS.indexOf( "=", beginIndex ) + 1;
         endIndex = decodeJS.indexOf( ";", beginIndex );
-        tempString = decodeJS.substring( beginIndex, endIndex ).trim();
-        int serverId = Integer.parseInt( tempString.trim() );
-
-        Common.debugPrintln( "第一張圖片位址：" + frontPicURLs[serverId - 1] + backPicURLs[0] );
+        
+        String serverPicURL = "";
+        
+        if (endIndex > beginIndex)
+        {
+            tempString = decodeJS.substring( beginIndex, endIndex ).trim();
+            int serverId = Integer.parseInt( tempString.trim() );
+            serverPicURL = frontPicURLs[serverId - 1];
+        }
+        else
+        {
+            Common.debugPrintln("圖片伺服器不在清單裡面，需另外請求");
+            
+            beginIndex = allPageString.indexOf("colist_") + 7;
+            endIndex = allPageString.indexOf(".html", beginIndex);
+            String cid = allPageString.substring(beginIndex, endIndex);
+            
+            beginIndex = webSite.lastIndexOf("/") + 1;
+            endIndex = webSite.indexOf(".html");
+            String coid = webSite.substring(beginIndex, endIndex);
+            
+            String requestURL = "http://css.177mh.com/img_v1/cn_svr.aspx?s=9&cid=" + cid + "&coid=" + coid;
+            
+            String tempAllString = getAllPageString( requestURL );
+            
+            beginIndex = tempAllString.indexOf("\"") + 1;
+            endIndex = tempAllString.indexOf("\"", beginIndex);
+            serverPicURL = tempAllString.substring(beginIndex, endIndex);
+        }
+        Common.debugPrintln( "第一張圖片位址：" + serverPicURL + backPicURLs[0] );
 
         beginIndex = endIndex = 0;
         for ( int p = 0; p < totalPage && Run.isAlive; p++ )
         {
 
-            comicURL[p] = frontPicURLs[serverId - 1] + backPicURLs[p].replace("\\", "");
+            comicURL[p] = serverPicURL + backPicURLs[p].replace("\\", "");
 
             //使用最簡下載協定，加入refer始可下載
             referURL = webSite + "?page=" + (p + 1);
