@@ -21,6 +21,9 @@ import jcomicdownloader.enums.*;
 import jcomicdownloader.*;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import jcomicdownloader.encode.Zhcode;
 import org.jsoup.nodes.*;
 import org.jsoup.parser.*;
@@ -153,12 +156,24 @@ public class ParseEC extends ParseOnlineComicSite {
     @Override
     public String getTitleOnMainPage( String urlString, String allPageString ) {
         Document nodes = Parser.parse(allPageString, urlString);
-        String ret = nodes.select("body > table:nth-of-type(2) table table:first-of-type tr:first-of-type font").text();
+        String title = nodes.title();
 
-        if (ret.length() == 0)
+        if (title.length() == 0)
             Common.errorReport("取得標題失敗！值為空");
 
-        return ret;
+        // 大家的玩具漫畫,動畫,在線漫畫   - 8comic.com 無限動漫
+        // 我的英雄學院漫畫,動畫,在線漫畫  綠谷出久,歐爾麥特,爆豪勝己,麗日禦茶子,飯田天哉 - 8comic.com 無限動漫
+        // 盛氣凌人漫畫,動畫,在線漫畫  成瀨翔,町田由希 - 8comic.com 無限動漫
+        // 食戟之靈漫畫,動畫,在線漫畫  幸平創真,幸平城一&#37086;,峰崎 - 8comic.com 無限動漫
+        // 聲之形漫畫,動畫,在線漫畫  西宮硝子,石田將也 - 8comic.com 無限動漫
+        // 一拳超人漫畫,動畫,在線漫畫  福克高,馬魯哥利 - 8comic.com 無限動漫
+        Pattern titlePattern = Pattern.compile("(.+)漫畫,動畫,在線漫畫\\s+.*\\s+- 8comic\\.com 無限動漫");
+        Matcher titleMatcher = titlePattern.matcher(title);
+
+        if (!titleMatcher.find())
+            Common.errorReport("取得標題失敗！Regular Expression 無發擷取標題（頁面已改版？）");
+
+        return titleMatcher.group(1); // 0 means full
     }
 
     @Override
