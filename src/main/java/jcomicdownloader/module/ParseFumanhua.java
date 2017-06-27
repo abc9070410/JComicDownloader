@@ -38,7 +38,7 @@ public class ParseFumanhua extends ParseOnlineComicSite {
     public ParseFumanhua() {
         enumName = "FUMANHUA";
 	parserName=this.getClass().getName();
-        regexs= new String[]{"(?s).*fumanhua.net(?s).*", "(?s).*fumanhua.com(?s).*" };
+        regexs= new String[]{"(?s).*fumanhua.net(?s).*", "(?s).*fumanhua.com(?s).*", "(?s).*fmhua.com(?s).*" };
         downloadBefore=true;
 	siteID=Site.formString("FUMANHUA");
         siteName = "Fumanhua";
@@ -121,7 +121,7 @@ public class ParseFumanhua extends ParseOnlineComicSite {
             
             // 設定伺服器位址
             String[] serverURLs = {
-                "http://pic.tebcn.com",
+                "http://bd.kfxxgc.com",
                 "http://pic2.fumanhua.net",
                 "http://pic.fumanhua.net"
                 };
@@ -268,7 +268,7 @@ public class ParseFumanhua extends ParseOnlineComicSite {
 
         int volumeCount = tempString.split( " href=" ).length - 1;
         
-        endIndex = urlString.indexOf(".net/") + 5;
+        endIndex = urlString.indexOf("/manhua");
         String base = urlString.substring(0, endIndex);
 
         String volumeTitle = "";

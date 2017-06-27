@@ -206,10 +206,8 @@ public class ParseXXBH extends ParseOnlineComicSite
             int serverId = Integer.parseInt( tempString.trim() );
             serverPicURL = frontPicURLs[serverId - 1];
         }
-        else
+        else // 圖片伺服器不在清單裡面，需另外請求
         {
-            Common.debugPrintln("圖片伺服器不在清單裡面，需另外請求");
-            
             beginIndex = allPageString.indexOf("colist_") + 7;
             endIndex = allPageString.indexOf(".html", beginIndex);
             String cid = allPageString.substring(beginIndex, endIndex);
@@ -434,7 +432,7 @@ public String getDecodeJS( String data )
 
         String tempString = allPageString.substring( beginIndex, endIndex );
 
-        int volumeCount = tempString.split( " href=" ).length - 1;
+        int volumeCount = tempString.split( " href='" ).length - 1;
         totalVolume = volumeCount;
         Common.debugPrintln( "共有" + totalVolume + "集" );
 
@@ -444,7 +442,7 @@ public String getDecodeJS( String data )
         for ( int i = 0; i < volumeCount; i++ )
         {
             // 取得單集位址
-            beginIndex = tempString.indexOf( " href=", beginIndex );
+            beginIndex = tempString.indexOf( " href='", beginIndex );
             beginIndex = tempString.indexOf( "'", beginIndex ) + 1;
             endIndex = tempString.indexOf( "'", beginIndex );
             volumeURL = tempString.substring( beginIndex, endIndex );
