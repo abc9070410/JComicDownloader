@@ -2799,12 +2799,12 @@ public class Common
             connection.setDoOutput( true );
 
             connection.setRequestProperty( "If-None-Match", "\"c4d553cc945cd1:0\"" );
-            connection.setRequestProperty( "Host", "pic.fumanhua.com" );
+            connection.setRequestProperty( "Host", url.getHost() );
 
             //connection.setRequestProperty( "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" );
             //connection.setRequestProperty( "Accept-Charset", "Big5,utf-8;q=0.7,*;q=0.3" );
             //connection.setRequestProperty( "Accept-Encoding", "gzip,deflate,sdch" );
-            //connection.setRequestProperty( "Accept-Language", "zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4" );
+            connection.setRequestProperty( "Accept-Language", "zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4" );
             //connection.setRequestProperty( "Cache-Control", "max-age=0" );
             //connection.setRequestProperty( "Connection", "keep-alive" );
             //connection.setRequestProperty( "Host", "f1.xiami.net" );
