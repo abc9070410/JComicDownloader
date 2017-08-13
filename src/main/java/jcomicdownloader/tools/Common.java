@@ -307,7 +307,7 @@ public class Common
             if ( tempStrings[tempStrings.length - 1].length() == 3 || // ex. jgp, png
                     tempStrings[tempStrings.length - 1].length() == 4 ) // ex. jpeg
             {
-                extensionName = tempStrings[tempStrings.length - 1];
+                extensionName = tempStrings[tempStrings.length - 1].replace("?", "");
             }
 
             String fileName = picFrontName + formatter.format( i ) + "." + extensionName;

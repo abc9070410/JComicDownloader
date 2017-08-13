@@ -24,23 +24,24 @@ public class Parse99ComicTC extends ParseCocoTC
         super();
         enumName = "NINENINE_COMIC_TC";
 	parserName=this.getClass().getName();
-        regexs=new String[]{"(?s).*www.99comic.com(?s).*"};
+        regexs=new String[]{"(?s).*www.99comic.com(?s).*", "(?s).*www.999comic.com(?s).*"};
 	siteID=Site.formString("NINENINE_COMIC_TC");
         siteName = "www.99comic.com";
+        //downloadBefore=true;
 
         jsURL = "http://www.99comic.com/script/viewhtml.js";
-        baseURL = "http://www.99comic.com";
+        baseURL = "http://www.999comic.com";
     }
 
     @Override // 從網址判斷是否為單集頁面(true) 還是主頁面(false)
     public boolean isSingleVolumePage( String urlString )
     {
-        // ex. http://www.99comic.com/comics/11728o98066/
-        if ( urlString.matches( "(?s).*/comics/(?s).*" ) )
+        // ex. http://www.999comic.com/comic/12110/3d503dfa080ce43fb756686877b21e56.html
+        if ( urlString.indexOf( ".html" ) > 0 )
         {
             return true;
         }
-        else // ex. http://www.99comic.com/comic/9911728/
+        else // ex. http://www.999comic.com/comic/12110/
         {
             return false;
         }
@@ -70,24 +71,25 @@ public class Parse99ComicTC extends ParseCocoTC
         List<String> urlList = new ArrayList<String>();
         List<String> volumeList = new ArrayList<String>();
 
-        int beginIndex = allPageString.indexOf( "class=\"cVol\"" );
-        int endIndex = allPageString.indexOf( "Vol_list", beginIndex );
+        int beginIndex = allPageString.indexOf( "chapter-list" );
+        int endIndex = allPageString.indexOf( "similar-list", beginIndex );
 
         String tempString = allPageString.substring( beginIndex, endIndex );
 
-        totalVolume = tempString.split( "href=" ).length - 1;
+        totalVolume = tempString.split( "href=\"" ).length - 1;
 
         beginIndex = endIndex = 0;
         for ( int count = 0; count < totalVolume; count++ )
         {
 
             beginIndex = tempString.indexOf( "href=", beginIndex );
-            beginIndex = tempString.indexOf( "'", beginIndex ) + 1;
-            endIndex = tempString.indexOf( "'", beginIndex );
+            beginIndex = tempString.indexOf( "\"", beginIndex ) + 1;
+            endIndex = tempString.indexOf( "\"", beginIndex );
             urlList.add( baseURL + tempString.substring( beginIndex, endIndex ) );
-
-            beginIndex = tempString.indexOf( ">", beginIndex ) + 1;
-            endIndex = tempString.indexOf( "<", beginIndex );
+            
+            beginIndex = tempString.indexOf( "title=", beginIndex );
+            beginIndex = tempString.indexOf( "\"", beginIndex ) + 1;
+            endIndex = tempString.indexOf( "\"", beginIndex );
             String title = tempString.substring( beginIndex, endIndex );
 
             volumeList.add( getVolumeWithFormatNumber(
@@ -132,39 +134,26 @@ public class Parse99ComicTC extends ParseCocoTC
         int beginIndex = 0;
         int endIndex = 0;
 
-        beginIndex = allPageString.indexOf( "var sFiles" );
-        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
-        endIndex = allPageString.indexOf( "\"", beginIndex );
+        beginIndex = allPageString.indexOf( "var cInfo" );
+        beginIndex = allPageString.indexOf( "[", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( "]", beginIndex );
 
         String tempString = allPageString.substring( beginIndex, endIndex );
-        String[] urlTokens = tempString.split( "\\|" );
+        String[] urlTokens = tempString.split( "," );
+        
+        Common.debugPrintln( "共有 " + urlTokens.length + " 頁" );
 
         // 取得頁數
         comicURL = new String[ urlTokens.length ];
 
-
         // 再取得後面的下載伺服器網址
-        beginIndex = allPageString.indexOf( "var sPath", beginIndex );
-        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
-        endIndex = allPageString.indexOf( "\"", beginIndex );
-        serverNo = Integer.parseInt(
-                allPageString.substring( beginIndex, endIndex ) );
-
-        Common.downloadFile( jsURL, SetUp.getTempDirectory(), jsName, false, "" );
-        String allJsString = Common.getFileString( SetUp.getTempDirectory(), jsName );
-
-        beginIndex = allJsString.indexOf( "\"" ) + 1;
-        endIndex = allJsString.indexOf( "\"", beginIndex );
-
-        tempString = allJsString.substring( beginIndex, endIndex );
-        String[] serverTokens = tempString.split( "\\|" );
-        baseURL = serverTokens[serverNo - 1];
+        baseURL = "http://www.999comic.com/g.php?";
 
         Common.debugPrintln( "下載伺服器位址: " + baseURL );
 
         for ( int i = 0; i < comicURL.length; i++ )
-        {
-            comicURL[i] = baseURL + Common.getFixedChineseURL( urlTokens[i] );
+        {            
+            comicURL[i] = baseURL + Common.getFixedChineseURL(urlTokens[i].replaceAll("'", "").replaceAll(".webp", "?"));
             Common.debugPrintln( i + " : " + comicURL[i] );
         }
         //System.exit(0);

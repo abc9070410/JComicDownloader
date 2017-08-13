@@ -164,6 +164,7 @@ public class ParseXXBH extends ParseOnlineComicSite
         beginIndex = allPageString.indexOf( "/coojs/" );
         beginIndex = allPageString.lastIndexOf( "\"", beginIndex ) + 1;
         endIndex = allPageString.indexOf( "\"", beginIndex );
+        Common.debugPrintln("->" + beginIndex + "," + endIndex);
         String jsURL = allPageString.substring( beginIndex, endIndex );
 
         // 開始解析js檔案
@@ -199,14 +200,20 @@ public class ParseXXBH extends ParseOnlineComicSite
         endIndex = decodeJS.indexOf( ";", beginIndex );
         
         String serverPicURL = "";
+        String[] serverPicURLs = new String[5];
+        
+        
+        int serverId = 1;
         
         if (endIndex > beginIndex)
         {
             tempString = decodeJS.substring( beginIndex, endIndex ).trim();
-            int serverId = Integer.parseInt( tempString.trim() );
-            serverPicURL = frontPicURLs[serverId - 1];
+            serverId = Integer.parseInt( tempString.trim() );
+            serverPicURLs[0] = frontPicURLs[serverId - 1];
+            
+            Common.debugPrintln("第一組可能伺服器位址:" + serverPicURLs[0]);
         }
-        else // 圖片伺服器不在清單裡面，需另外請求
+        //else // 圖片伺服器不在清單裡面，需另外請求
         {
             beginIndex = allPageString.indexOf("colist_") + 7;
             endIndex = allPageString.indexOf(".html", beginIndex);
@@ -222,9 +229,27 @@ public class ParseXXBH extends ParseOnlineComicSite
             
             beginIndex = tempAllString.indexOf("\"") + 1;
             endIndex = tempAllString.indexOf("\"", beginIndex);
-            serverPicURL = tempAllString.substring(beginIndex, endIndex);
+            serverPicURLs[1] = tempAllString.substring(beginIndex, endIndex);
+            
+            Common.debugPrintln("第二組可能伺服器位址:" + serverPicURLs[1]);
         }
+        
+        serverPicURLs[2] = "http://hw2.readingbox.net/h" + serverId + "/";
+        serverPicURLs[3] = "http://h59.readingbox.net/h" + serverId + "/";
+        serverPicURLs[4] = "http://hf2.readingbox.net/h" + serverId + "/";
+        
+        for (int i = 0; i < serverPicURLs.length; i++)
+        {
+            if (Common.urlIsOK(serverPicURLs[i] + backPicURLs[0]))
+            {
+                serverPicURL = serverPicURLs[i];
+                break;
+        }
+        }
+        
         Common.debugPrintln( "第一張圖片位址：" + serverPicURL + backPicURLs[0] );
+
+        //System.exit(0);
 
         beginIndex = endIndex = 0;
         for ( int p = 0; p < totalPage && Run.isAlive; p++ )
@@ -432,24 +457,45 @@ public String getDecodeJS( String data )
 
         String tempString = allPageString.substring( beginIndex, endIndex );
 
-        int volumeCount = tempString.split( " href='" ).length - 1;
-        totalVolume = volumeCount;
+        int volumeCount1 = tempString.split( " href='" ).length - 1;
+        int volumeCount2 = tempString.split( " href=\"" ).length - 1;
+        String quotationMark = "";
+        
+        if (volumeCount1 > 0)
+        {
+            totalVolume = volumeCount1;
+            quotationMark = "'";
+        }
+        else
+        {
+            totalVolume = volumeCount2;
+            quotationMark = "\"";
+        }
+        
         Common.debugPrintln( "共有" + totalVolume + "集" );
 
         String volumeURL = "";
         String volumeTitle = "";
         beginIndex = endIndex = 0;
-        for ( int i = 0; i < volumeCount; i++ )
+        for ( int i = 0; i < totalVolume; i++ )
         {
             // 取得單集位址
-            beginIndex = tempString.indexOf( " href='", beginIndex );
-            beginIndex = tempString.indexOf( "'", beginIndex ) + 1;
-            endIndex = tempString.indexOf( "'", beginIndex );
+            beginIndex = tempString.indexOf( " href=" + quotationMark, beginIndex );
+            beginIndex = tempString.indexOf( quotationMark, beginIndex ) + 1;
+            endIndex = tempString.indexOf( quotationMark, beginIndex );
             volumeURL = tempString.substring( beginIndex, endIndex );
 
-            if ( !volumeURL.matches( ".*/s/.*" ) && volumeURL.matches( "/(?s).*" ) )
+            Common.debugPrintln(i + "->" + volumeURL);
+            Common.debugPrintln(volumeURL.matches( ".*/s/.*" ) + "_" + volumeURL.matches( "/(?s).*" ));
+
+            if ( !volumeURL.matches( ".*/s/.*" ) && (volumeURL.matches( "/(?s).*" ) || volumeURL.indexOf(".html") > 0) )
             { // 代表有非集數的網址在亂入
-                urlList.add( baseURL + volumeURL );
+                if (volumeURL.indexOf("http") < 0)
+                {
+                    volumeURL = baseURL + volumeURL;
+                }
+                
+                urlList.add(volumeURL);
                 // 取得單集名稱
                 beginIndex = tempString.indexOf( ">", beginIndex ) + 1;
                 endIndex = tempString.indexOf( "</a>", beginIndex );
@@ -457,6 +503,8 @@ public String getDecodeJS( String data )
                 volumeTitle = volumeTitle.replaceAll( "<.*>", "" );
                 volumeList.add( getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
                         Common.getTraditionalChinese( volumeTitle.trim() ) ) ) );
+                        
+                Common.debugPrintln(i + ":" + volumeTitle + ":" + volumeURL);
             }
         }
 
