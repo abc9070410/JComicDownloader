@@ -54,7 +54,7 @@ public class ParseEynyNovel extends ParseCKNovel {
 
         floorCountInOnePage = 10; // 一頁有幾層樓
         
-        cookie = "djAX_e8d7_agree=6; "; // 因應分級頁面
+        cookie = "eXbD_e8d7_agree=6;"; // 因應分級頁面
     }
 
     @Override
