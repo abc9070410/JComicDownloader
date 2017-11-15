@@ -135,6 +135,8 @@ public class ParseXXBH extends ParseOnlineComicSite
         endIndex = allJSPageString.indexOf( "\"", beginIndex );
         String jsURL2 = allJSPageString.substring( beginIndex, endIndex );
         */
+        
+        
         String jsURL2 = "http://css.177mh.com/img_v1/fdc_160903a.js";
         
         Common.debugPrintln( "第2個js位址: " + jsURL2 );
@@ -160,8 +162,9 @@ public class ParseXXBH extends ParseOnlineComicSite
 
         //Common.debugPrint( "開始解析這一集有幾頁 : " );
         
-        // 首先要下載js檔
-        beginIndex = allPageString.indexOf( "/coojs/" );
+       
+       // 首先要下載js檔
+        beginIndex = allPageString.indexOf( "https://a70.readingbox.net/telc" );
         beginIndex = allPageString.lastIndexOf( "\"", beginIndex ) + 1;
         endIndex = allPageString.indexOf( "\"", beginIndex );
         Common.debugPrintln("->" + beginIndex + "," + endIndex);
@@ -211,7 +214,7 @@ public class ParseXXBH extends ParseOnlineComicSite
             serverId = Integer.parseInt( tempString.trim() );
             serverPicURLs[0] = frontPicURLs[serverId - 1];
             
-            Common.debugPrintln("第一組可能伺服器位址:" + serverPicURLs[0]);
+            Common.debugPrintln("第四組可能伺服器位址:" + serverPicURLs[4]);
         }
         //else // 圖片伺服器不在清單裡面，需另外請求
         {
@@ -223,7 +226,11 @@ public class ParseXXBH extends ParseOnlineComicSite
             endIndex = webSite.indexOf(".html");
             String coid = webSite.substring(beginIndex, endIndex);
             
-            String requestURL = "http://css.177mh.com/img_v1/cn_svr.aspx?s=9&cid=" + cid + "&coid=" + coid;
+            String requestBaseURL;
+            //requestBaseURL = "http://css.177mh.com/img_v1/cn_svr.aspx?s=9&cid=";
+            requestBaseURL = "https://a70.readingbox.net/img_v1/hw2_svr.aspx?s=44&cid=";
+            
+            String requestURL = requestBaseURL + cid + "&coid=" + coid;
             
             String tempAllString = getAllPageString( requestURL );
             
@@ -231,20 +238,20 @@ public class ParseXXBH extends ParseOnlineComicSite
             endIndex = tempAllString.indexOf("\"", beginIndex);
             serverPicURLs[1] = tempAllString.substring(beginIndex, endIndex);
             
-            Common.debugPrintln("第二組可能伺服器位址:" + serverPicURLs[1]);
+            Common.debugPrintln("第一組可能伺服器位址:" + serverPicURLs[0]);
         }
         
-        serverPicURLs[2] = "http://hw2.readingbox.net/h" + serverId + "/";
-        serverPicURLs[3] = "http://h59.readingbox.net/h" + serverId + "/";
-        serverPicURLs[4] = "http://hf2.readingbox.net/h" + serverId + "/";
+        serverPicURLs[1] = "http://hw2.readingbox.net/h" + serverId + "/";
+        serverPicURLs[2] = "http://h59.readingbox.net/h" + serverId + "/";
+        serverPicURLs[3] = "http://hf2.readingbox.net/h" + serverId + "/";
         
         for (int i = 0; i < serverPicURLs.length; i++)
         {
-            if (Common.urlIsOK(serverPicURLs[i] + backPicURLs[0]))
+            if (serverPicURLs[i] != null && Common.urlIsOK(serverPicURLs[i] + backPicURLs[0]))
             {
                 serverPicURL = serverPicURLs[i];
                 break;
-        }
+            }
         }
         
         Common.debugPrintln( "第一張圖片位址：" + serverPicURL + backPicURLs[0] );
