@@ -212,9 +212,9 @@ public class ParseXXBH extends ParseOnlineComicSite
         {
             tempString = decodeJS.substring( beginIndex, endIndex ).trim();
             serverId = Integer.parseInt( tempString.trim() );
-            serverPicURLs[0] = frontPicURLs[serverId - 1];
+            serverPicURLs[3] = frontPicURLs[serverId - 1];
             
-            Common.debugPrintln("第四組可能伺服器位址:" + serverPicURLs[4]);
+            Common.debugPrintln("第4組可能伺服器位址:" + serverPicURLs[3]);
         }
         //else // 圖片伺服器不在清單裡面，需另外請求
         {
@@ -236,14 +236,14 @@ public class ParseXXBH extends ParseOnlineComicSite
             
             beginIndex = tempAllString.indexOf("\"") + 1;
             endIndex = tempAllString.indexOf("\"", beginIndex);
-            serverPicURLs[1] = tempAllString.substring(beginIndex, endIndex);
+            serverPicURLs[4] = tempAllString.substring(beginIndex, endIndex);
             
-            Common.debugPrintln("第一組可能伺服器位址:" + serverPicURLs[0]);
+            Common.debugPrintln("第5組可能伺服器位址:" + serverPicURLs[4]);
         }
         
-        serverPicURLs[1] = "http://hw2.readingbox.net/h" + serverId + "/";
-        serverPicURLs[2] = "http://h59.readingbox.net/h" + serverId + "/";
-        serverPicURLs[3] = "http://hf2.readingbox.net/h" + serverId + "/";
+        serverPicURLs[0] = "http://hw2.readingbox.net/h" + serverId + "/";
+        serverPicURLs[1] = "http://h59.readingbox.net/h" + serverId + "/";
+        serverPicURLs[2] = "http://hf2.readingbox.net/h" + serverId + "/";
         
         for (int i = 0; i < serverPicURLs.length; i++)
         {
@@ -315,6 +315,7 @@ public int getIndexOfE( String eStr, int radix )
 public String getDecode( String[] codes, String encode )
 {
     String decode = "";
+    String temp = "";
  
     //for ( int i = 0; i < encode.length(); i ++ )
     
@@ -345,14 +346,32 @@ public String getDecode( String[] codes, String encode )
             decodeB = true;
         }
         
-        if ( decodeA && decodeB )
+        if ( decodeA && decodeB)
         {
-            decode += codes[getIndexOfE( a + b, codes.length )];   
+            temp = codes[getIndexOfE( a + b, codes.length )];
+            
+            if ("".equals(temp))
+            {
+                decode += (a + b);
+            }
+            else
+            {
+                decode += temp;
+            }
             i++;
         }
         else if ( decodeA )
         {
-            decode += codes[getIndexOfE( a, codes.length )];    
+            temp = codes[getIndexOfE( a, codes.length )];
+            
+            if ("".equals(temp))
+            {
+                decode += a;
+            }
+            else
+            {
+                decode += temp;
+            }            
         }
         else
         {

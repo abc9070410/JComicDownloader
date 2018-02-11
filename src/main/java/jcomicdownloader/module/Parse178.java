@@ -1428,8 +1428,8 @@ public class Parse178 extends ParseOnlineComicSite
             return combinationList;
         }
 
-        int beginIndex = allPageString.indexOf( "class=\"cartoon_online_border\"" );
-        int endIndex = allPageString.indexOf( "document.write", beginIndex );
+        int beginIndex = allPageString.indexOf( "last_read_history" );
+        int endIndex = allPageString.indexOf( "class=\"icorss_acg\"", beginIndex );
 
         if (urlString.indexOf("mh.") > 0)
         {

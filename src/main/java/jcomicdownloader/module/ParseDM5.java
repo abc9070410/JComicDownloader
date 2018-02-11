@@ -744,6 +744,9 @@ public class ParseDM5 extends ParseOnlineComicSite
         String allPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
         Common.debugPrint( "開始解析這一集有幾頁 : " );
         
+        String referURL = "http://www.dm5.com/manhua-yishoumodu/";
+        Common.downloadFile(webSite, SetUp.getTempDirectory(), indexName, false, "", referURL );
+        
         if (needTsukkomiMode(webSite))
         {
             handleTsukkomi(allPageString);
@@ -767,15 +770,40 @@ public class ParseDM5 extends ParseOnlineComicSite
         beginIndex = allPageString.indexOf( "href=\"/", beginIndex );
         beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
         endIndex = allPageString.indexOf( "\"", beginIndex );
-        String referURL = baseURL + allPageString.substring( beginIndex, endIndex );
+        referURL = baseURL + allPageString.substring( beginIndex, endIndex );
         Common.debugPrintln( "主頁網址：" + referURL );
 
         // ex. DM5_CID=85258;
         beginIndex = allPageString.indexOf( "DM5_CID" );
         beginIndex = allPageString.indexOf( "=", beginIndex ) + 1;
         endIndex = allPageString.indexOf( ";", beginIndex );
-        String cid = allPageString.substring( beginIndex, endIndex );
+        String cid = allPageString.substring( beginIndex, endIndex ).trim();
         Common.debugPrintln( "DM5_CID=" + cid );
+        
+        // ex. COMIC_MID=4389;
+        beginIndex = allPageString.indexOf( "COMIC_MID" );
+        beginIndex = allPageString.indexOf( "=", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( ";", beginIndex );
+        String mid = allPageString.substring( beginIndex, endIndex ).trim();
+        Common.debugPrintln( "COMIC_MID=" + mid );
+        
+        // ex. DM5_VIEWSIGN="e6ae93f121d76978a12816dbc5e8b7fa";
+        beginIndex = allPageString.indexOf( "DM5_VIEWSIGN" );
+        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( "\"", beginIndex );
+        String sign = allPageString.substring( beginIndex, endIndex );
+        Common.debugPrintln( "DM5_VIEWSIGN=" + sign );
+        
+        // ex. DM5_VIEWSIGN_DT="2018-02-10 15:22:07"
+        beginIndex = allPageString.indexOf( "DM5_VIEWSIGN_DT" );
+        beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
+        endIndex = allPageString.indexOf( "\"", beginIndex );
+        String dt = allPageString.substring( beginIndex, endIndex );
+        
+        dt = dt.replaceAll(":", "%3A").replaceAll(" ", "+");
+        Common.debugPrintln( "DM5_VIEWSIGN_DT=" + dt );
+
+
 
         String dm5Key = "";
         beginIndex = allPageString.indexOf( "eval(function" );
@@ -801,21 +829,28 @@ public class ParseDM5 extends ParseOnlineComicSite
             else
             {
                 comicDataURL[i] = frontURL;
+                
+                Common.debugPrintln( comicDataURL[i] );
             }
-//http://tel.dm5.com/m209176/chapterfun.ashx?cid=209176&page=1&key=&language=1&gtk=6
-            // ex. /chapterimagefun.ashx?cid=55303&page=1&language=1&key=
+            // ex. http://www.dm5.com/m469938/chapterfun.ashx?cid=469938&page=1&key=&language=1&gtk=6&_cid=469938&_mid=4389&_dt=2018-02-10+15%3A22%3A59&_sign=d68894dfafb0d88f1139043720c47d96
+            // ex. http://www.dm5.com/m470971/chapterfun.ashx?cid=470971&page=1&key=&language=1&gtk=6&_cid=470971&_mid=4389&_dt=2018-02-10+15%3A46%3A31&_sign=c6e9428a791fff285b732ce552cdbd8c
             comicDataURL[i] += "/chapterfun.ashx?cid="
                     + cid + "&page="
-                    + (i + 1) + "&key"+dm5Key+"&language=1&gtk=6";
+                    + (i + 1) + "&key="+dm5Key+"&language=1&gtk=6&_cid=" + cid + "&_mid=" + mid + "&_dt=" + dt + "&_sign=" + sign;
 
-            Common.debugPrintln( comicDataURL[i] );
+            //Common.debugPrintln( comicDataURL[i] );
         }
 
         referURL = webSite;
+        
+        String url1 = frontURL + "/history.ashx?cid=" + cid + "&mid=" + mid + "&page=1&uid=0&language=1";
+        //Common.debugPrintln( "history:" + url1 );
+        Common.urlIsOK(url1);
 
         boolean firstPicDownload = false; // 第一張下載了沒
         String picURL = "";
         String cidAndKey = getCidAndKey( comicDataURL[1], gerReferURL( webSite, 1 ) );
+        //System.exit(0);
         
         boolean needChangeName = false;
 
