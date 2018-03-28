@@ -56,7 +56,7 @@ public class ParseEH extends ParseOnlineComicSite {
 
         needCookie = false;
         cookieString = "";
-        baseSiteURL = "http://g.e-hentai.org";
+        baseSiteURL = "https://e-hentai.org";
         collectionMainTitle = "E-Hentai_Collection";
     }
 
@@ -165,7 +165,7 @@ public class ParseEH extends ParseOnlineComicSite {
         int beginPage = 0; // the page which starts to download
         
         //System.exit( 0);
-
+        
         // get URLs of pic page
         for ( int pageNumber = 0 ;
                 pageNumber < pageCount && Run.isAlive && !getTitle().equals( "Gallery Not Available" ) ;
