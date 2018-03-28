@@ -24,7 +24,7 @@ public class Parse99ComicTC extends ParseCocoTC
         super();
         enumName = "NINENINE_COMIC_TC";
 	parserName=this.getClass().getName();
-        regexs=new String[]{"(?s).*www.99comic.com(?s).*", "(?s).*www.999comic.com(?s).*"};
+        regexs=new String[]{"(?s).*www.99comic.com(?s).*", "(?s).*www.999comic(?s).*"};
 	siteID=Site.formString("NINENINE_COMIC_TC");
         siteName = "www.99comic.com";
         //downloadBefore=true;
@@ -146,16 +146,37 @@ public class Parse99ComicTC extends ParseCocoTC
         // 取得頁數
         comicURL = new String[ urlTokens.length ];
 
-        // 再取得後面的下載伺服器網址
-        baseURL = "http://www.999comic.com/g.php?";
+        if (false)
+        {
+            // 再取得後面的下載伺服器網址
+            baseURL = "http://www.999comic.com/g.php?";
 
-        Common.debugPrintln( "下載伺服器位址: " + baseURL );
+            Common.debugPrintln( "下載伺服器位址: " + baseURL );
 
-        for ( int i = 0; i < comicURL.length; i++ )
-        {            
-            comicURL[i] = baseURL + Common.getFixedChineseURL(urlTokens[i].replaceAll("'", "").replaceAll(".webp", "?"));
-            Common.debugPrintln( i + " : " + comicURL[i] );
+            for ( int i = 0; i < comicURL.length; i++ )
+            {            
+                comicURL[i] = baseURL + Common.getFixedChineseURL(urlTokens[i].replaceAll("'", "").replaceAll(".webp", "?"));
+                Common.debugPrintln( i + " : " + comicURL[i] );
+            }
         }
+        else
+        {
+            Common.debugPrintln("site:" + webSite );
+            
+            int begin = webSite.lastIndexOf("/") + 1;
+            int end = webSite.lastIndexOf(".");
+            
+            String partURL = webSite.substring(begin, end);
+            
+            baseURL = "https://i1.999comics.com/" + partURL + "/";
+            
+            for ( int i = 0; i < comicURL.length; i++ )
+            {
+                comicURL[i] = baseURL + Common.getFixedChineseURL(urlTokens[i].replaceAll("'", "").replace("E677572603D2C21991", "D17063D3")) + ".jpg";
+                Common.debugPrintln( i + " : " + comicURL[i] );
+            }
+        }    
+        
         //System.exit(0);
     }
 }
