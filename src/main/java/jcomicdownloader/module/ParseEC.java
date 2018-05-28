@@ -114,14 +114,26 @@ public class ParseEC extends ParseOnlineComicSite {
         beginIndex = allPageString.indexOf( "\'", beginIndex ) + 1;
         endIndex = allPageString.indexOf( "\'", beginIndex );
         String allcodes = allPageString.substring( beginIndex, endIndex );
+        
+        beginIndex = allPageString.indexOf( ";for(var", beginIndex );
+        endIndex = allPageString.indexOf( ";pi=", beginIndex );
+        String jsCode = allPageString.substring( beginIndex, endIndex );
+        
+        
+        //Common.debugPrintln("allcodes:" + allcodes + "\r\n");
 
         // use re-gened JS for de-obfuscation
-        NView_Java nv = new NView_Java(Integer.parseInt(chs), Integer.parseInt(itemid), allcodes, ch);
-        this.comicURL = new String[nv.getPagesCount()];
+        NView_Java nv = new NView_Java(Integer.parseInt(chs), Integer.parseInt(itemid), allcodes, ch, jsCode);
         nv.setPage(1);
+        nv.parse();
+        
+        this.comicURL = new String[nv.getPagesCount()];
+        Common.debugPrintln("total " + nv.getPagesCount() + " pages");
+
         // must be started from 1 since this index follows the real page number
         for (int d = 1; d <= nv.getPagesCount(); nv.setPage(++d)) {
             this.comicURL[d - 1] = nv.parse();
+            //Common.debugPrintln("" + this.comicURL[d - 1]);
         }
     }
 
@@ -138,7 +150,7 @@ public class ParseEC extends ParseOnlineComicSite {
 
     @Override
     public boolean isSingleVolumePage( String urlString ) {
-        return urlString.matches( "(?s).*/show/(?s).*" ); // ex. http://www.8comic.com/love/drawing-2245.html?ch=51
+        return urlString.matches( "(?s).*/online/(?s).*" ); // ex. http://www.8comic.com/love/drawing-2245.html?ch=51
     }
 
     @Override
@@ -167,7 +179,9 @@ public class ParseEC extends ParseOnlineComicSite {
         // 食戟之靈漫畫,動畫,在線漫畫  幸平創真,幸平城一&#37086;,峰崎 - 8comic.com 無限動漫
         // 聲之形漫畫,動畫,在線漫畫  西宮硝子,石田將也 - 8comic.com 無限動漫
         // 一拳超人漫畫,動畫,在線漫畫  福克高,馬魯哥利 - 8comic.com 無限動漫
-        Pattern titlePattern = Pattern.compile("(.+)漫畫,動畫,在線漫畫\\s+.*\\s+- 8comic\\.com 無限動漫");
+        // 美食的俘虜免費漫畫,動畫,線上觀看 - 免費漫畫區  阿虜,小松 - 無限動漫狂熱社群 - 8comic.com comicbus.com
+        //Pattern titlePattern = Pattern.compile("(.+)漫畫,動畫,在線漫畫\\s+.*\\s+- 8comic\\.com 無限動漫");
+        Pattern titlePattern = Pattern.compile("(.+)免費漫畫,動畫,.+8comic\\.com.+");
         Matcher titleMatcher = titlePattern.matcher(title);
 
         if (!titleMatcher.find())
@@ -186,10 +200,13 @@ public class ParseEC extends ParseOnlineComicSite {
         List<String> volumeList = new ArrayList<String>();
 
         Elements linksToEpisodes = nodes.select("#rp_tb_comic_0 table a.Vol, a.Ch");
-        totalVolume = linksToEpisodes.size();
-        Common.debugPrintln( "共有" + totalVolume + "集" );
+        //Elements linksToEpisodes = nodes.select("#rp_ctl06_0_dl_0 table a.Vol, a.Ch");
+        totalVolume = linksToEpisodes.size() / 2;
+        Common.debugPrintln( "共有" + totalVolume + "集+" );
 
         // TODO: alert to user when totalVolume == 0
+        
+        int i = 0;
 
         for (Element ele : linksToEpisodes) {
             ele.attributes();
@@ -220,6 +237,12 @@ public class ParseEC extends ParseOnlineComicSite {
             volumeTitle = getVolumeWithFormatNumber( Common.getStringRemovedIllegalChar(
                     Common.getTraditionalChinese( volumeTitle.trim() ) ) );
             volumeList.add( getVolumeWithFormatNumber(volumeTitle) );
+            
+            //Common.debugPrintln("" + (i++) + ":" +  volumeTitle );
+            
+            if (++i == totalVolume) {
+                break;
+            }
         }
 
         combinationList.add( volumeList );
@@ -232,7 +255,7 @@ public class ParseEC extends ParseOnlineComicSite {
     public String getSinglePageURL( String idString, String volumeNoString, String catidString ) {
 
         String ret = "";
-        
+
         // should be updated from http://www.comicbus.com/js/comicview.js
         switch (Integer.parseInt( catidString )) {
             case 3:
@@ -241,19 +264,19 @@ public class ParseEC extends ParseOnlineComicSite {
             case 16:
             case 18:
             case 20:
-                ret += "http://www.comicbus.com/online/comic-";
+                ret += "http://v.comicbus.com/online/comic-";
                 break;
             case 4:
             case 6:
             case 12:
             case 22:
-                ret += "http://www.comicbus.com/online/comic-";
+                ret += "http://v.comicbus.com/online/comic-";
                 break;
             case 1:
             case 17:
             case 19:
             case 21:
-                ret += "http://www.comicbus.com/online/comic-";
+                ret += "http://v.comicbus.com/online/comic-";
                 break;
             case 2:
             case 5:
@@ -264,7 +287,7 @@ public class ParseEC extends ParseOnlineComicSite {
             case 11:
             case 13:
             case 14:
-                ret += "http://www.comicbus.com/online/comic-";
+                ret += "http://v.comicbus.com/online/comic-";
                 break;
             default:
                 throw new IllegalArgumentException("The catid is not whithin the valid range.");
@@ -320,17 +343,17 @@ class NView_Java {
      * String of chapter, also found on URL param "ch". Format: "1", "1-3", "153-12"
      */
     private String ch;
+    
+    public int ps; // page sum (??)
+    
+    private String jsCode;
 
-    public NView_Java(int chapters, int mangaId, String compiledString, String chapter) {
+    public NView_Java(int chapters, int mangaId, String compiledString, String chapter, String jsCode) {
         this.chs = chapters;
         this.ti = mangaId;
         this.cs = compiledString;
         this.ch = chapter;
-
-        if (ch.indexOf('-') > 0) {
-            p = Integer.parseInt(ch.split("-")[1]);
-            ch = ch.split("-")[0];
-        }
+        this.jsCode = jsCode;
         
         this.sp();
     }
@@ -350,7 +373,8 @@ class NView_Java {
      * @return The image of that page of a manga.
      */
     public String parse() {
-        si(c);
+        //si(c);
+        siNew();
         return this.urlResult;
     }
 
@@ -360,8 +384,8 @@ class NView_Java {
      * @return Count of pages of the volume.
      */
     public int getPagesCount() {
-        String strCnt = ss(c, 7, 3);
-        return Integer.parseInt(strCnt);
+        //String strCnt = ss(c, 7, 3);
+        return ps; //Integer.parseInt(strCnt);
     }
 
     /**
@@ -377,29 +401,25 @@ class NView_Java {
      * @param page The number of page to work.
      */
     public void setPage(int page) {
-        this.p = page;
+        this.p = page; 
     }
 
     private String c = "";
     private final int f = 50;
     private int p = 1;
+    private int y = 46;
 
     /**
      * The first function called by the 8comic view page, which provides ability to decode the "cs"
      * (compiled string) in the page js to a image link hyper-referenced by img#TheImg DOM.
      */
     private void sp() {
-
         int cc = cs.length();
         for (int i = 0; i < cc / f; i++) {
             if (ss(cs, i * f, 4).equals(ch)) {
                 c = ss(cs, i * f, f, f);
                 break;
             }
-        }
-        if (c.equals("")) {
-            c = ss(cs, cc - f, f);
-            ch = chs + "";
         }
     }
 
@@ -425,6 +445,133 @@ class NView_Java {
     }
 
     private void si(String c) {
-        this.urlResult = "http://img" + ss(c, 4, 2) + ".6comic.com:99/" + ss(c, 6, 1) + "/" + ti + "/" + ss(c, 0, 4) + "/" + nn(p) + "_" + ss(c, mm(p) + 10, 3, f) + ".jpg";
+        this.urlResult = "http://img" + ss(c, 4, 2) + ".8comic.com/" + ss(c, 6, 1) + "/" + ti + "/" + ss(c, 0, 4) + "/" + nn(p) + "_" + ss(c, mm(p) + 10, 3, f) + ".jpg";
+        //this.urlResult = 'http://img' + ss(c, 4, 2) + '.8comic.com/' + ss(c, 6, 1) + '/' + ti + '/' + ss(c, 0, 4) + '/' + nn(p) + '_' + ss(c, mm(p) + 10, 3, f) + '.jpg';
+    }
+    
+    private String lc(String l) {
+        if (l.length() != 2) return l;
+        String az = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String a = l.substring(0, 1);
+        String b = l.substring(1, 2);
+        if (a.equals("Z")) return Integer.toString(8000 + az.indexOf(b));
+        else return Integer.toString(az.indexOf(a) * 52 + az.indexOf(b));        
+    }
+    
+    private String su(String a, int b, int c) {
+        String e = (a + "").substring(b, b + c);
+        return (e);
+    }
+    
+    // ex. i=1, a=0, b=40 -> lc(su(cs, 1 * y + 0, 40));
+    private String getlcsucs(int i, int a, int b) {
+        return lc(su(cs, i * y + a, b));
+        
+    }
+    
+    /*
+    for(var i=0;i<313;i++){var wrpmm= lc(su(cs,i*y+0,2));var fejwt=lc(su(cs,i*y+2,2));var riuil= lc(su(cs,i*y+4,40));var vxmvn= lc(su(cs,i*y+44,2));ps=vxmvn;if(fejwt== ch){ci=i;ge('TheImg').src='http://img'+su(wrpmm, 0, 1)+'.8comic.com/'+su(wrpmm,1,1)+'/'+ti+'/'+fejwt+'/'+ nn(p)+'_'+su(riuil,mm(p),3)+'.jpg';pi=ci>0?lc(su(cs,ci*y-y+2,2)):ch;ni=ci<chs-1?lc(su(cs,ci*y+y+2,2)):ch;break;}}var pt='[ '+pi+' ]';var nt='[ '+ni+' ]';spp();
+    */
+    private void siNew() {
+        int begin, end, i;
+        String temp;
+        
+        begin = jsCode.indexOf("<") + 1;
+        end = jsCode.indexOf(";i++");
+        
+        int loopCount = Integer.parseInt(jsCode.substring(begin, end));
+        //Common.debugPrintln("loopCount:" + loopCount);
+        
+        String[] varName = new String[4];
+        int[] a = new int[4];
+        int[] b = new int[4];
+        
+        for (i = 0; i < 4; i++) {
+            begin = jsCode.indexOf("var ", end) + 4;
+            end = jsCode.indexOf("=", begin);
+            varName[i] = jsCode.substring(begin, end);
+        
+            begin = jsCode.indexOf("i*y+", end) + 4;
+            end = jsCode.indexOf(")", begin);
+            temp = jsCode.substring(begin, end);
+            a[i] = Integer.parseInt(temp.split(",")[0]);
+            b[i] = Integer.parseInt(temp.split(",")[1]);
+            
+            //Common.debugPrintln(i + ":" + varName[i] + "_" + a[i] + "," +b[i]);
+        }
+        
+        begin = jsCode.indexOf("ps=", end) + 3;
+        end = jsCode.indexOf(";", begin);
+        temp = jsCode.substring(begin, end);
+        int pageSumIndex = getEqualIndex(varName, temp);
+        //Common.debugPrintln("PS index:" + pageSumIndex); 
+        
+        begin = jsCode.indexOf("if(", end) + 3;
+        end = jsCode.indexOf("==", begin);
+        temp = jsCode.substring(begin, end);
+        int chEqualIndex = getEqualIndex(varName, temp);
+        //Common.debugPrintln("CH index:" + chEqualIndex); 
+        
+        begin = jsCode.indexOf("img'+su(", end) + 8;
+        end = jsCode.indexOf(",", begin);
+        temp = jsCode.substring(begin, end);
+        int[] urlIndex = new int[4];
+        urlIndex[0] = getEqualIndex(varName, temp);
+        
+        begin = jsCode.indexOf("ti+'/'+", end) + 7;
+        end = jsCode.indexOf("+", begin);
+        temp = jsCode.substring(begin, end);
+        urlIndex[1] = getEqualIndex(varName, temp);        
+        
+        begin = jsCode.indexOf("'_'+su(", end) + 7;
+        end = jsCode.indexOf(",", begin);
+        temp = jsCode.substring(begin, end);
+        urlIndex[2] = getEqualIndex(varName, temp);       
+        
+        for (i = 0; i < 3; i++) {
+            //Common.debugPrintln("url index " + i + ":" + urlIndex[i]); 
+        }
+        
+        
+        setUrlResult(loopCount, a, b, urlIndex, chEqualIndex, pageSumIndex);
+    }
+    
+    private int getEqualIndex(String[] varName, String target) {
+        for (int i = 0; i < 4; i++) {
+            if (target.equals(varName[i])) {
+                return i;
+            }
+        }
+        return 5;
+    }
+    
+    private void setUrlResult(int loopCount, int[] a, int[] b, int[] urlIndex, int chEqualIndex, int pageSumIndex) {
+        int ci = 0;
+        
+        for (int i = 0; i < loopCount; i++) {
+            
+            String[] value = new String[4];
+            for (int j = 0; j < 4; j++) {
+                value[j] = lc(su(cs, i * y + a[j], b[j]));
+            }
+            
+            if (value[chEqualIndex].equals(ch)) {
+                ci = i;
+                
+                this.urlResult = "http://img" + 
+                                    su(value[urlIndex[0]], 0, 1) + ".8comic.com/" + 
+                                    su(value[urlIndex[0]], 1, 1) + "/" + ti + "/" + value[urlIndex[1]] + "/" + nn(p) + "_" +
+                                    su(value[urlIndex[2]], mm(p), 3) + ".jpg";
+                
+                
+
+                ps = Integer.parseInt(value[pageSumIndex]);
+                
+                Common.debugPrintln("url:" + this.urlResult + " ps:" + ps);
+                break;
+            }
+        }   
+        
+        
     }
 }
