@@ -2636,7 +2636,7 @@ public class Common
                 if ( connection.getResponseCode() != 200 )
                 {
                     //Common.debugPrintln( "第二次失敗，不再重試!" );
-                    Common.errorReport( "錯誤回傳碼(responseCode): "
+                    Common.errorReport( "[1]錯誤回傳碼(responseCode): "
                             + connection.getResponseCode() + " : " + webSite );
                     return;
                 }
@@ -2831,7 +2831,7 @@ public class Common
             if ( responseCode != 200 )
             {
                 //Common.debugPrintln( "第二次失敗，不再重試!" );
-                Common.errorReport( "錯誤回傳碼(responseCode): "
+                Common.errorReport( "[2]錯誤回傳碼(responseCode): "
                         + responseCode + " : " + webSite );
 
                 return responseCode;
@@ -2974,7 +2974,7 @@ public class Common
             if ( responseCode != 200 )
             {
                 //Common.debugPrintln( "第二次失敗，不再重試!" );
-                Common.errorReport( "錯誤回傳碼(responseCode): "
+                Common.errorReport( "[3]錯誤回傳碼(responseCode): "
                 + responseCode + " : " + webSite );
                 
                 return responseCode;
@@ -3772,7 +3772,7 @@ public class Common
                         else if ( responseCode != 200 )
                         {
                             //Common.debugPrintln( "第二次失敗，不再重試!" );
-                            String errorMessage = "錯誤回傳碼(responseCode): " + connection.getResponseCode();
+                            String errorMessage = "[4]錯誤回傳碼(responseCode): " + connection.getResponseCode();
                             Common.errorReport( errorMessage + " : " + webSite );
                             ComicDownGUI.stateBar.setText( errorMessage + " ----> 無法下載" + webSite );
                             return;

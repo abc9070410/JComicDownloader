@@ -45,7 +45,7 @@ public class ParseXXBH extends ParseOnlineComicSite
     {
         enumName = "XXBH";
 	parserName=this.getClass().getName();
-        regexs= new String[]{"(?s).*xxbh.net(?s).*|(?s).*77mh.com(?s).*" };
+        regexs= new String[]{"(?s).*xxbh.net(?s).*|(?s).*77mh.(?s).*" };
         downloadBefore=true;
         siteID=Site.formString("XXBH");
         siteName = "xxbh";
@@ -55,7 +55,7 @@ public class ParseXXBH extends ParseOnlineComicSite
         jsName = "index_xxbh.js";
         radixNumber = 1591371; // default value, not always be useful!!
 
-        baseURL = "http://www.77mh.com"; //"http://xxbh.net";
+        baseURL = "http://www.177mh.net"; //"http://xxbh.net";
     }
 
     public ParseXXBH( String webSite, String titleName )
@@ -108,77 +108,11 @@ public class ParseXXBH extends ParseOnlineComicSite
         // 找出全部的伺服器位址
         Common.debugPrintln( "開始解析全部的伺服器位址" );
 
-
-        // 首先要下載第二份js檔
-
-        /*
-         beginIndex = Common.getIndexOfOrderKeyword( allPageString, " src=", 5 );
-         beginIndex = allPageString.indexOf( "\"", beginIndex ) + 1;
-         endIndex = allPageString.indexOf( "\"", beginIndex );
-         String jsURL2 = allPageString.substring( beginIndex, endIndex );
-         */
-        /*
-        // 取得v3_cont_v130404.js
-        beginIndex = allPageString.indexOf( "/cont_" );
-        beginIndex = allPageString.lastIndexOf( "http:", beginIndex );
-        endIndex = allPageString.indexOf( "\"", beginIndex );
-        String tempURL = allPageString.substring( beginIndex, endIndex );
-        
-        Common.debugPrintln( "第1個js位址: " + tempURL );
-        
-        allJSPageString = getAllPageString( tempURL );
-        
-       
-        // 從v3_cont_v130404.js中取得記載伺服器位址的js, ex. http://img_v1.dm08.com/img_v1/fdc_130404.js
-        beginIndex = allJSPageString.indexOf( "/fdc_" );
-        beginIndex = allJSPageString.lastIndexOf( "http:", beginIndex );
-        endIndex = allJSPageString.indexOf( "\"", beginIndex );
-        String jsURL2 = allJSPageString.substring( beginIndex, endIndex );
-        */
-        
-        
-        String jsURL2 = "http://css.177mh.com/img_v1/fdc_160903a.js";
-        
-        Common.debugPrintln( "第2個js位址: " + jsURL2 );
-
-
-        // 開始解析js檔案
-        allJSPageString = getAllPageString( jsURL2 );
-
-        // 取出全部的前面位址（伺服器位址+資料夾位置）
-        int serverAmount = allJSPageString.split( "http://" ).length - 1;
-        String[] frontPicURLs = new String[ serverAmount ];
-
-        beginIndex = endIndex = 0;
-        for ( int i = 0; i < serverAmount; i++ )
-        {
-            beginIndex = allJSPageString.indexOf( "http://", beginIndex );
-            endIndex = allJSPageString.indexOf( "\"", beginIndex );
-            frontPicURLs[i] = allJSPageString.substring( beginIndex, endIndex );
-            beginIndex = endIndex;
-        }
-
-        //System.exit( 0 );
-
         //Common.debugPrint( "開始解析這一集有幾頁 : " );
-        
-       
-       // 首先要下載js檔
-        beginIndex = allPageString.indexOf( "https://a70.readingbox.net/telc" );
-        beginIndex = allPageString.lastIndexOf( "\"", beginIndex ) + 1;
-        endIndex = allPageString.indexOf( "\"", beginIndex );
-        Common.debugPrintln("->" + beginIndex + "," + endIndex);
-        String jsURL = allPageString.substring( beginIndex, endIndex );
-
-        // 開始解析js檔案
-        Common.debugPrintln( "開始解析後面部份的位址" );
         String referURL = webSite + "?page=1";
-        Common.simpleDownloadFile( jsURL, SetUp.getTempDirectory(), indexName, referURL );
         allJSPageString = Common.getFileString( SetUp.getTempDirectory(), indexName );
-        
-        //String[] picNames = getPicNames( allJSPageString );
-        
-        String decodeJS = getDecodeJS( allJSPageString );
+
+        String decodeJS = getDecodeJS( allPageString );
         Common.debugPrintln( "DECODE: " + decodeJS );
         
         //System.exit( 0 );
@@ -198,52 +132,23 @@ public class ParseXXBH extends ParseOnlineComicSite
         comicURL = new String[ totalPage ];
 
         Common.debugPrintln( "開始解析前面部份的位址" );
+
+        int serverId = 1;
         beginIndex = decodeJS.indexOf( " img_s" );
         beginIndex = decodeJS.indexOf( "=", beginIndex ) + 1;
         endIndex = decodeJS.indexOf( ";", beginIndex );
+        tempString = decodeJS.substring( beginIndex, endIndex ).trim();
+        serverId = Integer.parseInt( tempString.trim() );
         
         String serverPicURL = "";
-        String[] serverPicURLs = new String[5];
+        String[] serverPicURLs = new String[6];
         
-        
-        int serverId = 1;
-        
-        if (endIndex > beginIndex)
-        {
-            tempString = decodeJS.substring( beginIndex, endIndex ).trim();
-            serverId = Integer.parseInt( tempString.trim() );
-            serverPicURLs[3] = frontPicURLs[serverId - 1];
-            
-            Common.debugPrintln("第4組可能伺服器位址:" + serverPicURLs[3]);
-        }
-        //else // 圖片伺服器不在清單裡面，需另外請求
-        {
-            beginIndex = allPageString.indexOf("colist_") + 7;
-            endIndex = allPageString.indexOf(".html", beginIndex);
-            String cid = allPageString.substring(beginIndex, endIndex);
-            
-            beginIndex = webSite.lastIndexOf("/") + 1;
-            endIndex = webSite.indexOf(".html");
-            String coid = webSite.substring(beginIndex, endIndex);
-            
-            String requestBaseURL;
-            //requestBaseURL = "http://css.177mh.com/img_v1/cn_svr.aspx?s=9&cid=";
-            requestBaseURL = "https://a70.readingbox.net/img_v1/hw2_svr.aspx?s=44&cid=";
-            
-            String requestURL = requestBaseURL + cid + "&coid=" + coid;
-            
-            String tempAllString = getAllPageString( requestURL );
-            
-            beginIndex = tempAllString.indexOf("\"") + 1;
-            endIndex = tempAllString.indexOf("\"", beginIndex);
-            serverPicURLs[4] = tempAllString.substring(beginIndex, endIndex);
-            
-            Common.debugPrintln("第5組可能伺服器位址:" + serverPicURLs[4]);
-        }
-        
-        serverPicURLs[0] = "http://hw2.readingbox.net/h" + serverId + "/";
-        serverPicURLs[1] = "http://h59.readingbox.net/h" + serverId + "/";
-        serverPicURLs[2] = "http://hf2.readingbox.net/h" + serverId + "/";
+        serverPicURLs[0] = "https://h76.readingbox.net/h" + serverId + "/";
+        serverPicURLs[1] = "https://hws.readingbox.net/h" + serverId + "/";
+        serverPicURLs[2] = "https://h16hk1g.readingbox.net/h" + serverId + "/";
+        serverPicURLs[3] = "https://mark.readingbox.net/h" + serverId + "/";
+        serverPicURLs[4] = "https://his.readingbox.net/h" + serverId + "/";
+        serverPicURLs[5] = "https://i.readingbox.net/h" + serverId + "/";
         
         for (int i = 0; i < serverPicURLs.length; i++)
         {

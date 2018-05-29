@@ -453,8 +453,6 @@ package jcomicdownloader;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -484,8 +482,6 @@ import jcomicdownloader.table.DownTableRender;
 import jcomicdownloader.table.DownloadTableModel;
 import jcomicdownloader.table.RecordTableModel;
 import jcomicdownloader.tools.*;
-import static java.nio.file.StandardCopyOption.*;
-import static jcomicdownloader.tools.Common.getSlash;
 
 /**
  * @author surveyorK
@@ -500,12 +496,9 @@ public class ComicDownGUI extends JFrame implements ActionListener,
 
     public static JFrame mainFrame; // for change look and feel
     // GUI component
-    private BorderLayout layout;
     private JPanel buttonPanel, textPanel;
     private JButton button[];
-    private JTextArea messageArea;
     private JTextField urlField;
-    private JLabel urlLabel, logoLabel;
     JTabbedPane tabbedPane; // 裡面放三個頁面（任務、書籤、紀錄）
     public static TrayIcon trayIcon_old2; // 系統列圖示
     public static TrayIcon trayIcon;
@@ -568,7 +561,6 @@ public class ComicDownGUI extends JFrame implements ActionListener,
     // non-GUI component
     private String[] args;
     private static String resourceFolder;
-    private StringBuffer messageString;
     private Run mainRun;
     private int nowDownloadMissionRow; // 目前正在進行下載的任務列的順序
     Dimension frameDimension;
@@ -677,7 +669,7 @@ public class ComicDownGUI extends JFrame implements ActionListener,
         //CommonGUI.newFrameStartInEDT( "jcomicdownloader.frame.LogFrame",
         //    SetUp.getOpenDebugMessageWindow() );
         //counter();  // 以code頁面記錄開啟次數（好玩測試看看）
-        messageString = new StringBuffer("");
+        StringBuffer messageString = new StringBuffer("");
 
         setUpUIComponent();
         setUpeListener();
